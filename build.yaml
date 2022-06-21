@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          - lib/domain/models/*.dart
+          - lib/store/**.dart

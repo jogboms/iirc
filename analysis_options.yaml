@@ -1,0 +1,53 @@
+include: package:mfsao/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/generated/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    missing_required_param: error
+    missing_return: error
+    unused_import: error
+    unused_local_variable: error
+    dead_code: error
+
+linter:
+  rules:
+    # All rules from pedantic, already enabled rules are left out
+    # https://github.com/google/pedantic/blob/master/lib/analysis_options.1.11.0.yaml
+    - always_declare_return_types
+    - prefer_single_quotes
+    - sort_child_properties_last
+    - unawaited_futures
+    - unsafe_html
+
+    # Additional rules from https://github.com/flutter/flutter/blob/master/analysis_options.yaml
+    # Not all rules are included
+    - always_put_control_body_on_new_line
+    - always_specify_types # also used by Flutter itself, makes it more readable
+    - avoid_slow_async_io
+    - cast_nullable_to_non_nullable
+    - directives_ordering
+    - missing_whitespace_between_adjacent_strings
+    - sort_pub_dependencies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_if_elements_to_conditional_expressions
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - test_types_in_equals
+    - tighten_type_of_initializing_formals
+    - unnecessary_await_in_return
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_statements
+    - use_late_for_private_fields_and_variables
+    - use_named_constants
+    - use_raw_strings
+    - use_super_parameters

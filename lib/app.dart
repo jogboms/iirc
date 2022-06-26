@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iirc/core.dart';
-import 'package:intl/intl.dart';
+import 'package:iirc/registry.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 class App extends StatelessWidget {
-  const App({super.key});
+  const App({
+    super.key,
+    required this.registry,
+  });
+
+  final Registry registry;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      onGenerateTitle: (BuildContext context) => context.l10n.appName,
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        S.delegate,
-        _ResetIntlUtilLocaleLocalizationDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      home: const HomePage(),
+    final String bannerMessage = registry.get<Environment>().name.toUpperCase();
+
+    return RegistryProvider(
+      data: registry,
+      child: _Banner(
+        key: Key(bannerMessage),
+        message: bannerMessage,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateTitle: (BuildContext context) => context.l10n.appName,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            S.delegate,
+            _ResetIntlUtilLocaleLocalizationDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          home: const HomePage(),
+        ),
+      ),
     );
   }
 }
@@ -35,10 +50,36 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(context.l10n.appName),
-            Text(environment.name),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Banner extends StatelessWidget {
+  const _Banner({super.key, required this.message, required this.child});
+
+  final String message;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      alignment: Alignment.topCenter,
+      children: <Widget>[
+        child,
+        CustomPaint(
+          painter: BannerPainter(
+            message: message,
+            textDirection: TextDirection.ltr,
+            layoutDirection: TextDirection.ltr,
+            location: BannerLocation.topStart,
+            color: const Color(0xFFA573E3),
+          ),
+        ),
+      ],
     );
   }
 }

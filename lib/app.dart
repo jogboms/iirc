@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/registry.dart';
+import 'package:iirc/screens.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 class App extends StatelessWidget {
@@ -33,24 +34,6 @@ class App extends StatelessWidget {
           ],
           supportedLocales: S.delegate.supportedLocales,
           home: const HomePage(),
-        ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(context.l10n.appName),
-          ],
         ),
       ),
     );

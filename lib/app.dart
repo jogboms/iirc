@@ -9,9 +9,11 @@ class App extends StatelessWidget {
   const App({
     super.key,
     required this.registry,
+    this.home,
   });
 
   final Registry registry;
+  final Widget? home;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class App extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          home: const HomePage(),
+          home: home ?? const HomePage(),
         ),
       ),
     );

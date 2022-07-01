@@ -17,6 +17,7 @@ void main() async {
     ..set<UsersRepository>(UsersMockImpl())
     ..set<ItemsRepository>(ItemsMockImpl())
     ..set<TagsRepository>(TagsMockImpl())
+    ..factory<FetchItemsUseCase>((RegistryFactory di) => FetchItemsUseCase(items: di()))
     ..set<Environment>(environment);
 
   runApp(

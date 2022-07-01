@@ -10,3 +10,4 @@ export 'domain/repositories/auth.dart';
 export 'domain/repositories/items.dart';
 export 'domain/repositories/tags.dart';
 export 'domain/repositories/users.dart';
+export 'domain/use_cases/fetch_items_use_case.dart';

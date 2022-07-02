@@ -13,10 +13,10 @@ void main() {
     tearDown(() => reset(tagsRepository));
 
     test('should fetch tags', () {
-      final List<TagModel> expectedTags = List<TagModel>.generate(3, (_) => TagsMockImpl.generateTag());
+      final TagModelList expectedTags = TagModelList.generate(3, (_) => TagsMockImpl.generateTag());
 
       when(() => tagsRepository.fetch()).thenAnswer(
-        (_) => Stream<List<TagModel>>.value(expectedTags),
+        (_) => Stream<TagModelList>.value(expectedTags),
       );
 
       expect(useCase(), emits(expectedTags));
@@ -32,7 +32,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => tagsRepository.fetch()).thenAnswer(
-        (_) => Stream<List<TagModel>>.error(expectedError),
+        (_) => Stream<TagModelList>.error(expectedError),
       );
 
       expect(useCase(), emitsError(expectedError));

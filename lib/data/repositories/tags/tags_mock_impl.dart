@@ -35,7 +35,7 @@ class TagsMockImpl extends TagsRepository {
   }
 
   @override
-  Stream<List<TagModel>> fetch() => _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
+  Stream<TagModelList> fetch() => _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
 }
 
 extension on TagModel {

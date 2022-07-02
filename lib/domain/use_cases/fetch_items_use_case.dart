@@ -6,8 +6,7 @@ class FetchItemsUseCase {
 
   final ItemsRepository _items;
 
-  Stream<List<ItemModel>> call() =>
-      _items.fetch().map((List<ItemModel> items) => items.uniqueByTag()).asBroadcastStream();
+  Stream<ItemModelList> call() => _items.fetch().map((ItemModelList items) => items.uniqueByTag()).asBroadcastStream();
 }
 
 extension UniqueByTagExtension<E extends ItemModel> on Iterable<E> {

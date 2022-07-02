@@ -35,10 +35,10 @@ void main() {
     });
 
     testWidgets('should show list of items', (WidgetTester tester) async {
-      final List<ItemModel> expectedItems = List<ItemModel>.generate(3, (_) => ItemsMockImpl.generateItem());
+      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
 
       when(() => mockRepositories.items.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.value(expectedItems),
+        (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
@@ -57,7 +57,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => mockRepositories.items.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.error(expectedError),
+        (_) => Stream<ItemModelList>.error(expectedError),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));

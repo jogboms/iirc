@@ -15,14 +15,14 @@ class HomePageState extends State<HomePage> {
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
-  late final Stream<List<ItemModel>> stream = context.registry.get<FetchItemsUseCase>().call();
+  late final Stream<ItemModelList> stream = context.registry.get<FetchItemsUseCase>().call();
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<List<ItemModel>>(
+      child: StreamBuilder<ItemModelList>(
         stream: stream,
-        builder: (BuildContext context, AsyncSnapshot<List<ItemModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<ItemModelList> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               key: loadingViewKey,
@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage> {
             );
           }
 
-          final List<ItemModel> items = snapshot.requireData;
+          final ItemModelList items = snapshot.requireData;
 
           return ListView.builder(
             itemBuilder: (BuildContext context, int index) {
@@ -46,7 +46,7 @@ class HomePageState extends State<HomePage> {
               return ListTile(
                 key: Key(item.id),
                 title: Text(item.title),
-                subtitle: Text(item.description),
+                subtitle: Text(item.tag.title),
               );
             },
             itemCount: items.length,

@@ -15,14 +15,14 @@ class TagsPageState extends State<TagsPage> {
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
-  late final Stream<List<TagModel>> stream = context.registry.get<FetchTagsUseCase>().call();
+  late final Stream<TagModelList> stream = context.registry.get<FetchTagsUseCase>().call();
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<List<TagModel>>(
+      child: StreamBuilder<TagModelList>(
         stream: stream,
-        builder: (BuildContext context, AsyncSnapshot<List<TagModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TagModelList> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               key: loadingViewKey,
@@ -37,7 +37,7 @@ class TagsPageState extends State<TagsPage> {
             );
           }
 
-          final List<TagModel> tags = snapshot.requireData;
+          final TagModelList tags = snapshot.requireData;
 
           return ListView.builder(
             itemBuilder: (BuildContext context, int index) {

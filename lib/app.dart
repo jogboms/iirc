@@ -5,7 +5,7 @@ import 'package:iirc/registry.dart';
 import 'package:iirc/screens.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({
     super.key,
     required this.registry,
@@ -16,26 +16,49 @@ class App extends StatelessWidget {
   final Widget? home;
 
   @override
-  Widget build(BuildContext context) {
-    final String bannerMessage = registry.get<Environment>().name.toUpperCase();
+  State<App> createState() => _AppState();
+}
 
+class _AppState extends State<App> with SingleTickerProviderStateMixin {
+  late final Environment environment = widget.registry.get();
+  late final String bannerMessage = environment.name.toUpperCase();
+
+  late final TabController menuPageTabController = TabController(
+    vsync: this,
+    length: MenuPageItem.values.length,
+    initialIndex: MenuPageItem.defaultPage.index,
+  );
+
+  @override
+  void dispose() {
+    menuPageTabController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return RegistryProvider(
-      data: registry,
-      child: _Banner(
-        key: Key(bannerMessage),
-        message: bannerMessage,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          onGenerateTitle: (BuildContext context) => context.l10n.appName,
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            S.delegate,
-            _ResetIntlUtilLocaleLocalizationDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          home: home ?? const HomePage(),
+      data: widget.registry,
+      child: MenuPageProvider(
+        data: menuPageTabController,
+        child: _Banner(
+          key: Key(bannerMessage),
+          message: bannerMessage,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            onGenerateTitle: (BuildContext context) => context.l10n.appName,
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+              S.delegate,
+              _ResetIntlUtilLocaleLocalizationDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            home: widget.home ?? const MenuPage(),
+            // home: home ?? const HomePage(),
+          ),
         ),
       ),
     );

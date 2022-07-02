@@ -1,3 +1,6 @@
 {
-  "appName": "IIRC"
+  "appName": "IIRC",
+  "itemsCaption": "items",
+  "tagsCaption": "tags",
+  "moreCaption": "more"
 }

@@ -22,8 +22,6 @@ void main() {
       await tester.pump();
 
       expect(tagsPage, findsOneWidget);
-      expect(find.byType(AppBar).descendantOf(tagsPage), findsOneWidget);
-      expect(find.text('IIRC').descendantOf(find.byType(AppBar)), findsOneWidget);
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
 
@@ -20,11 +19,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.appName),
-      ),
-      body: StreamBuilder<List<ItemModel>>(
+    return Material(
+      child: StreamBuilder<List<ItemModel>>(
         stream: stream,
         builder: (BuildContext context, AsyncSnapshot<List<ItemModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

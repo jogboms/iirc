@@ -75,7 +75,3 @@ void main() {
     });
   });
 }
-
-extension on Finder {
-  Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
-}

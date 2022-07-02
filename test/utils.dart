@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
@@ -27,3 +28,7 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..set(environment);
+
+extension FinderExtensions on Finder {
+  Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
+}

@@ -50,8 +50,3 @@ void main() {
     });
   });
 }
-
-extension UniqueByExtension<E> on Iterable<E> {
-  Set<U> uniqueBy<U>(U Function(E) fn) =>
-      fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
-}

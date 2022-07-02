@@ -32,3 +32,8 @@ Registry createRegistry({
 extension FinderExtensions on Finder {
   Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
 }
+
+extension UniqueByExtension<E> on Iterable<E> {
+  Set<U> uniqueBy<U>(U Function(E) fn) =>
+      fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
+}

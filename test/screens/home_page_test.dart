@@ -22,8 +22,6 @@ void main() {
       await tester.pump();
 
       expect(homePage, findsOneWidget);
-      expect(find.byType(AppBar).descendantOf(homePage), findsOneWidget);
-      expect(find.text('IIRC').descendantOf(find.byType(AppBar)), findsOneWidget);
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
@@ -74,8 +72,4 @@ void main() {
       );
     });
   });
-}
-
-extension on Finder {
-  Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
 }

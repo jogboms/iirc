@@ -3,26 +3,26 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
 
 // TODO(Jogboms): Improve UI.
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TagsPage extends StatefulWidget {
+  const TagsPage({super.key});
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<TagsPage> createState() => TagsPageState();
 }
 
 @visibleForTesting
-class HomePageState extends State<HomePage> {
+class TagsPageState extends State<TagsPage> {
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
-  late final Stream<List<ItemModel>> stream = context.registry.get<FetchItemsUseCase>().call();
+  late final Stream<List<TagModel>> stream = context.registry.get<FetchTagsUseCase>().call();
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<List<ItemModel>>(
+      child: StreamBuilder<List<TagModel>>(
         stream: stream,
-        builder: (BuildContext context, AsyncSnapshot<List<ItemModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<TagModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               key: loadingViewKey,
@@ -37,19 +37,19 @@ class HomePageState extends State<HomePage> {
             );
           }
 
-          final List<ItemModel> items = snapshot.requireData;
+          final List<TagModel> tags = snapshot.requireData;
 
           return ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              final ItemModel item = items[index];
+              final TagModel tag = tags[index];
 
               return ListTile(
-                key: Key(item.id),
-                title: Text(item.title),
-                subtitle: Text(item.description),
+                key: Key(tag.id),
+                title: Text(tag.title),
+                subtitle: Text(tag.description),
               );
             },
-            itemCount: items.length,
+            itemCount: tags.length,
           );
         },
       ),

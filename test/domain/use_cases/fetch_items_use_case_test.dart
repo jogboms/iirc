@@ -3,11 +3,11 @@ import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockItemsRepository extends Mock implements ItemsRepository {}
+import '../../utils.dart';
 
 void main() {
   group('FetchItemsUseCase', () {
-    final ItemsRepository itemsRepository = MockItemsRepository();
+    final ItemsRepository itemsRepository = mockRepositories.items;
     final FetchItemsUseCase useCase = FetchItemsUseCase(items: itemsRepository);
 
     tearDown(() => reset(itemsRepository));

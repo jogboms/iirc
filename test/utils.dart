@@ -25,4 +25,5 @@ Registry createRegistry({
       ..set<ItemsRepository>(mockRepositories.items)
       ..set<TagsRepository>(mockRepositories.tags)
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
+      ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..set(environment);

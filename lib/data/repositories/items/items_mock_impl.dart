@@ -16,7 +16,7 @@ class ItemsMockImpl extends ItemsRepository {
       title: faker.lorem.words(3).join(' '),
       description: faker.lorem.sentence(),
       date: faker.randomGenerator.dateTime,
-      tag: TagsMockImpl.generateTag(),
+      tag: TagsMockImpl.tags.values.random(),
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );

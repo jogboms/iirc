@@ -21,7 +21,7 @@ class TagsMockImpl extends TagsRepository {
   }
 
   static final Map<String, TagModel> tags =
-      faker.randomGenerator.amount((_) => generateTag(), 20, min: 5).foldToMap((TagModel element) => element.id);
+      faker.randomGenerator.amount((_) => generateTag(), 3, min: 3).foldToMap((TagModel element) => element.id);
 
   final BehaviorSubject<Map<String, TagModel>> _tags$ = BehaviorSubject<Map<String, TagModel>>.seeded(tags);
 

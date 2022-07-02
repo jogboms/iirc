@@ -1,7 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:faker/faker.dart';
 
-extension ListExtensions<T> on List<T> {
+extension ListExtensions<T> on Iterable<T> {
   Map<String, T> foldToMap(String Function(T) keyBuilder) => fold(<String, T>{},
       (Map<String, T> previousValue, T element) => <String, T>{...previousValue, keyBuilder(element): element});
 }
@@ -17,4 +17,8 @@ extension RandomGeneratorExtensions on RandomGenerator {
       integer(59, min: 0),
     );
   }
+}
+
+extension RandomEnum<T extends Object> on Iterable<T> {
+  T random() => elementAt(faker.randomGenerator.integer(length - 1));
 }

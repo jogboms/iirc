@@ -6,5 +6,13 @@ class FetchItemsUseCase {
 
   final ItemsRepository _items;
 
-  Stream<List<ItemModel>> call() => _items.fetch();
+  Stream<List<ItemModel>> call() =>
+      _items.fetch().map((List<ItemModel> items) => items.uniqueByTag()).asBroadcastStream();
+}
+
+extension UniqueByTagExtension<E extends ItemModel> on Iterable<E> {
+  List<E> uniqueByTag() => fold(
+        <String, E>{},
+        (Map<String, E> previousValue, E element) => previousValue..putIfAbsent(element.tag.id, () => element),
+      ).values.toList(growable: false);
 }

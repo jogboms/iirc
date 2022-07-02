@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
+
+import 'item_list_tile.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -20,6 +23,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: StreamBuilder<ItemModelList>(
         stream: stream,
         builder: (BuildContext context, AsyncSnapshot<ItemModelList> snapshot) {
@@ -39,16 +43,17 @@ class HomePageState extends State<HomePage> {
 
           final ItemModelList items = snapshot.requireData;
 
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final ItemModel item = items[index];
 
-              return ListTile(
-                key: Key(item.id),
-                title: Text(item.title),
-                subtitle: Text(item.tag.title),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: ItemListTile(key: Key(item.id), item: item),
               );
             },
+            separatorBuilder: (BuildContext context, _) => const SizedBox(height: 8),
             itemCount: items.length,
           );
         },

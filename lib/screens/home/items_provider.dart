@@ -8,4 +8,15 @@ final _Provider itemsProvider = _Provider((StreamProviderRef<ItemModelList> ref)
   return registry.get<FetchItemsUseCase>().call();
 });
 
+final _Provider filteredItemsProvider = _Provider((StreamProviderRef<ItemModelList> ref) {
+  return ref.watch(itemsProvider.stream).map((ItemModelList items) => items.uniqueByTag()).asBroadcastStream();
+});
+
 typedef _Provider = StreamProvider<ItemModelList>;
+
+extension UniqueByTagExtension<E extends ItemModel> on Iterable<E> {
+  List<E> uniqueByTag() => fold(
+        <String, E>{},
+        (Map<String, E> previousValue, E element) => previousValue..putIfAbsent(element.tag.id, () => element),
+      ).values.toList(growable: false);
+}

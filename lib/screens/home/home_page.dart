@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
     return Material(
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsProvider).when(
               data: (ItemModelList data) => _ItemsDataView(
                 items: data,
                 onPressedItem: (ItemModel item) {

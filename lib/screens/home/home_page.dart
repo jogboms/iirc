@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
+import 'item_detail_page.dart';
 import 'item_list_tile.dart';
 import 'items_provider.dart';
+import 'selected_item_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -25,7 +27,14 @@ class HomePageState extends State<HomePage> {
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
-              data: (ItemModelList data) => _ItemsDataView(items: data),
+              data: (ItemModelList data) => _ItemsDataView(
+                items: data,
+                onPressedItem: (ItemModel item) {
+                  ref.read(selectedItemIdProvider.state).state = item.id;
+
+                  ItemDetailPage.go(context);
+                },
+              ),
               error: (Object error, _) => Center(
                 key: errorViewKey,
                 child: Text(error.toString()),
@@ -42,9 +51,10 @@ class HomePageState extends State<HomePage> {
 }
 
 class _ItemsDataView extends StatelessWidget {
-  const _ItemsDataView({super.key, required this.items});
+  const _ItemsDataView({super.key, required this.items, required this.onPressedItem});
 
   final ItemModelList items;
+  final ValueChanged<ItemModel> onPressedItem;
 
   @override
   Widget build(BuildContext context) => ListView.separated(
@@ -52,7 +62,11 @@ class _ItemsDataView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final ItemModel item = items[index];
 
-          return ItemListTile(key: Key(item.id), item: item);
+          return ItemListTile(
+            key: Key(item.id),
+            item: item,
+            onPressed: () => onPressedItem(item),
+          );
         },
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemCount: items.length,

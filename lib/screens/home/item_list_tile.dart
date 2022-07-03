@@ -5,15 +5,17 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
 class ItemListTile extends StatelessWidget {
-  const ItemListTile({super.key, required this.item});
+  const ItemListTile({super.key, required this.item, required this.onPressed});
 
   final ItemModel item;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) => AppListTile(
         title: Text(item.title),
         subtitle: Text(DateFormat().format(item.date)),
         trailing: _Tag(key: Key(item.tag.id), tag: item.tag),
+        onPressed: onPressed,
       );
 }
 

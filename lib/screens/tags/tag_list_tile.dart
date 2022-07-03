@@ -11,7 +11,7 @@ class TagListTile extends StatelessWidget {
   Widget build(BuildContext context) => AppListTile(
         title: Text(tag.title),
         subtitle: Text(tag.description),
-        trailing: _TagColor(key: Key(tag.id), code: tag.color),
+        trailing: _TagColor(key: ValueKey<int>(tag.color), code: tag.color),
       );
 }
 

@@ -44,16 +44,13 @@ class HomePageState extends State<HomePage> {
           final ItemModelList items = snapshot.requireData;
 
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final ItemModel item = items[index];
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: ItemListTile(key: Key(item.id), item: item),
-              );
+              return ItemListTile(key: Key(item.id), item: item);
             },
-            separatorBuilder: (BuildContext context, _) => const SizedBox(height: 8),
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemCount: items.length,
           );
         },

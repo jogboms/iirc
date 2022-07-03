@@ -44,16 +44,13 @@ class TagsPageState extends State<TagsPage> {
           final TagModelList tags = snapshot.requireData;
 
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final TagModel tag = tags[index];
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: TagListTile(key: Key(tag.id), tag: tag),
-              );
+              return TagListTile(key: Key(tag.id), tag: tag);
             },
-            separatorBuilder: (BuildContext context, _) => const SizedBox(height: 8),
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemCount: tags.length,
           );
         },

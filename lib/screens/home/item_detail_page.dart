@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
 
-import 'selected_item_provider.dart';
+import 'providers/selected_item_provider.dart';
 
 class ItemDetailPage extends StatefulWidget {
   const ItemDetailPage({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
 
-import 'selected_tag_provider.dart';
+import 'providers/selected_tag_provider.dart';
 
 class TagDetailPage extends StatefulWidget {
   const TagDetailPage({super.key});

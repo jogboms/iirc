@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import 'selected_tag_provider.dart';
+import 'providers/selected_tag_provider.dart';
+import 'providers/tags_provider.dart';
 import 'tag_detail_page.dart';
 import 'tag_list_tile.dart';
-import 'tags_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class TagsPage extends StatefulWidget {

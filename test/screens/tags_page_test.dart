@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/app.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
@@ -17,7 +16,7 @@ void main() {
     testWidgets('smoke test', (WidgetTester tester) async {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
 
@@ -27,7 +26,7 @@ void main() {
     testWidgets('should show loading view on load', (WidgetTester tester) async {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
 
@@ -41,7 +40,7 @@ void main() {
         (_) => Stream<TagModelList>.value(expectedItems),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
       await tester.pump();
@@ -60,7 +59,7 @@ void main() {
         (_) => Stream<TagModelList>.error(expectedError),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
       await tester.pump();

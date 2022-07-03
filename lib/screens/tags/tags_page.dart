@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
+
+import 'tag_list_tile.dart';
 
 // TODO(Jogboms): Improve UI.
 class TagsPage extends StatefulWidget {
@@ -20,6 +23,7 @@ class TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: StreamBuilder<TagModelList>(
         stream: stream,
         builder: (BuildContext context, AsyncSnapshot<TagModelList> snapshot) {
@@ -39,16 +43,17 @@ class TagsPageState extends State<TagsPage> {
 
           final TagModelList tags = snapshot.requireData;
 
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final TagModel tag = tags[index];
 
-              return ListTile(
-                key: Key(tag.id),
-                title: Text(tag.title),
-                subtitle: Text(tag.description),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: TagListTile(key: Key(tag.id), tag: tag),
               );
             },
+            separatorBuilder: (BuildContext context, _) => const SizedBox(height: 8),
             itemCount: tags.length,
           );
         },

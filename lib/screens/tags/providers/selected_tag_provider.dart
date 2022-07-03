@@ -5,12 +5,10 @@ import 'tags_provider.dart';
 
 final StateProvider<String> selectedTagIdProvider = StateProvider<String>((StateProviderRef<String> ref) => '');
 
-final StateProvider<TagModel?> selectedTagProvider = StateProvider<TagModel?>((StateProviderRef<TagModel?> ref) {
+final AutoDisposeFutureProvider<TagModel> selectedTagProvider =
+    FutureProvider.autoDispose((AutoDisposeFutureProviderRef<TagModel> ref) async {
   final String id = ref.watch(selectedTagIdProvider);
+  final TagModelList tags = await ref.watch(tagsProvider.future);
 
-  return ref.watch(tagsProvider).when(
-        data: (TagModelList data) => data.firstWhere((TagModel element) => element.id == id),
-        error: (Object error, _) => null,
-        loading: () => null,
-      );
+  return tags.firstWhere((TagModel element) => element.id == id);
 });

@@ -7,13 +7,13 @@ class AppListTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.trailing,
-    required this.onPressed,
+    this.onPressed,
   });
 
   final Widget title;
   final Widget subtitle;
   final Widget trailing;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AppListTile extends StatelessWidget {
       color: theme.colorScheme.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
       child: InkWell(
-        onTap: () => onPressed(),
+        onTap: () => onPressed?.call(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(

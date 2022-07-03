@@ -21,17 +21,12 @@ class _TagDetailPageState extends State<TagDetailPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final TagModel? item = ref.read(selectedTagProvider);
-
-          if (item == null) {
-            return const Center(
-              child: Text('No item'),
-            );
-          }
-
-          return Text(item.id);
-        },
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(selectedTagProvider).maybeWhen(
+              data: (TagModel tag) => Center(child: Text(tag.id)),
+              orElse: () => const Center(
+                child: Text('No item'),
+              ),
+            ),
       ),
     );
   }

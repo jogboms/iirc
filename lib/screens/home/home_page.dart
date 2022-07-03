@@ -6,7 +6,7 @@ import 'package:iirc/domain.dart';
 import 'item_detail_page.dart';
 import 'item_list_tile.dart';
 import 'providers/items_provider.dart';
-import 'providers/selected_item_provider.dart';
+import 'providers/selected_items_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage> {
               data: (ItemModelList data) => _ItemsDataView(
                 items: data,
                 onPressedItem: (ItemModel item) {
-                  ref.read(selectedItemIdProvider.state).state = item.id;
+                  ref.read(selectedItemTagIdProvider.state).state = item.tag.id;
 
                   ItemDetailPage.go(context);
                 },

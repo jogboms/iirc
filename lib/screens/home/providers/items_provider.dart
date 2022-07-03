@@ -9,7 +9,7 @@ final _Provider itemsProvider = _Provider((StreamProviderRef<ItemModelList> ref)
 });
 
 final _Provider filteredItemsProvider = _Provider((StreamProviderRef<ItemModelList> ref) {
-  return ref.watch(itemsProvider.stream).map((ItemModelList items) => items.uniqueByTag()).asBroadcastStream();
+  return ref.watch(itemsProvider.stream).map((ItemModelList items) => items.uniqueByTag());
 });
 
 typedef _Provider = StreamProvider<ItemModelList>;

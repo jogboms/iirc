@@ -12,24 +12,7 @@ class TagListTile extends StatelessWidget {
   Widget build(BuildContext context) => AppListTile(
         title: Text(tag.title),
         subtitle: Text(tag.description),
-        trailing: _TagColor(key: ValueKey<int>(tag.color), code: tag.color),
+        trailing: TagColorBox(key: ValueKey<int>(tag.color), code: tag.color),
         onPressed: onPressed,
       );
-}
-
-class _TagColor extends StatelessWidget {
-  const _TagColor({super.key, required this.code});
-
-  final int code;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color color = Color(code);
-
-    return Material(
-      shape: const CircleBorder(),
-      color: color,
-      child: const SizedBox.square(dimension: 16),
-    );
-  }
 }

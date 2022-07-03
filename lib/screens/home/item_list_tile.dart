@@ -5,10 +5,10 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
 class ItemListTile extends StatelessWidget {
-  const ItemListTile({super.key, required this.item, required this.onPressed});
+  const ItemListTile({super.key, required this.item, this.onPressed});
 
   final ItemModel item;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => AppListTile(

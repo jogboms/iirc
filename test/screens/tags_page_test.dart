@@ -35,10 +35,10 @@ void main() {
     });
 
     testWidgets('should show list of tags', (WidgetTester tester) async {
-      final List<TagModel> expectedItems = List<TagModel>.generate(3, (_) => TagsMockImpl.generateTag());
+      final TagModelList expectedItems = TagModelList.generate(3, (_) => TagsMockImpl.generateTag());
 
       when(() => mockRepositories.tags.fetch()).thenAnswer(
-        (_) => Stream<List<TagModel>>.value(expectedItems),
+        (_) => Stream<TagModelList>.value(expectedItems),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
@@ -57,7 +57,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => mockRepositories.tags.fetch()).thenAnswer(
-        (_) => Stream<List<TagModel>>.error(expectedError),
+        (_) => Stream<TagModelList>.error(expectedError),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));

@@ -12,14 +12,25 @@ void main() {
 
     tearDown(() => reset(itemsRepository));
 
-    test('should fetch items', () {
-      final List<ItemModel> expectedItems = List<ItemModel>.generate(3, (_) => ItemsMockImpl.generateItem());
+    test('should fetch items unique by tag and ordered by first', () {
+      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
+      final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
 
       when(() => itemsRepository.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.value(expectedItems),
+        (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
-      expect(useCase(), emits(expectedItems));
+      final Stream<ItemModelList> result = useCase();
+      expect(result, emits(hasLength(uniqueTags.length)));
+      expect(
+        result,
+        emits(<ItemModel>[
+          for (final TagModel tag in uniqueTags)
+            expectedItems.firstWhere(
+              (ItemModel element) => element.tag == tag,
+            ),
+        ]),
+      );
     });
 
     test('should bubble fetch errors', () {
@@ -32,7 +43,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => itemsRepository.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.error(expectedError),
+        (_) => Stream<ItemModelList>.error(expectedError),
       );
 
       expect(useCase(), emitsError(expectedError));

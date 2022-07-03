@@ -35,10 +35,11 @@ void main() {
     });
 
     testWidgets('should show list of items', (WidgetTester tester) async {
-      final List<ItemModel> expectedItems = List<ItemModel>.generate(3, (_) => ItemsMockImpl.generateItem());
+      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
+      final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
 
       when(() => mockRepositories.items.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.value(expectedItems),
+        (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
@@ -46,10 +47,11 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      for (final ItemModel item in expectedItems) {
+      for (final TagModel tag in uniqueTags) {
+        final ItemModel item = expectedItems.firstWhere((ItemModel element) => element.tag == tag);
         expect(find.byKey(Key(item.id)).descendantOf(homePage), findsOneWidget);
         expect(find.text(item.title), findsOneWidget);
-        expect(find.text(item.description), findsOneWidget);
+        expect(find.text(item.tag.title), findsOneWidget);
       }
     });
 
@@ -57,7 +59,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => mockRepositories.items.fetch()).thenAnswer(
-        (_) => Stream<List<ItemModel>>.error(expectedError),
+        (_) => Stream<ItemModelList>.error(expectedError),
       );
 
       await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));

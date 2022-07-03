@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
+
+import 'tag_list_tile.dart';
 
 // TODO(Jogboms): Improve UI.
 class TagsPage extends StatefulWidget {
@@ -15,14 +18,15 @@ class TagsPageState extends State<TagsPage> {
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
-  late final Stream<List<TagModel>> stream = context.registry.get<FetchTagsUseCase>().call();
+  late final Stream<TagModelList> stream = context.registry.get<FetchTagsUseCase>().call();
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<List<TagModel>>(
+      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
+      child: StreamBuilder<TagModelList>(
         stream: stream,
-        builder: (BuildContext context, AsyncSnapshot<List<TagModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TagModelList> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               key: loadingViewKey,
@@ -37,18 +41,16 @@ class TagsPageState extends State<TagsPage> {
             );
           }
 
-          final List<TagModel> tags = snapshot.requireData;
+          final TagModelList tags = snapshot.requireData;
 
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final TagModel tag = tags[index];
 
-              return ListTile(
-                key: Key(tag.id),
-                title: Text(tag.title),
-                subtitle: Text(tag.description),
-              );
+              return TagListTile(key: Key(tag.id), tag: tag);
             },
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemCount: tags.length,
           );
         },

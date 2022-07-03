@@ -12,16 +12,16 @@ class TagsMockImpl extends TagsRepository {
     return TagModel(
       id: id,
       path: '/tags/${AuthMockImpl.id}/$id',
-      title: faker.lorem.words(3).join(' '),
+      title: faker.lorem.words(1).join(' '),
       description: faker.lorem.sentence(),
-      color: faker.randomGenerator.integer(1000000),
+      color: faker.randomGenerator.integer(1000000) * 0xfffff,
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );
   }
 
   static final Map<String, TagModel> tags =
-      faker.randomGenerator.amount((_) => generateTag(), 20, min: 5).foldToMap((TagModel element) => element.id);
+      faker.randomGenerator.amount((_) => generateTag(), 15, min: 5).foldToMap((TagModel element) => element.id);
 
   final BehaviorSubject<Map<String, TagModel>> _tags$ = BehaviorSubject<Map<String, TagModel>>.seeded(tags);
 
@@ -35,7 +35,7 @@ class TagsMockImpl extends TagsRepository {
   }
 
   @override
-  Stream<List<TagModel>> fetch() => _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
+  Stream<TagModelList> fetch() => _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
 }
 
 extension on TagModel {

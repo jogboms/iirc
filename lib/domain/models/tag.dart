@@ -25,3 +25,5 @@ class TagModel with EquatableMixin {
   @override
   bool? get stringify => true;
 }
+
+typedef TagModelList = List<TagModel>;

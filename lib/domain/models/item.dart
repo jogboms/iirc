@@ -29,3 +29,5 @@ class ItemModel with EquatableMixin {
   @override
   bool? get stringify => true;
 }
+
+typedef ItemModelList = List<ItemModel>;

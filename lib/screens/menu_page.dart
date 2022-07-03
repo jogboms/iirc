@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 
-import 'home_page.dart';
-import 'tags_page.dart';
+import 'home/home_page.dart';
+import 'tags/tags_page.dart';
 
 enum MenuPageItem {
   tags,

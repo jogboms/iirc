@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
+
+import 'item_list_tile.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -15,14 +18,15 @@ class HomePageState extends State<HomePage> {
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
-  late final Stream<List<ItemModel>> stream = context.registry.get<FetchItemsUseCase>().call();
+  late final Stream<ItemModelList> stream = context.registry.get<FetchItemsUseCase>().call();
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: StreamBuilder<List<ItemModel>>(
+      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
+      child: StreamBuilder<ItemModelList>(
         stream: stream,
-        builder: (BuildContext context, AsyncSnapshot<List<ItemModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<ItemModelList> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               key: loadingViewKey,
@@ -37,18 +41,16 @@ class HomePageState extends State<HomePage> {
             );
           }
 
-          final List<ItemModel> items = snapshot.requireData;
+          final ItemModelList items = snapshot.requireData;
 
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             itemBuilder: (BuildContext context, int index) {
               final ItemModel item = items[index];
 
-              return ListTile(
-                key: Key(item.id),
-                title: Text(item.title),
-                subtitle: Text(item.description),
-              );
+              return ItemListTile(key: Key(item.id), item: item);
             },
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemCount: items.length,
           );
         },

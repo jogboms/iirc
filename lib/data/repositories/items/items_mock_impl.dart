@@ -16,14 +16,14 @@ class ItemsMockImpl extends ItemsRepository {
       title: faker.lorem.words(3).join(' '),
       description: faker.lorem.sentence(),
       date: faker.randomGenerator.dateTime,
-      tag: TagsMockImpl.generateTag(),
+      tag: TagsMockImpl.tags.values.random(),
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );
   }
 
   static final Map<String, ItemModel> items =
-      faker.randomGenerator.amount((_) => generateItem(), 20, min: 5).foldToMap((ItemModel element) => element.id);
+      faker.randomGenerator.amount((_) => generateItem(), 100, min: 50).foldToMap((ItemModel element) => element.id);
 
   final BehaviorSubject<Map<String, ItemModel>> _items$ = BehaviorSubject<Map<String, ItemModel>>.seeded(items);
 
@@ -44,7 +44,7 @@ class ItemsMockImpl extends ItemsRepository {
   }
 
   @override
-  Stream<List<ItemModel>> fetch() => _items$.stream.map((Map<String, ItemModel> event) => event.values.toList());
+  Stream<ItemModelList> fetch() => _items$.stream.map((Map<String, ItemModel> event) => event.values.toList());
 }
 
 extension on ItemModel {

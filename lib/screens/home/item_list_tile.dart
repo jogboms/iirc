@@ -4,18 +4,19 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
+import 'item_detail_page.dart';
+
 class ItemListTile extends StatelessWidget {
-  const ItemListTile({super.key, required this.item, this.onPressed});
+  const ItemListTile({super.key, required this.item});
 
   final ItemModel item;
-  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => AppListTile(
         title: Text(item.title),
         subtitle: Text(DateFormat().format(item.date)),
         trailing: _Tag(key: Key(item.tag.id), tag: item.tag),
-        onPressed: onPressed,
+        onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(context, id: item.tag.id)),
       );
 }
 

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../home/item_detail_page.dart';
 import 'providers/tags_provider.dart';
 import 'tag_list_tile.dart';
 
@@ -27,12 +26,7 @@ class TagsPageState extends State<TagsPage> {
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
-              data: (TagModelList data) => _TagsDataView(
-                key: dataViewKey,
-                tags: data,
-                onPressedItem: (TagModel item) =>
-                    Navigator.of(context).push<void>(ItemDetailPage.route(context, id: item.id)),
-              ),
+              data: (TagModelList data) => _TagsDataView(key: dataViewKey, tags: data),
               error: (Object error, _) => Center(
                 key: errorViewKey,
                 child: Text(error.toString()),
@@ -49,10 +43,9 @@ class TagsPageState extends State<TagsPage> {
 }
 
 class _TagsDataView extends StatelessWidget {
-  const _TagsDataView({super.key, required this.tags, required this.onPressedItem});
+  const _TagsDataView({super.key, required this.tags});
 
   final TagModelList tags;
-  final ValueChanged<TagModel> onPressedItem;
 
   @override
   Widget build(BuildContext context) => ListView.separated(
@@ -60,11 +53,7 @@ class _TagsDataView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final TagModel tag = tags[index];
 
-          return TagListTile(
-            key: Key(tag.id),
-            tag: tag,
-            onPressed: () => onPressedItem(tag),
-          );
+          return TagListTile(key: Key(tag.id), tag: tag);
         },
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemCount: tags.length,

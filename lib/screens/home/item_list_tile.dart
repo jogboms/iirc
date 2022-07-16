@@ -35,6 +35,7 @@ class _Tag extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Text(
+          key: Key(tag.id),
           tag.title,
           style: theme.textTheme.labelMedium?.copyWith(
             color: Color.lerp(color, Colors.black, .75),

@@ -5,7 +5,7 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../utils.dart';
+import '../../utils.dart';
 
 void main() {
   group('HomePage', () {
@@ -33,7 +33,7 @@ void main() {
       expect(find.byKey(HomePageState.loadingViewKey).descendantOf(homePage), findsOneWidget);
     });
 
-    testWidgets('should show list of items', (WidgetTester tester) async {
+    testWidgets('should show unique list of items', (WidgetTester tester) async {
       final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
 

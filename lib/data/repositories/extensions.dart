@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:clock/clock.dart';
 import 'package:faker/faker.dart';
 
@@ -20,5 +22,5 @@ extension RandomGeneratorExtensions on RandomGenerator {
 }
 
 extension RandomEnum<T extends Object> on Iterable<T> {
-  T random() => elementAt(faker.randomGenerator.integer(length - 1));
+  T random() => elementAt(Random().nextInt(length - 1));
 }

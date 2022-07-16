@@ -8,7 +8,7 @@ import '../extensions.dart';
 import '../tags/tags_mock_impl.dart';
 
 class ItemsMockImpl extends ItemsRepository {
-  static ItemModel generateItem() {
+  static ItemModel generateItem([TagModel? tag]) {
     final String id = faker.guid.guid();
     return ItemModel(
       id: id,
@@ -16,7 +16,7 @@ class ItemsMockImpl extends ItemsRepository {
       title: faker.lorem.words(3).join(' '),
       description: faker.lorem.sentence(),
       date: faker.randomGenerator.dateTime,
-      tag: TagsMockImpl.tags.values.random(),
+      tag: tag ?? TagsMockImpl.tags.values.random(),
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );

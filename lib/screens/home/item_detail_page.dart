@@ -23,8 +23,6 @@ class ItemDetailPage extends StatefulWidget {
 @visibleForTesting
 class ItemDetailPageState extends State<ItemDetailPage> {
   static const Key dataViewKey = Key('dataViewKey');
-  static const Key loadingViewKey = Key('loadingViewKey');
-  static const Key errorViewKey = Key('errorViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +36,10 @@ class ItemDetailPageState extends State<ItemDetailPage> {
                     tag: state.tag,
                     items: state.items,
                   ),
-                  error: (Object error, _) => Center(
-                    key: errorViewKey,
-                    child: Text(error.toString()),
-                  ),
+                  error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
                   loading: () => child!,
                 ),
-        child: const Center(
-          key: loadingViewKey,
-          child: CircularProgressIndicator(),
-        ),
+        child: const LoadingView(),
       ),
     );
   }

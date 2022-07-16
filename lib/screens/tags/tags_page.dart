@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
+import 'package:iirc/widgets.dart';
 
 import 'providers/tags_provider.dart';
 import 'tag_list_tile.dart';
@@ -17,8 +18,6 @@ class TagsPage extends StatefulWidget {
 @visibleForTesting
 class TagsPageState extends State<TagsPage> {
   static const Key dataViewKey = Key('dataViewKey');
-  static const Key loadingViewKey = Key('loadingViewKey');
-  static const Key errorViewKey = Key('errorViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +26,10 @@ class TagsPageState extends State<TagsPage> {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
               data: (TagModelList data) => _TagsDataView(key: dataViewKey, tags: data),
-              error: (Object error, _) => Center(
-                key: errorViewKey,
-                child: Text(error.toString()),
-              ),
+              error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
               loading: () => child!,
             ),
-        child: const Center(
-          key: loadingViewKey,
-          child: CircularProgressIndicator(),
-        ),
+        child: const LoadingView(),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils.dart';
@@ -30,7 +31,7 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byKey(HomePageState.loadingViewKey).descendantOf(homePage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(homePage), findsOneWidget);
     });
 
     testWidgets('should show unique list of items', (WidgetTester tester) async {
@@ -66,11 +67,8 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(HomePageState.errorViewKey).descendantOf(homePage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(HomePageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(homePage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });
 }

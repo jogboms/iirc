@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils.dart';
@@ -30,7 +31,7 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byKey(TagsPageState.loadingViewKey).descendantOf(tagsPage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(tagsPage), findsOneWidget);
     });
 
     testWidgets('should show list of tags', (WidgetTester tester) async {
@@ -64,11 +65,8 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(TagsPageState.errorViewKey).descendantOf(tagsPage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(TagsPageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(tagsPage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });
 }

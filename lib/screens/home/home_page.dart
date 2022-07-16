@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
+import 'package:iirc/widgets.dart';
 
 import 'item_list_tile.dart';
 import 'providers/items_provider.dart';
@@ -17,8 +18,6 @@ class HomePage extends StatefulWidget {
 @visibleForTesting
 class HomePageState extends State<HomePage> {
   static const Key dataViewKey = Key('dataViewKey');
-  static const Key loadingViewKey = Key('loadingViewKey');
-  static const Key errorViewKey = Key('errorViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +26,10 @@ class HomePageState extends State<HomePage> {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
               data: (ItemModelList data) => _ItemsDataView(key: dataViewKey, items: data),
-              error: (Object error, _) => Center(
-                key: errorViewKey,
-                child: Text(error.toString()),
-              ),
+              error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
               loading: () => child!,
             ),
-        child: const Center(
-          key: loadingViewKey,
-          child: CircularProgressIndicator(),
-        ),
+        child: const LoadingView(),
       ),
     );
   }

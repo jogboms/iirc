@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils.dart';
@@ -32,7 +33,7 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byKey(ItemDetailPageState.loadingViewKey).descendantOf(itemDetailPage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(itemDetailPage), findsOneWidget);
     });
 
     testWidgets('should show list of items for tag', (WidgetTester tester) async {
@@ -64,11 +65,8 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(ItemDetailPageState.errorViewKey).descendantOf(itemDetailPage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(ItemDetailPageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(itemDetailPage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
 
     testWidgets('should show error if items fetch fails', (WidgetTester tester) async {
@@ -82,11 +80,8 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(ItemDetailPageState.errorViewKey).descendantOf(itemDetailPage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(ItemDetailPageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(itemDetailPage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });
 }

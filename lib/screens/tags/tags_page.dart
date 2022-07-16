@@ -30,7 +30,8 @@ class TagsPageState extends State<TagsPage> {
               data: (TagModelList data) => _TagsDataView(
                 key: dataViewKey,
                 tags: data,
-                onPressedItem: (TagModel item) => ItemDetailPage.go(context, id: item.id),
+                onPressedItem: (TagModel item) =>
+                    Navigator.of(context).push<void>(ItemDetailPage.route(context, id: item.id)),
               ),
               error: (Object error, _) => Center(
                 key: errorViewKey,

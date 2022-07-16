@@ -12,8 +12,8 @@ class ItemDetailPage extends StatefulWidget {
 
   final String id;
 
-  static Future<void> go(BuildContext context, {required String id}) {
-    return Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id)));
+  static PageRoute<void> route(BuildContext context, {required String id}) {
+    return MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id));
   }
 
   @override

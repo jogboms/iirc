@@ -30,7 +30,8 @@ class HomePageState extends State<HomePage> {
               data: (ItemModelList data) => _ItemsDataView(
                 key: dataViewKey,
                 items: data,
-                onPressedItem: (ItemModel item) => ItemDetailPage.go(context, id: item.tag.id),
+                onPressedItem: (ItemModel item) =>
+                    Navigator.of(context).push<void>(ItemDetailPage.route(context, id: item.tag.id)),
               ),
               error: (Object error, _) => Center(
                 key: errorViewKey,

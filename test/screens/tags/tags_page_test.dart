@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/app.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../utils.dart';
+import '../../utils.dart';
 
 void main() {
   group('TagsPage', () {
@@ -17,7 +17,7 @@ void main() {
     testWidgets('smoke test', (WidgetTester tester) async {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
 
@@ -27,11 +27,11 @@ void main() {
     testWidgets('should show loading view on load', (WidgetTester tester) async {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
 
-      expect(find.byKey(TagsPageState.loadingViewKey).descendantOf(tagsPage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(tagsPage), findsOneWidget);
     });
 
     testWidgets('should show list of tags', (WidgetTester tester) async {
@@ -41,7 +41,7 @@ void main() {
         (_) => Stream<TagModelList>.value(expectedItems),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
       await tester.pump();
@@ -60,16 +60,13 @@ void main() {
         (_) => Stream<TagModelList>.error(expectedError),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const TagsPage()));
+      await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(TagsPageState.errorViewKey).descendantOf(tagsPage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(TagsPageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(tagsPage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });
 }

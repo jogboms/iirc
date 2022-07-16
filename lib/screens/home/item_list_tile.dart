@@ -4,6 +4,8 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
+import 'item_detail_page.dart';
+
 class ItemListTile extends StatelessWidget {
   const ItemListTile({super.key, required this.item});
 
@@ -14,6 +16,7 @@ class ItemListTile extends StatelessWidget {
         title: Text(item.title),
         subtitle: Text(DateFormat().format(item.date)),
         trailing: _Tag(key: Key(item.tag.id), tag: item.tag),
+        onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(context, id: item.tag.id)),
       );
 }
 
@@ -33,6 +36,7 @@ class _Tag extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Text(
+          key: Key(tag.id),
           tag.title,
           style: theme.textTheme.labelMedium?.copyWith(
             color: Color.lerp(color, Colors.black, .75),

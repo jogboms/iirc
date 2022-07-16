@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/app.dart';
 import 'package:iirc/screens.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -15,11 +14,7 @@ void main() {
 
     addTearDown(() => mockRepositories.reset());
 
-    await tester.pumpWidget(
-      App(
-        registry: createRegistry(),
-      ),
-    );
+    await tester.pumpWidget(createApp());
 
     await tester.pump();
 

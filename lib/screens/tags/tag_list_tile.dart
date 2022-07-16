@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/domain.dart';
-import 'package:iirc/widgets/app_list_tile.dart';
+import 'package:iirc/widgets.dart';
+
+import '../home/item_detail_page.dart';
 
 class TagListTile extends StatelessWidget {
   const TagListTile({super.key, required this.tag});
@@ -11,23 +13,7 @@ class TagListTile extends StatelessWidget {
   Widget build(BuildContext context) => AppListTile(
         title: Text(tag.title),
         subtitle: Text(tag.description),
-        trailing: _TagColor(key: ValueKey<int>(tag.color), code: tag.color),
+        trailing: TagColorBox(key: ValueKey<int>(tag.color), code: tag.color),
+        onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(context, id: tag.id)),
       );
-}
-
-class _TagColor extends StatelessWidget {
-  const _TagColor({super.key, required this.code});
-
-  final int code;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color color = Color(code);
-
-    return Material(
-      shape: const CircleBorder(),
-      color: color,
-      child: const SizedBox.square(dimension: 16),
-    );
-  }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/app.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../utils.dart';
+import '../../utils.dart';
 
 void main() {
   group('HomePage', () {
@@ -17,7 +17,7 @@ void main() {
     testWidgets('smoke test', (WidgetTester tester) async {
       when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const HomePage()));
 
       await tester.pump();
 
@@ -27,14 +27,14 @@ void main() {
     testWidgets('should show loading view on load', (WidgetTester tester) async {
       when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const HomePage()));
 
       await tester.pump();
 
-      expect(find.byKey(HomePageState.loadingViewKey).descendantOf(homePage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(homePage), findsOneWidget);
     });
 
-    testWidgets('should show list of items', (WidgetTester tester) async {
+    testWidgets('should show unique list of items', (WidgetTester tester) async {
       final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
 
@@ -42,7 +42,7 @@ void main() {
         (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const HomePage()));
 
       await tester.pump();
       await tester.pump();
@@ -62,16 +62,13 @@ void main() {
         (_) => Stream<ItemModelList>.error(expectedError),
       );
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const HomePage()));
 
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(HomePageState.errorViewKey).descendantOf(homePage), findsOneWidget);
-      expect(
-        find.text(expectedError.toString()).descendantOf(find.byKey(HomePageState.errorViewKey)),
-        findsOneWidget,
-      );
+      expect(find.byType(ErrorView).descendantOf(homePage), findsOneWidget);
+      expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });
 }

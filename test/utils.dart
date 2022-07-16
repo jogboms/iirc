@@ -1,7 +1,11 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/app.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
+import 'package:iirc/state.dart';
 import 'package:mocktail/mocktail.dart' as mt;
 
 import 'mocks.dart';
@@ -28,6 +32,23 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..set(environment);
+
+Widget createApp({
+  Widget? home,
+  Registry? registry,
+}) {
+  registry ??= createRegistry();
+
+  return ProviderScope(
+    overrides: <Override>[
+      registryProvider.overrideWithValue(registry),
+    ],
+    child: App(
+      registry: registry,
+      home: home,
+    ),
+  );
+}
 
 extension FinderExtensions on Finder {
   Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);

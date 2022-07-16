@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/app.dart';
 import 'package:iirc/screens.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -16,7 +15,7 @@ void main() {
       when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(App(registry: createRegistry(), home: const MenuPage()));
+      await tester.pumpWidget(createApp(home: const MenuPage()));
 
       await tester.pump();
 

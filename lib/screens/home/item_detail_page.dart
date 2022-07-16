@@ -8,31 +8,46 @@ import 'item_list_tile.dart';
 import 'providers/selected_items_provider.dart';
 
 class ItemDetailPage extends StatefulWidget {
-  const ItemDetailPage({super.key});
+  const ItemDetailPage({super.key, required this.id});
 
-  static Future<void> go(BuildContext context) {
-    return Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (_) => const ItemDetailPage()));
+  final String id;
+
+  static Future<void> go(BuildContext context, {required String id}) {
+    return Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id)));
   }
 
   @override
-  State<ItemDetailPage> createState() => _ItemDetailPageState();
+  State<ItemDetailPage> createState() => ItemDetailPageState();
 }
 
-class _ItemDetailPageState extends State<ItemDetailPage> {
+@visibleForTesting
+class ItemDetailPageState extends State<ItemDetailPage> {
+  static const Key dataViewKey = Key('dataViewKey');
+  static const Key loadingViewKey = Key('loadingViewKey');
+  static const Key errorViewKey = Key('errorViewKey');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(selectedItemsProvider).maybeWhen(
-              data: (SelectedItemState state) => _SelectedItemDataView(
-                tag: state.tag,
-                items: state.items,
-              ),
-              orElse: () => const Center(
-                child: Text('No item'),
-              ),
-            ),
+        builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+            ref.watch(selectedItemsStateProvider(widget.id)).when(
+                  data: (SelectedItemState state) => _SelectedItemDataView(
+                    key: dataViewKey,
+                    tag: state.tag,
+                    items: state.items,
+                  ),
+                  error: (Object error, _) => Center(
+                    key: errorViewKey,
+                    child: Text(error.toString()),
+                  ),
+                  loading: () => child!,
+                ),
+        child: const Center(
+          key: loadingViewKey,
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

@@ -1,18 +1,24 @@
+// ignore_for_file: always_specify_types
+
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-final _Provider itemsProvider = _Provider((StreamProviderRef<ItemModelList> ref) {
+final itemsProvider = StreamProvider<ItemModelList>((ref) {
   final Registry registry = ref.read(registryProvider);
   return registry.get<FetchItemsUseCase>().call();
 });
 
-final _Provider filteredItemsProvider = _Provider((StreamProviderRef<ItemModelList> ref) {
-  return ref.watch(itemsProvider.stream).map((ItemModelList items) => items.uniqueByTag());
+final _filteredItemsProvider = FutureProvider<ItemModelList>((ref) async {
+  final ItemModelList items = await ref.watch(itemsProvider.future);
+  return items.uniqueByTag();
 });
 
-typedef _Provider = StreamProvider<ItemModelList>;
+final filteredItemsStateProvider =
+    StateNotifierProvider.autoDispose<PreserveStateNotifier<ItemModelList>, AsyncValue<ItemModelList>>(
+  (ref) => PreserveStateNotifier(_filteredItemsProvider, ref),
+);
 
 extension UniqueByTagExtension<E extends ItemModel> on Iterable<E> {
   List<E> uniqueByTag() => fold(

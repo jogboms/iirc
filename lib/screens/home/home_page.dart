@@ -6,7 +6,6 @@ import 'package:iirc/domain.dart';
 import 'item_detail_page.dart';
 import 'item_list_tile.dart';
 import 'providers/items_provider.dart';
-import 'providers/selected_items_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -18,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 @visibleForTesting
 class HomePageState extends State<HomePage> {
+  static const Key dataViewKey = Key('dataViewKey');
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
@@ -26,14 +26,11 @@ class HomePageState extends State<HomePage> {
     return Material(
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsProvider).when(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
               data: (ItemModelList data) => _ItemsDataView(
+                key: dataViewKey,
                 items: data,
-                onPressedItem: (ItemModel item) {
-                  ref.read(selectedItemTagIdProvider.state).state = item.tag.id;
-
-                  ItemDetailPage.go(context);
-                },
+                onPressedItem: (ItemModel item) => ItemDetailPage.go(context, id: item.tag.id),
               ),
               error: (Object error, _) => Center(
                 key: errorViewKey,

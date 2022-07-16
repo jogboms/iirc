@@ -1,5 +1,6 @@
+// ignore_for_file: always_specify_types
+
 import 'package:iirc/registry.dart';
 import 'package:riverpod/riverpod.dart';
 
-final Provider<Registry> registryProvider =
-    Provider<Registry>((ProviderRef<Registry> ref) => throw UnimplementedError());
+final registryProvider = Provider<Registry>((ref) => throw UnimplementedError());

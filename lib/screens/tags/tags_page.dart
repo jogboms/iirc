@@ -4,7 +4,6 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../home/item_detail_page.dart';
-import '../home/providers/selected_items_provider.dart';
 import 'providers/tags_provider.dart';
 import 'tag_list_tile.dart';
 
@@ -18,6 +17,7 @@ class TagsPage extends StatefulWidget {
 
 @visibleForTesting
 class TagsPageState extends State<TagsPage> {
+  static const Key dataViewKey = Key('dataViewKey');
   static const Key loadingViewKey = Key('loadingViewKey');
   static const Key errorViewKey = Key('errorViewKey');
 
@@ -26,14 +26,11 @@ class TagsPageState extends State<TagsPage> {
     return Material(
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsProvider).when(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
               data: (TagModelList data) => _TagsDataView(
+                key: dataViewKey,
                 tags: data,
-                onPressedItem: (TagModel item) {
-                  ref.read(selectedItemTagIdProvider.state).state = item.id;
-
-                  ItemDetailPage.go(context);
-                },
+                onPressedItem: (TagModel item) => ItemDetailPage.go(context, id: item.id),
               ),
               error: (Object error, _) => Center(
                 key: errorViewKey,

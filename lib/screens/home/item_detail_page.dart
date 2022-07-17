@@ -74,10 +74,10 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
     hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
   );
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier<DateTime>(kToday);
-  late final ValueNotifier<List<ItemModel>> _selectedItems =
-      ValueNotifier<List<ItemModel>>(_getItemsForDay(_selectedDay!));
 
-  DateTime? get _selectedDay => _focusedDay.value;
+  DateTime get _selectedDay => _focusedDay.value;
+
+  List<ItemModel> get _selectedItems => _getItemsForDay(_selectedDay);
 
   @override
   void initState() {
@@ -95,21 +95,15 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
     }
   }
 
-  @override
-  void dispose() {
-    _selectedItems.dispose();
-
-    super.dispose();
-  }
-
   List<ItemModel> _getItemsForDay(DateTime day) => _items[day] ?? <ItemModel>[];
+
+  void _onFocusDay(DateTime focusedDay) => _focusedDay.value = focusedDay;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
-      setState(() {});
-
-      _focusedDay.value = focusedDay;
-      _selectedItems.value = _getItemsForDay(selectedDay);
+      setState(() {
+        _onFocusDay(focusedDay);
+      });
     }
   }
 
@@ -190,7 +184,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               firstDay: DateTime(1970),
               lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
               selectedDayPredicate: (DateTime day) => isSameDay(_selectedDay, day),
-              onPageChanged: (DateTime focusedDay) => _focusedDay.value = focusedDay,
+              onPageChanged: (DateTime focusedDay) => _onFocusDay(focusedDay),
               calendarBuilders: CalendarBuilders<ItemModel>(
                 prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
                   final bool isSelected = isSameDay(date, focusedDay);
@@ -222,11 +216,9 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                   );
                 },
                 headerTitleBuilder: (_, DateTime value) => _CalendarHeader(
-                  key: ValueKey<DateTime>(_focusedDay.value),
+                  key: ValueKey<DateTime>(_selectedDay),
                   focusedDay: value,
-                  onTodayButtonTap: () {
-                    setState(() => _focusedDay.value = kToday);
-                  },
+                  onTodayButtonTap: () => setState(() => _onFocusDay(kToday)),
                 ),
                 singleMarkerBuilder: (BuildContext context, DateTime day, ItemModel item) => Container(
                   margin: const EdgeInsets.only(right: 2.0),
@@ -238,16 +230,17 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                   ),
                 ),
               ),
-              focusedDay: _focusedDay.value,
+              focusedDay: _selectedDay,
               eventLoader: _getItemsForDay,
               onDaySelected: _onDaySelected,
             ),
           ),
           pinned: true,
         ),
-        ValueListenableBuilder<ItemModelList>(
-          valueListenable: _selectedItems,
-          builder: (BuildContext context, ItemModelList items, _) {
+        ValueListenableBuilder<DateTime>(
+          valueListenable: _focusedDay,
+          builder: (BuildContext context, __, _) {
+            final List<ItemModel> items = _selectedItems;
             final int count = items.length;
 
             if (count == 0) {

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
@@ -38,7 +39,11 @@ void main() {
 
     testWidgets('should show list of items for tag', (WidgetTester tester) async {
       final TagModel tag = TagsMockImpl.generateTag();
-      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem(tag));
+      final DateTime now = clock.now();
+      final ItemModelList expectedItems = ItemModelList.generate(
+        3,
+        (_) => ItemsMockImpl.generateItem(tag: tag, date: now),
+      );
 
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
       when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
@@ -50,7 +55,7 @@ void main() {
 
       for (final ItemModel item in expectedItems) {
         expect(find.byKey(Key(item.id)).descendantOf(itemDetailPage), findsOneWidget);
-        expect(find.text(item.title), findsOneWidget);
+        expect(find.text(item.description), findsOneWidget);
       }
     });
 

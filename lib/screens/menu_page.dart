@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/widgets.dart';
 
 import 'home/home_page.dart';
 import 'tags/tags_page.dart';
@@ -60,17 +61,11 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = context.theme;
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: theme.colorScheme.surface,
-        title: Text(
-          context.l10n.appName,
-          style: theme.textTheme.titleLarge?.copyWith(height: 1),
-        ),
+      appBar: CustomAppBar(
+        title: Text(context.l10n.appName),
       ),
       body: AnimatedBuilder(
         animation: _controller.animation!,

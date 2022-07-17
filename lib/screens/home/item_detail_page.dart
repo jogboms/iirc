@@ -131,16 +131,8 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
 
     return CustomScrollView(
       slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          elevation: 0,
-          backgroundColor: theme.colorScheme.surface,
-          leading: BackButton(color: theme.colorScheme.onSurface),
-          centerTitle: false,
-          title: Text(
-            widget.tag.title.capitalize(),
-            style: theme.textTheme.titleLarge?.copyWith(height: 1),
-          ),
+        CustomAppBar(
+          title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
               onPressed: () => showDialog<void>(
@@ -162,6 +154,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               color: theme.colorScheme.onSurface,
             )
           ],
+          asSliver: true,
         ),
         SliverPersistentHeader(
           delegate: _CustomSliverPersistentHeader(

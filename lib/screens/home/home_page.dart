@@ -48,7 +48,7 @@ class _ItemsDataView extends StatelessWidget {
 
           return ItemListTile(key: Key(item.id), item: item);
         },
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemCount: items.length,
       );
 }

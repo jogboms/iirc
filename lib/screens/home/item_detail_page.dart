@@ -203,9 +203,9 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                     margin: const EdgeInsets.all(1),
                     decoration: BoxDecoration(
                       color: isToday
-                          ? theme.colorScheme.primary
+                          ? theme.colorScheme.inverseSurface
                           : isSelected
-                              ? theme.colorScheme.inverseSurface
+                              ? theme.colorScheme.primary
                               : Colors.transparent,
                       borderRadius: BorderRadius.circular(4),
                     ),
@@ -249,23 +249,44 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
         ),
         ValueListenableBuilder<ItemModelList>(
           valueListenable: _selectedItems,
-          builder: (BuildContext context, ItemModelList items, _) => SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  final ItemModel item = items[index];
+          builder: (BuildContext context, ItemModelList items, _) {
+            final int count = items.length;
 
-                  return ItemListTile(
-                    key: Key(item.id),
-                    item: item,
-                    canNavigate: false,
-                  );
-                },
-                childCount: items.length,
+            if (count == 0) {
+              return SliverFillRemaining(
+                child: Center(
+                  child: Text(context.l10n.noItemsAvailableMessage),
+                ),
+              );
+            }
+
+            return SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 48),
+              sliver: SliverList(
+                delegate: SliverSeparatorBuilderDelegate.withHeader(
+                  builder: (BuildContext context, int index) {
+                    final ItemModel item = items[index];
+
+                    return ItemListTile(
+                      key: Key(item.id),
+                      item: item,
+                      canShowDate: false,
+                      canNavigate: false,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, __) => const SizedBox(height: 8),
+                  headerBuilder: (BuildContext context) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      context.l10n.itemsCaption.capitalize() + ' ($count)',
+                      style: theme.textTheme.labelLarge,
+                    ),
+                  ),
+                  childCount: count,
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

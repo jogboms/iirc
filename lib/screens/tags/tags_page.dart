@@ -48,7 +48,7 @@ class _TagsDataView extends StatelessWidget {
 
           return TagListTile(key: Key(tag.id), tag: tag);
         },
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemCount: tags.length,
       );
 }

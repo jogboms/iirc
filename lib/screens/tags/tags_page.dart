@@ -26,7 +26,7 @@ class TagsPageState extends State<TagsPage> {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
               data: (TagModelList data) => _TagsDataView(key: dataViewKey, tags: data),
-              error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
+              error: ErrorView.new,
               loading: () => child!,
             ),
         child: const LoadingView(),

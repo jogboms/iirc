@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
               data: (ItemModelList data) => _ItemsDataView(key: dataViewKey, items: data),
-              error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
+              error: ErrorView.new,
               loading: () => child!,
             ),
         child: const LoadingView(),

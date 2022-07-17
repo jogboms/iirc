@@ -36,7 +36,7 @@ class ItemDetailPageState extends State<ItemDetailPage> {
                     tag: state.tag,
                     items: state.items,
                   ),
-                  error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
+                  error: ErrorView.new,
                   loading: () => child!,
                 ),
         child: const LoadingView(),

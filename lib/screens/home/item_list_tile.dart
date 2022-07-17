@@ -83,11 +83,7 @@ class ItemListTile extends StatelessWidget {
             ),
         ],
       ),
-      onPressed: () => canNavigate
-          ? Navigator.of(context).push<void>(
-              ItemDetailPage.route(context, id: item.tag.id),
-            )
-          : null,
+      onPressed: () => canNavigate ? Navigator.of(context).push<void>(ItemDetailPage.route(id: item.tag.id)) : null,
     );
   }
 }

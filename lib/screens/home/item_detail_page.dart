@@ -10,6 +10,7 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'create_item_page.dart';
 import 'item_list_tile.dart';
 import 'providers/selected_items_provider.dart';
 
@@ -20,7 +21,7 @@ class ItemDetailPage extends StatefulWidget {
 
   final String id;
 
-  static PageRoute<void> route(BuildContext context, {required String id}) {
+  static PageRoute<void> route({required String id}) {
     return MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id));
   }
 
@@ -48,6 +49,10 @@ class ItemDetailPageState extends State<ItemDetailPage> {
                   loading: () => child!,
                 ),
         child: const LoadingView(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push<void>(CreateItemPage.route()),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -34,9 +34,7 @@ class TagListTile extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () => Navigator.of(context).push<void>(
-        ItemDetailPage.route(context, id: tag.id),
-      ),
+      onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(id: tag.id)),
     );
   }
 }

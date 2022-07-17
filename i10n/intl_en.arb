@@ -3,5 +3,7 @@
   "itemsCaption": "items",
   "tagsCaption": "tags",
   "moreCaption": "more",
-  "noItemsAvailableMessage": "No items available for selected date"
+  "noItemsAvailableMessage": "No items available for selected date",
+  "createItemCaption": "Create Item",
+  "createTag": "Create Tag"
 }

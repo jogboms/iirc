@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/widgets.dart';
 
+import 'home/create_item_page.dart';
 import 'home/home_page.dart';
+import 'tags/create_tag_page.dart';
 import 'tags/tags_page.dart';
 
 enum MenuPageItem {
@@ -109,6 +111,33 @@ class _MenuPageState extends State<MenuPage> {
           for (final _TabRouteView item in _tabRouteViews.values)
             BottomNavigationBarItem(icon: item.icon, label: item.title),
         ],
+      ),
+      floatingActionButton: AnimatedBuilder(
+        animation: _controller.animation!,
+        builder: (BuildContext context, Widget? child) {
+          final Route<void>? route;
+          switch (MenuPageItem.values[_currentPageIndex]) {
+            case MenuPageItem.items:
+              route = CreateItemPage.route();
+              break;
+            case MenuPageItem.tags:
+              route = CreateTagPage.route();
+              break;
+            case MenuPageItem.more:
+            default:
+              route = null;
+          }
+
+          return AnimatedScale(
+            scale: route != null ? 1 : 0,
+            duration: const Duration(milliseconds: 250),
+            child: FloatingActionButton(
+              onPressed: () => Navigator.of(context).push<void>(route!),
+              child: const Icon(Icons.add),
+            ),
+          );
+        },
+        child: const SizedBox.shrink(),
       ),
     );
   }

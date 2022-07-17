@@ -256,7 +256,11 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                 (BuildContext context, int index) {
                   final ItemModel item = items[index];
 
-                  return ItemListTile(key: Key(item.id), item: item);
+                  return ItemListTile(
+                    key: Key(item.id),
+                    item: item,
+                    canNavigate: false,
+                  );
                 },
                 childCount: items.length,
               ),

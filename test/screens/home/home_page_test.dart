@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
@@ -50,8 +51,8 @@ void main() {
       for (final TagModel tag in uniqueTags) {
         final ItemModel item = expectedItems.firstWhere((ItemModel element) => element.tag == tag);
         expect(find.byKey(Key(item.id)).descendantOf(homePage), findsOneWidget);
-        expect(find.text(item.title), findsOneWidget);
-        expect(find.text(item.tag.title), findsOneWidget);
+        expect(find.text(item.description), findsOneWidget);
+        expect(find.text(item.tag.title.capitalize()), findsOneWidget);
       }
     });
 

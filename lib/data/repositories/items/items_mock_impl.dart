@@ -8,14 +8,13 @@ import '../extensions.dart';
 import '../tags/tags_mock_impl.dart';
 
 class ItemsMockImpl extends ItemsRepository {
-  static ItemModel generateItem([TagModel? tag]) {
+  static ItemModel generateItem({TagModel? tag, DateTime? date}) {
     final String id = faker.guid.guid();
     return ItemModel(
       id: id,
       path: '/items/${AuthMockImpl.id}/$id',
-      title: faker.lorem.words(3).join(' '),
       description: faker.lorem.sentence(),
-      date: faker.randomGenerator.dateTime,
+      date: date ?? faker.randomGenerator.dateTime,
       tag: tag ?? TagsMockImpl.tags.values.random(),
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
@@ -51,7 +50,6 @@ extension on ItemModel {
   ItemModel update(UpdateItemData update) => ItemModel(
         id: id,
         path: path,
-        title: update.title,
         description: update.description,
         date: update.date,
         tag: update.tag,

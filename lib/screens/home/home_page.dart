@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
               data: (ItemModelList data) => _ItemsDataView(key: dataViewKey, items: data),
-              error: (Object error, StackTrace? stackTrace) => ErrorView(error: error, stackTrace: stackTrace),
+              error: ErrorView.new,
               loading: () => child!,
             ),
         child: const LoadingView(),
@@ -48,7 +48,7 @@ class _ItemsDataView extends StatelessWidget {
 
           return ItemListTile(key: Key(item.id), item: item);
         },
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemCount: items.length,
       );
 }

@@ -60,11 +60,17 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = context.theme;
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.appName),
+        elevation: 0,
+        backgroundColor: theme.colorScheme.surface,
+        title: Text(
+          context.l10n.appName,
+          style: theme.textTheme.titleLarge?.copyWith(height: 1),
+        ),
       ),
       body: AnimatedBuilder(
         animation: _controller.animation!,

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class ErrorView extends StatelessWidget {
-  const ErrorView({super.key, required this.error, this.stackTrace});
+  const ErrorView(this.error, this.stackTrace, {super.key});
 
   static const Key errorViewKey = Key('errorViewKey');
 

@@ -8,3 +8,7 @@ extension L10nExtensions on BuildContext {
 extension BuildContextThemeExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
 }
+
+extension StringExtensions on String {
+  String capitalize() => this[0].toUpperCase() + substring(1);
+}

@@ -2,5 +2,6 @@
   "appName": "IIRC",
   "itemsCaption": "items",
   "tagsCaption": "tags",
-  "moreCaption": "more"
+  "moreCaption": "more",
+  "noItemsAvailableMessage": "No items available for selected date"
 }

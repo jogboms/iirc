@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/domain.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
 import '../home/item_detail_page.dart';
@@ -8,14 +8,15 @@ import '../home/item_detail_page.dart';
 class TagListTile extends StatelessWidget {
   const TagListTile({super.key, required this.tag});
 
-  final TagModel tag;
+  final TagViewModel tag;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
     return AppListTile(
-      color: Color(tag.color),
+      tagForegroundColor: tag.foregroundColor,
+      tagBackgroundColor: tag.backgroundColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

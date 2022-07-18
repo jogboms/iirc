@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/domain.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -61,15 +61,15 @@ class ItemDetailPageState extends State<ItemDetailPage> {
 class _SelectedItemDataView extends StatefulWidget {
   const _SelectedItemDataView({super.key, required this.tag, required this.items});
 
-  final TagModel tag;
-  final ItemModelList items;
+  final TagViewModel tag;
+  final ItemViewModelList items;
 
   @override
   State<_SelectedItemDataView> createState() => _SelectedItemDataViewState();
 }
 
 class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
-  late final LinkedHashMap<DateTime, List<ItemModel>> _items = LinkedHashMap<DateTime, List<ItemModel>>(
+  late final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
     equals: isSameDay,
     hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
   );
@@ -77,7 +77,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
 
   DateTime get _selectedDay => _focusedDay.value;
 
-  List<ItemModel> get _selectedItems => _getItemsForDay(_selectedDay);
+  List<ItemViewModel> get _selectedItems => _getItemsForDay(_selectedDay);
 
   @override
   void initState() {
@@ -95,7 +95,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
     }
   }
 
-  List<ItemModel> _getItemsForDay(DateTime day) => _items[day] ?? <ItemModel>[];
+  List<ItemViewModel> _getItemsForDay(DateTime day) => _items[day] ?? <ItemViewModel>[];
 
   void _onFocusDay(DateTime focusedDay) => _focusedDay.value = focusedDay;
 
@@ -109,8 +109,8 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
 
   void _populateItems() {
     _items.clear();
-    for (final ItemModel item in widget.items) {
-      _items[item.date] = <ItemModel>[...?_items[item.date], item];
+    for (final ItemViewModel item in widget.items) {
+      _items[item.date] = <ItemViewModel>[...?_items[item.date], item];
     }
   }
 
@@ -159,7 +159,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
           delegate: _CustomSliverPersistentHeader(
             height: MediaQuery.of(context).size.height / 2.5,
             color: theme.colorScheme.surface,
-            child: TableCalendar<ItemModel>(
+            child: TableCalendar<ItemViewModel>(
               calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.sunday,
               calendarStyle: const CalendarStyle(),
@@ -185,7 +185,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
               selectedDayPredicate: (DateTime day) => isSameDay(_selectedDay, day),
               onPageChanged: (DateTime focusedDay) => _onFocusDay(focusedDay),
-              calendarBuilders: CalendarBuilders<ItemModel>(
+              calendarBuilders: CalendarBuilders<ItemViewModel>(
                 prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
                   final bool isSelected = isSameDay(date, focusedDay);
                   final bool isToday = isSameDay(date, kToday) && !isSelected;
@@ -220,15 +220,19 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                   focusedDay: value,
                   onTodayButtonTap: () => setState(() => _onFocusDay(kToday)),
                 ),
-                singleMarkerBuilder: (BuildContext context, DateTime day, ItemModel item) => Container(
-                  margin: const EdgeInsets.only(right: 2.0),
-                  constraints: BoxConstraints.tight(const Size.square(6)),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isSameDay(day, _selectedDay) ? theme.colorScheme.onInverseSurface : Color(item.tag.color),
-                    border: Border.all(color: Colors.grey.shade600),
-                  ),
-                ),
+                singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) {
+                  final bool isSelected = isSameDay(day, _selectedDay);
+
+                  return Container(
+                    margin: const EdgeInsets.only(right: 2.0),
+                    constraints: BoxConstraints.tight(const Size.square(6)),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSelected ? theme.colorScheme.onInverseSurface : item.tag.backgroundColor,
+                      border: Border.all(color: item.tag.foregroundColor, width: isSelected ? 0 : .5),
+                    ),
+                  );
+                },
               ),
               focusedDay: _selectedDay,
               eventLoader: _getItemsForDay,
@@ -240,7 +244,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
         ValueListenableBuilder<DateTime>(
           valueListenable: _focusedDay,
           builder: (BuildContext context, __, _) {
-            final List<ItemModel> items = _selectedItems;
+            final List<ItemViewModel> items = _selectedItems;
             final int count = items.length;
 
             if (count == 0) {
@@ -256,7 +260,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               sliver: SliverList(
                 delegate: SliverSeparatorBuilderDelegate.withHeader(
                   builder: (BuildContext context, int index) {
-                    final ItemModel item = items[index];
+                    final ItemViewModel item = items[index];
 
                     return ItemListTile(
                       key: Key(item.id),

@@ -8,8 +8,7 @@ import 'registry_provider.dart';
 
 final userProvider = FutureProvider<UserModel>((ref) async {
   final registry = ref.read(registryProvider);
-  final users = registry.get<FetchUserUseCase>();
   final account = await ref.watch(accountProvider.future);
 
-  return users.call(account.id);
+  return registry.get<FetchUserUseCase>().call(account.id);
 });

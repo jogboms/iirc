@@ -10,11 +10,13 @@ import 'package:iirc/widgets.dart';
 import 'providers/tag_provider.dart';
 
 class CreateTagPage extends StatefulWidget {
-  const CreateTagPage({super.key});
+  const CreateTagPage({super.key, required this.asModal});
 
-  static PageRoute<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const CreateTagPage());
+  static PageRoute<void> route({bool asModal = false}) {
+    return MaterialPageRoute<void>(builder: (_) => CreateTagPage(asModal: asModal));
   }
+
+  final bool asModal;
 
   @override
   State<CreateTagPage> createState() => CreateTagPageState();
@@ -84,6 +86,11 @@ class CreateTagPageState extends State<CreateTagPage> {
     final TagModel tag = await ref.read(tagProvider).create(data);
 
     // TODO: Handle loading state.
+
+    if (widget.asModal) {
+      return Navigator.pop(context);
+    }
+
     unawaited(
       Navigator.of(context).pushReplacement(ItemDetailPage.route(id: tag.id)),
     );

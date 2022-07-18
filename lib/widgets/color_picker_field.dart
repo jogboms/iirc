@@ -35,8 +35,10 @@ class ColorPickerState extends State<ColorPickerField> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                if (color != null) TagColorBox(code: color.value),
-                const SizedBox(width: 4),
+                if (color != null) ...<Widget>[
+                  TagColorBox(code: color.value),
+                  const SizedBox(width: 4),
+                ],
                 TextButton(
                   onPressed: () => setState(() => isSelecting = true),
                   child: Text(context.l10n.selectTagColorCaption),

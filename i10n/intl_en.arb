@@ -6,5 +6,6 @@
   "noItemsAvailableMessage": "No items available for selected date",
   "createItemCaption": "Create Item",
   "createTag": "Create Tag",
-  "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}"
+  "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}",
+  "selectTagColorCaption": "Select tag color"
 }

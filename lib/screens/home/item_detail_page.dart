@@ -189,6 +189,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                 prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
                   final bool isSelected = isSameDay(date, focusedDay);
                   final bool isToday = isSameDay(date, kToday) && !isSelected;
+                  final bool isDisabled = date.month != focusedDay.month;
 
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 350),
@@ -205,17 +206,20 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                       child: Text(
                         '${date.day}',
                         style: theme.textTheme.titleSmall?.copyWith(
-                          color: isToday
-                              ? theme.colorScheme.onPrimary
-                              : isSelected
-                                  ? theme.colorScheme.onInverseSurface
-                                  : theme.colorScheme.inverseSurface,
+                          fontWeight: isDisabled ? FontWeight.normal : FontWeight.w700,
+                          color: isDisabled
+                              ? Colors.grey.shade400
+                              : isToday
+                                  ? theme.colorScheme.onPrimary
+                                  : isSelected
+                                      ? theme.colorScheme.onInverseSurface
+                                      : theme.colorScheme.inverseSurface,
                         ),
                       ),
                     ),
                   );
                 },
-                headerTitleBuilder: (_, DateTime value) => _CalendarHeader(
+                headerTitleBuilder: (BuildContext context, DateTime value) => _CalendarHeader(
                   key: ValueKey<DateTime>(_selectedDay),
                   focusedDay: value,
                   onTodayButtonTap: () => setState(() => _onFocusDay(kToday)),
@@ -243,16 +247,12 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
         ),
         ValueListenableBuilder<DateTime>(
           valueListenable: _focusedDay,
-          builder: (BuildContext context, __, _) {
+          builder: (BuildContext context, DateTime focusedDay, Widget? child) {
             final List<ItemViewModel> items = _selectedItems;
             final int count = items.length;
 
             if (count == 0) {
-              return SliverFillRemaining(
-                child: Center(
-                  child: Text(context.l10n.noItemsAvailableMessage),
-                ),
-              );
+              return child!;
             }
 
             return SliverPadding(
@@ -272,9 +272,19 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                   separatorBuilder: (BuildContext context, __) => const SizedBox(height: 8),
                   headerBuilder: (BuildContext context) => Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: Text(
-                      context.l10n.itemsCaption.capitalize() + ' ($count)',
-                      style: theme.textTheme.labelLarge,
+                    child: DefaultTextStyle(
+                      style: theme.textTheme.labelSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                        color: Colors.grey.shade600,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(DateFormat.yMMMEd().format(focusedDay).toUpperCase()),
+                          Text(context.l10n.itemsCountCaption(count).toUpperCase()),
+                        ],
+                      ),
                     ),
                   ),
                   childCount: count,
@@ -282,6 +292,11 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               ),
             );
           },
+          child: SliverFillRemaining(
+            child: Center(
+              child: Text(context.l10n.noItemsAvailableMessage),
+            ),
+          ),
         ),
       ],
     );

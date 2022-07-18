@@ -10,5 +10,8 @@
   "selectTagColorCaption": "Select tag color",
   "submitCaption": "Submit",
   "titleLabel": "Title",
-  "descriptionLabel": "Description"
+  "descriptionLabel": "Description",
+  "selectItemDateCaption": "Select item date",
+  "createNewTagCaption": "Create new tag",
+  "selectItemTagCaption": "Select item tag"
 }

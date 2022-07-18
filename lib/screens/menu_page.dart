@@ -13,6 +13,29 @@ enum MenuPageItem {
   more;
 
   static const MenuPageItem defaultPage = items;
+
+  bool get shouldShowFloatingActionButton {
+    switch (this) {
+      case items:
+      case tags:
+        return true;
+      case more:
+      default:
+        return false;
+    }
+  }
+
+  Route<void> Function()? get floatingActionButtonRouteBuilder {
+    switch (this) {
+      case items:
+        return CreateItemPage.route;
+      case tags:
+        return CreateTagPage.route;
+      case more:
+      default:
+        return null;
+    }
+  }
 }
 
 class MenuPage extends StatefulWidget {
@@ -114,30 +137,19 @@ class _MenuPageState extends State<MenuPage> {
       ),
       floatingActionButton: AnimatedBuilder(
         animation: _controller.animation!,
-        builder: (BuildContext context, Widget? child) {
-          final Route<void>? route;
-          switch (MenuPageItem.values[_currentPageIndex]) {
-            case MenuPageItem.items:
-              route = CreateItemPage.route();
-              break;
-            case MenuPageItem.tags:
-              route = CreateTagPage.route();
-              break;
-            case MenuPageItem.more:
-            default:
-              route = null;
-          }
+        builder: (BuildContext context, _) {
+          final MenuPageItem menuItem = MenuPageItem.values[_currentPageIndex];
+          final Route<void> Function()? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
 
           return AnimatedScale(
-            scale: route != null ? 1 : 0,
+            scale: routeBuilder != null ? 1 : 0,
             duration: const Duration(milliseconds: 250),
             child: FloatingActionButton(
-              onPressed: () => Navigator.of(context).push<void>(route!),
-              child: const Icon(Icons.add),
+              onPressed: () => Navigator.of(context).push<void>(routeBuilder!()),
+              child: _tabRouteViews[menuItem]!.icon,
             ),
           );
         },
-        child: const SizedBox.shrink(),
       ),
     );
   }

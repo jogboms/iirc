@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
+import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -15,6 +16,29 @@ import 'item_list_tile.dart';
 import 'providers/selected_items_provider.dart';
 
 final DateTime kToday = clock.now();
+
+@visibleForTesting
+class ItemDetailPageController with ChangeNotifier {
+  DateTime? get date => _date;
+  DateTime? _date;
+
+  set date(DateTime? date) {
+    if (this.date != date) {
+      _date = date;
+      notifyListeners();
+    }
+  }
+
+  TagModel? get tag => _tag;
+  TagModel? _tag;
+
+  set tag(TagModel? tag) {
+    if (this.tag != tag) {
+      _tag = tag;
+      notifyListeners();
+    }
+  }
+}
 
 class ItemDetailPage extends StatefulWidget {
   const ItemDetailPage({super.key, required this.id});
@@ -32,6 +56,7 @@ class ItemDetailPage extends StatefulWidget {
 @visibleForTesting
 class ItemDetailPageState extends State<ItemDetailPage> {
   static const Key dataViewKey = Key('dataViewKey');
+  final ItemDetailPageController controller = ItemDetailPageController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +67,7 @@ class ItemDetailPageState extends State<ItemDetailPage> {
             ref.watch(selectedItemsStateProvider(widget.id)).when(
                   data: (SelectedItemState state) => _SelectedItemDataView(
                     key: dataViewKey,
+                    controller: controller,
                     tag: state.tag,
                     items: state.items,
                   ),
@@ -51,7 +77,13 @@ class ItemDetailPageState extends State<ItemDetailPage> {
         child: const LoadingView(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push<void>(CreateItemPage.route()),
+        onPressed: () => Navigator.of(context).push<void>(
+          CreateItemPage.route(
+            asModal: true,
+            date: controller.date,
+            tag: controller.tag,
+          ),
+        ),
         child: const Icon(Icons.add),
       ),
     );
@@ -59,8 +91,9 @@ class ItemDetailPageState extends State<ItemDetailPage> {
 }
 
 class _SelectedItemDataView extends StatefulWidget {
-  const _SelectedItemDataView({super.key, required this.tag, required this.items});
+  const _SelectedItemDataView({super.key, required this.controller, required this.tag, required this.items});
 
+  final ItemDetailPageController controller;
   final TagViewModel tag;
   final ItemViewModelList items;
 
@@ -83,6 +116,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
   void initState() {
     super.initState();
 
+    widget.controller.tag = widget.tag;
     _populateItems();
   }
 
@@ -103,6 +137,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _onFocusDay(focusedDay);
+        widget.controller.date = focusedDay;
       });
     }
   }

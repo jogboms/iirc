@@ -9,7 +9,7 @@ void main() {
     final Finder createTagPage = find.byType(CreateTagPage);
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(home: const CreateTagPage()));
+      await tester.pumpWidget(createApp(home: const CreateTagPage(asModal: false)));
 
       await tester.pump();
 

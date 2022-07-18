@@ -7,5 +7,8 @@
   "createItemCaption": "Create Item",
   "createTag": "Create Tag",
   "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}",
-  "selectTagColorCaption": "Select tag color"
+  "selectTagColorCaption": "Select tag color",
+  "submitCaption": "Submit",
+  "titleLabel": "Title",
+  "descriptionLabel": "Description"
 }

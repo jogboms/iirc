@@ -225,7 +225,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
                   constraints: BoxConstraints.tight(const Size.square(6)),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(item.tag.color),
+                    color: isSameDay(day, _selectedDay) ? theme.colorScheme.onInverseSurface : Color(item.tag.color),
                     border: Border.all(color: Colors.grey.shade600),
                   ),
                 ),

@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:iirc/domain/models/tag.dart';
+import 'dart:ui';
+
+import 'package:iirc/core.dart';
+import 'package:iirc/domain.dart';
 
 class TagViewModel extends TagModel {
   const TagViewModel._({
@@ -16,9 +18,7 @@ class TagViewModel extends TagModel {
   });
 
   static TagViewModel fromTag(TagModel tag) {
-    final Color backgroundColor = Color(tag.color);
-    final Brightness brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
-    final Color foregroundColor = brightness == Brightness.dark ? Colors.white : Colors.black;
+    final TagColorScheme tagColorScheme = TagColorScheme.fromHex(tag.color);
 
     return TagViewModel._(
       id: tag.id,
@@ -28,9 +28,9 @@ class TagViewModel extends TagModel {
       color: tag.color,
       createdAt: tag.createdAt,
       updatedAt: tag.updatedAt,
-      brightness: brightness,
-      foregroundColor: foregroundColor,
-      backgroundColor: backgroundColor,
+      brightness: tagColorScheme.brightness,
+      foregroundColor: tagColorScheme.foregroundColor,
+      backgroundColor: tagColorScheme.backgroundColor,
     );
   }
 

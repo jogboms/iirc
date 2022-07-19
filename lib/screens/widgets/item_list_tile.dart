@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
@@ -31,20 +30,7 @@ class ItemListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: item.tag.backgroundColor,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    item.tag.title.capitalize(),
-                    style: theme.textTheme.caption?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: item.tag.foregroundColor,
-                    ),
-                  ),
-                ),
+                TagColorLabel(tag: item.tag),
                 const SizedBox(height: 6),
                 Text(
                   item.description,

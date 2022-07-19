@@ -31,7 +31,7 @@ class ItemDetailPageState extends State<ItemDetailPage> {
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
-          ScaffoldMessenger.of(context).clearMaterialBanners();
+          ScaffoldMessenger.of(context).removeCurrentMaterialBanner(reason: MaterialBannerClosedReason.dismiss);
           return true;
         },
         child: Consumer(
@@ -71,39 +71,20 @@ class _SelectedItemDataView extends StatelessWidget {
               color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 4),
-            IconButton(
-              onPressed: () {
-                final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
-
-                scaffoldMessengerState.showMaterialBanner(
-                  MaterialBanner(
-                    backgroundColor: theme.colorScheme.errorContainer,
-                    content: Text(context.l10n.areYouSureAboutThisMessage),
-                    contentTextStyle: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onErrorContainer,
-                    ),
-                    actions: <Widget>[
-                      Consumer(
-                        builder: (BuildContext context, WidgetRef ref, _) => IconButton(
-                          onPressed: () {
-                            scaffoldMessengerState.hideCurrentMaterialBanner();
-                            _onDelete(context, ref);
-                          },
-                          icon: const Icon(Icons.check_outlined),
-                          color: theme.colorScheme.onErrorContainer,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
-                        icon: const Icon(Icons.close_outlined),
-                        color: theme.colorScheme.onErrorContainer,
-                      ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(Icons.delete_forever_outlined),
-              color: theme.colorScheme.error,
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                onPressed: () async {
+                  final bool isOk = await showErrorChoiceBanner(
+                    context,
+                    message: context.l10n.areYouSureAboutThisMessage,
+                  );
+                  if (isOk) {
+                    _onDelete(context, ref);
+                  }
+                },
+                icon: const Icon(Icons.delete_forever_outlined),
+                color: theme.colorScheme.error,
+              ),
             ),
             const SizedBox(width: 2),
           ],

@@ -4,11 +4,9 @@ import 'package:iirc/domain.dart';
 class AuthMockImpl extends AuthRepository {
   static final String id = faker.guid.guid();
 
-  static AccountModel generateAccount() =>
-      AccountModel(id: id, displayName: faker.person.name(), email: faker.internet.email());
-
   @override
-  Future<AccountModel> get account async => generateAccount();
+  Future<AccountModel> get account async =>
+      AccountModel(id: id, displayName: faker.person.name(), email: faker.internet.email());
 
   @override
   Stream<String> get onAuthStateChanged async* {

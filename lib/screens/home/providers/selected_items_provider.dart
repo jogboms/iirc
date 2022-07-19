@@ -1,7 +1,6 @@
 // ignore_for_file: always_specify_types
 
 import 'package:equatable/equatable.dart';
-import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
@@ -10,8 +9,8 @@ import '../../tags/providers/tags_provider.dart';
 import 'items_provider.dart';
 
 final _selectedItemsProvider = FutureProvider.autoDispose.family<SelectedItemState, String>((ref, id) async {
-  final TagViewModelList tags = await ref.watch(tagsStateProvider.future);
-  final ItemViewModelList items = await ref.watch(itemsProvider.future);
+  final TagModelList tags = await ref.watch(tagsStateProvider.future);
+  final ItemModelList items = await ref.watch(itemsProvider.future);
 
   return SelectedItemState(
     tag: tags.firstWhere((TagModel element) => element.id == id),
@@ -27,8 +26,8 @@ final selectedItemsStateProvider = StateNotifierProvider.autoDispose
 class SelectedItemState with EquatableMixin {
   const SelectedItemState({required this.tag, required this.items});
 
-  final TagViewModel tag;
-  final ItemViewModelList items;
+  final TagModel tag;
+  final ItemModelList items;
 
   @override
   List<Object> get props => <Object>[tag, items];

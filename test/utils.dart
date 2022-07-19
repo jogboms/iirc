@@ -31,10 +31,6 @@ Registry createRegistry({
       ..set<TagsRepository>(mockRepositories.tags)
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
-      ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
-      ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
-      ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
-      ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
       ..set(environment);
 
 Widget createApp({

@@ -25,7 +25,7 @@ class CreateTagData with EquatableMixin {
   @override
   List<Object> get props => <Object>[title, description, color];
 
-  bool get isValid => title.isNotEmpty && description.isNotEmpty && color != 0;
+  bool get isValid => props.every((Object? item) => item != null);
 
   @override
   bool? get stringify => true;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
+import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
@@ -14,17 +14,18 @@ class ItemListTile extends StatelessWidget {
     this.canNavigate = true,
   });
 
-  final ItemViewModel item;
+  final ItemModel item;
   final bool canShowDate;
   final bool canNavigate;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final Color color = Color(item.tag.color);
+    final Brightness colorBrightness = ThemeData.estimateBrightnessForColor(color);
 
     return AppListTile(
-      tagForegroundColor: item.tag.foregroundColor,
-      tagBackgroundColor: item.tag.backgroundColor,
+      color: color,
       child: Row(
         children: <Widget>[
           Expanded(
@@ -35,14 +36,14 @@ class ItemListTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: item.tag.backgroundColor,
+                    color: color,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     item.tag.title.capitalize(),
                     style: theme.textTheme.caption?.copyWith(
                       fontWeight: FontWeight.w400,
-                      color: item.tag.foregroundColor,
+                      color: colorBrightness == Brightness.light ? Colors.black : Colors.white,
                     ),
                   ),
                 ),
@@ -82,7 +83,11 @@ class ItemListTile extends StatelessWidget {
             ),
         ],
       ),
-      onPressed: () => canNavigate ? Navigator.of(context).push<void>(ItemDetailPage.route(id: item.tag.id)) : null,
+      onPressed: () => canNavigate
+          ? Navigator.of(context).push<void>(
+              ItemDetailPage.route(context, id: item.tag.id),
+            )
+          : null,
     );
   }
 }

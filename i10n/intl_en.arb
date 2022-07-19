@@ -3,15 +3,5 @@
   "itemsCaption": "items",
   "tagsCaption": "tags",
   "moreCaption": "more",
-  "noItemsAvailableMessage": "No items available for selected date",
-  "createItemCaption": "Create Item",
-  "createTag": "Create Tag",
-  "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}",
-  "selectTagColorCaption": "Select tag color",
-  "submitCaption": "Submit",
-  "titleLabel": "Title",
-  "descriptionLabel": "Description",
-  "selectItemDateCaption": "Select item date",
-  "createNewTagCaption": "Create new tag",
-  "selectItemTagCaption": "Select item tag"
+  "noItemsAvailableMessage": "No items available for selected date"
 }

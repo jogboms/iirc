@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 
 class TagColorBox extends StatelessWidget {
-  const TagColorBox({super.key, required this.code}) : dimension = 32;
+  const TagColorBox({super.key, required this.code}) : dimension = 16;
+
+  const TagColorBox.large({super.key, required this.code}) : dimension = 24;
 
   final int code;
   final double dimension;
 
   @override
   Widget build(BuildContext context) {
-    final TagColorScheme tagColorScheme = TagColorScheme.fromHex(code);
+    final Color color = Color(code);
 
     return Material(
-      shape: const RoundedRectangleBorder(),
-      color: tagColorScheme.backgroundColor,
-      child: SizedBox.square(
-        dimension: dimension,
-        child: Icon(Icons.tag, color: tagColorScheme.foregroundColor),
-      ),
+      shape: const CircleBorder(),
+      color: color,
+      child: SizedBox.square(dimension: dimension),
     );
   }
 }

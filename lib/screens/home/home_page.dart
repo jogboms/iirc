@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
+import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 
 import 'item_list_tile.dart';
@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
-              data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
+              data: (ItemModelList data) => _ItemsDataView(key: dataViewKey, items: data),
               error: ErrorView.new,
               loading: () => child!,
             ),
@@ -38,13 +38,13 @@ class HomePageState extends State<HomePage> {
 class _ItemsDataView extends StatelessWidget {
   const _ItemsDataView({super.key, required this.items});
 
-  final ItemViewModelList items;
+  final ItemModelList items;
 
   @override
   Widget build(BuildContext context) => ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         itemBuilder: (BuildContext context, int index) {
-          final ItemViewModel item = items[index];
+          final ItemModel item = items[index];
 
           return ItemListTile(key: Key(item.id), item: item);
         },

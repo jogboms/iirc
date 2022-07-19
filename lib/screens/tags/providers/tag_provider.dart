@@ -19,4 +19,9 @@ class TagProvider {
 
     return registry.get<CreateTagUseCase>().call(user.id, data);
   }
+
+  Future<bool> update(UpdateTagData data) async {
+    final registry = _ref.read(registryProvider);
+    return registry.get<UpdateTagUseCase>().call(data);
+  }
 }

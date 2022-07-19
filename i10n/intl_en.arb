@@ -13,5 +13,6 @@
   "descriptionLabel": "Description",
   "selectItemDateCaption": "Select item date",
   "createNewTagCaption": "Create new tag",
-  "selectItemTagCaption": "Select item tag"
+  "selectItemTagCaption": "Select item tag",
+  "updateTag": "Update Tag"
 }

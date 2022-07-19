@@ -15,19 +15,6 @@ class UpdateTagData with EquatableMixin {
   final String description;
   final int color;
 
-  UpdateTagData copyWith({
-    String? title,
-    String? description,
-    int? color,
-  }) =>
-      UpdateTagData(
-        id: id,
-        path: path,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        color: color ?? this.color,
-      );
-
   @override
   List<Object?> get props => <Object?>[id, path, title, description, color];
 

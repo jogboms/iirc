@@ -11,6 +11,7 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../tags/update_tag_page.dart';
 import 'create_item_page.dart';
 import 'item_list_tile.dart';
 import 'providers/selected_items_provider.dart';
@@ -169,6 +170,12 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
           title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
+              onPressed: () => Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag)),
+              icon: const Icon(Icons.edit),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) => Center(
@@ -186,7 +193,8 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
               ),
               icon: const Icon(Icons.info_outline),
               color: theme.colorScheme.onSurface,
-            )
+            ),
+            const SizedBox(width: 2),
           ],
           asSliver: true,
         ),

@@ -35,6 +35,7 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+      ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
       ..set(environment);
 
 Widget createApp({

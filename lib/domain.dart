@@ -16,3 +16,4 @@ export 'domain/use_cases/fetch_items_use_case.dart';
 export 'domain/use_cases/fetch_tags_use_case.dart';
 export 'domain/use_cases/fetch_user_use_case.dart';
 export 'domain/use_cases/get_account_use_case.dart';
+export 'domain/use_cases/update_tag_use_case.dart';

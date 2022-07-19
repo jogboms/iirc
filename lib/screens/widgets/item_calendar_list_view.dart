@@ -16,9 +16,9 @@ class ItemCalendarListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
 
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (BuildContext context, Widget? emptyView) {
+    return ValueListenableBuilder<DateTime>(
+      valueListenable: controller,
+      builder: (BuildContext context, DateTime focusedDay, Widget? emptyView) {
         final ItemViewModelList items = controller.items;
         final int count = items.length;
 
@@ -52,7 +52,7 @@ class ItemCalendarListView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(DateFormat.yMMMEd().format(controller.date).toUpperCase()),
+                      Text(DateFormat.yMMMEd().format(focusedDay).toUpperCase()),
                       Text(context.l10n.itemsCountCaption(count).toUpperCase()),
                     ],
                   ),

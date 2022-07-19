@@ -117,7 +117,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
     super.initState();
 
     itemCalendarViewController.addListener(() {
-      widget.controller.date = itemCalendarViewController.date;
+      widget.controller.date = itemCalendarViewController.value;
     });
 
     widget.controller.tag = widget.tag;

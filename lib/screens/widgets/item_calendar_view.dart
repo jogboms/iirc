@@ -8,28 +8,30 @@ import 'package:iirc/data.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-final DateTime kToday = clock.now();
+final DateTime _kToday = clock.now();
 
-class ItemCalendarViewController with ChangeNotifier {
-  DateTime get date => _date;
-  DateTime _date = kToday;
+class ItemCalendarViewController extends ValueNotifier<DateTime> {
+  ItemCalendarViewController({
+    @visibleForTesting DateTime? date,
+  }) : super(date ?? _kToday);
 
-  set date(DateTime date) {
-    if (this.date != date) {
-      _date = date;
-      notifyListeners();
+  List<ItemViewModel> get items => getItemsForDay(value);
+
+  final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
+    equals: isSameDay,
+    hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
+  );
+
+  @visibleForTesting
+  void populate(ItemViewModelList items) {
+    _items.clear();
+    for (final ItemViewModel item in items) {
+      _items[item.date] = <ItemViewModel>[...?_items[item.date], item];
     }
   }
 
-  ItemViewModelList get items => _items;
-  ItemViewModelList _items = <ItemViewModel>[];
-
-  set items(ItemViewModelList items) {
-    if (!listEquals(this.items, items)) {
-      _items = items;
-      notifyListeners();
-    }
-  }
+  @visibleForTesting
+  List<ItemViewModel> getItemsForDay(DateTime day) => _items[day] ?? <ItemViewModel>[];
 }
 
 class ItemCalendarView extends StatefulWidget {
@@ -43,19 +45,11 @@ class ItemCalendarView extends StatefulWidget {
 }
 
 class _ItemCalendarViewState extends State<ItemCalendarView> {
-  late final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
-    equals: isSameDay,
-    hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
-  );
-  final ValueNotifier<DateTime> _focusedDay = ValueNotifier<DateTime>(kToday);
-
-  DateTime get _selectedDay => _focusedDay.value;
-
   @override
   void initState() {
     super.initState();
 
-    _populateItems();
+    widget.controller.populate(widget.items);
   }
 
   @override
@@ -63,30 +57,17 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     super.didUpdateWidget(oldWidget);
 
     if (!listEquals(widget.items, oldWidget.items)) {
-      _populateItems();
+      widget.controller.populate(widget.items);
     }
   }
 
-  List<ItemViewModel> _getItemsForDay(DateTime day) => _items[day] ?? <ItemViewModel>[];
-
-  void _onFocusDay(DateTime focusedDay) {
-    _focusedDay.value = focusedDay;
-    widget.controller.items = _getItemsForDay(_selectedDay);
-  }
+  void _onFocusDay(DateTime focusedDay) => widget.controller.value = focusedDay;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(_selectedDay, selectedDay)) {
+    if (!isSameDay(widget.controller.value, selectedDay)) {
       setState(() {
         _onFocusDay(focusedDay);
-        widget.controller.date = focusedDay;
       });
-    }
-  }
-
-  void _populateItems() {
-    _items.clear();
-    for (final ItemViewModel item in widget.items) {
-      _items[item.date] = <ItemViewModel>[...?_items[item.date], item];
     }
   }
 
@@ -112,7 +93,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
           calendarFormat: CalendarFormat.month,
           startingDayOfWeek: StartingDayOfWeek.sunday,
           calendarStyle: const CalendarStyle(),
-          currentDay: kToday,
+          currentDay: _kToday,
           daysOfWeekHeight: 34,
           daysOfWeekStyle: DaysOfWeekStyle(
             decoration: BoxDecoration(
@@ -131,13 +112,13 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
           ),
           shouldFillViewport: true,
           firstDay: DateTime(1970),
-          lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
-          selectedDayPredicate: (DateTime day) => isSameDay(_selectedDay, day),
+          lastDay: DateTime(_kToday.year, _kToday.month + 3, _kToday.day),
+          selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.value, day),
           onPageChanged: (DateTime focusedDay) => _onFocusDay(focusedDay),
           calendarBuilders: CalendarBuilders<ItemViewModel>(
             prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
               final bool isSelected = isSameDay(date, focusedDay);
-              final bool isToday = isSameDay(date, kToday) && !isSelected;
+              final bool isToday = isSameDay(date, _kToday) && !isSelected;
               final bool isDisabled = date.month != focusedDay.month;
 
               return AnimatedContainer(
@@ -169,12 +150,12 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
               );
             },
             headerTitleBuilder: (BuildContext context, DateTime value) => _CalendarHeader(
-              key: ValueKey<DateTime>(_selectedDay),
+              key: ValueKey<DateTime>(widget.controller.value),
               focusedDay: value,
-              onTodayButtonTap: () => setState(() => _onFocusDay(kToday)),
+              onTodayButtonTap: () => setState(() => _onFocusDay(_kToday)),
             ),
             singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) {
-              final bool isSelected = isSameDay(day, _selectedDay);
+              final bool isSelected = isSameDay(day, widget.controller.value);
 
               return Container(
                 margin: const EdgeInsets.only(right: 2.0),
@@ -187,8 +168,8 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
               );
             },
           ),
-          focusedDay: _selectedDay,
-          eventLoader: _getItemsForDay,
+          focusedDay: widget.controller.value,
+          eventLoader: widget.controller.getItemsForDay,
           onDaySelected: _onDaySelected,
         ),
       ),

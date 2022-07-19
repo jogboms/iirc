@@ -4,7 +4,7 @@ import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
-import 'item_detail_page.dart';
+import '../tags/tag_detail_page.dart';
 
 class ItemListTile extends StatelessWidget {
   const ItemListTile({
@@ -82,7 +82,7 @@ class ItemListTile extends StatelessWidget {
             ),
         ],
       ),
-      onPressed: () => canNavigate ? Navigator.of(context).push<void>(ItemDetailPage.route(id: item.tag.id)) : null,
+      onPressed: () => canNavigate ? Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id)) : null,
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
-import '../home/item_detail_page.dart';
+import 'tag_detail_page.dart';
 
 class TagListTile extends StatelessWidget {
   const TagListTile({super.key, required this.tag});
@@ -35,7 +35,7 @@ class TagListTile extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(id: tag.id)),
+      onPressed: () => Navigator.of(context).push<void>(TagDetailPage.route(id: tag.id)),
     );
   }
 }

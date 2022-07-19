@@ -49,7 +49,7 @@ class CreateTagPage extends StatelessWidget {
       }
 
       unawaited(
-        Navigator.of(context).pushReplacement(ItemDetailPage.route(id: tag.id)),
+        Navigator.of(context).pushReplacement(TagDetailPage.route(id: tag.id)),
       );
     };
   }

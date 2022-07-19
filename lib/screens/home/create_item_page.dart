@@ -62,7 +62,7 @@ class CreateItemPageState extends State<CreateItemPage> {
       }
 
       unawaited(
-        Navigator.of(context).pushReplacement(ItemDetailPage.route(id: item.tag.id)),
+        Navigator.of(context).pushReplacement(TagDetailPage.route(id: item.tag.id)),
       );
     };
   }

@@ -11,15 +11,15 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../tags/update_tag_page.dart';
-import 'create_item_page.dart';
-import 'item_list_tile.dart';
-import 'providers/selected_items_provider.dart';
+import '../home/create_item_page.dart';
+import '../home/item_list_tile.dart';
+import 'providers/selected_tag_provider.dart';
+import 'update_tag_page.dart';
 
 final DateTime kToday = clock.now();
 
 @visibleForTesting
-class ItemDetailPageController with ChangeNotifier {
+class TagDetailPageController with ChangeNotifier {
   DateTime? get date => _date;
   DateTime? _date;
 
@@ -41,23 +41,23 @@ class ItemDetailPageController with ChangeNotifier {
   }
 }
 
-class ItemDetailPage extends StatefulWidget {
-  const ItemDetailPage({super.key, required this.id});
+class TagDetailPage extends StatefulWidget {
+  const TagDetailPage({super.key, required this.id});
 
   final String id;
 
   static PageRoute<void> route({required String id}) {
-    return MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id));
+    return MaterialPageRoute<void>(builder: (_) => TagDetailPage(id: id));
   }
 
   @override
-  State<ItemDetailPage> createState() => ItemDetailPageState();
+  State<TagDetailPage> createState() => TagDetailPageState();
 }
 
 @visibleForTesting
-class ItemDetailPageState extends State<ItemDetailPage> {
+class TagDetailPageState extends State<TagDetailPage> {
   static const Key dataViewKey = Key('dataViewKey');
-  final ItemDetailPageController controller = ItemDetailPageController();
+  final TagDetailPageController controller = TagDetailPageController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,8 @@ class ItemDetailPageState extends State<ItemDetailPage> {
       backgroundColor: Colors.grey.shade200,
       body: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) =>
-            ref.watch(selectedItemsStateProvider(widget.id)).when(
-                  data: (SelectedItemState state) => _SelectedItemDataView(
+            ref.watch(selectedTagStateProvider(widget.id)).when(
+                  data: (SelectedTagState state) => _SelectedTagDataView(
                     key: dataViewKey,
                     controller: controller,
                     tag: state.tag,
@@ -91,18 +91,18 @@ class ItemDetailPageState extends State<ItemDetailPage> {
   }
 }
 
-class _SelectedItemDataView extends StatefulWidget {
-  const _SelectedItemDataView({super.key, required this.controller, required this.tag, required this.items});
+class _SelectedTagDataView extends StatefulWidget {
+  const _SelectedTagDataView({super.key, required this.controller, required this.tag, required this.items});
 
-  final ItemDetailPageController controller;
+  final TagDetailPageController controller;
   final TagViewModel tag;
   final ItemViewModelList items;
 
   @override
-  State<_SelectedItemDataView> createState() => _SelectedItemDataViewState();
+  State<_SelectedTagDataView> createState() => _SelectedTagDataViewState();
 }
 
-class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
+class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
   late final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
     equals: isSameDay,
     hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
@@ -122,7 +122,7 @@ class _SelectedItemDataViewState extends State<_SelectedItemDataView> {
   }
 
   @override
-  void didUpdateWidget(covariant _SelectedItemDataView oldWidget) {
+  void didUpdateWidget(covariant _SelectedTagDataView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (!listEquals(widget.items, oldWidget.items)) {

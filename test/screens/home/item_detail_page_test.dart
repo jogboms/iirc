@@ -10,8 +10,8 @@ import 'package:mocktail/mocktail.dart';
 import '../../utils.dart';
 
 void main() {
-  group('ItemDetailPage', () {
-    final Finder itemDetailPage = find.byType(ItemDetailPage);
+  group('TagDetailPage', () {
+    final Finder itemDetailPage = find.byType(TagDetailPage);
 
     tearDown(() => mockRepositories.reset());
 
@@ -19,7 +19,7 @@ void main() {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
       when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
+      await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
       await tester.pump();
 
@@ -30,7 +30,7 @@ void main() {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
       when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
 
-      await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
+      await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
       await tester.pump();
 
@@ -48,7 +48,7 @@ void main() {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
       when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
 
-      await tester.pumpWidget(createApp(home: ItemDetailPage(id: tag.id)));
+      await tester.pumpWidget(createApp(home: TagDetailPage(id: tag.id)));
 
       await tester.pump();
       await tester.pump();
@@ -65,7 +65,7 @@ void main() {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.error(expectedError));
       when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[]));
 
-      await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
+      await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
       await tester.pump();
       await tester.pump();
@@ -80,7 +80,7 @@ void main() {
       when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[]));
       when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
 
-      await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
+      await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
       await tester.pump();
       await tester.pump();

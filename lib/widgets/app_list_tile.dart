@@ -5,12 +5,14 @@ class AppListTile extends StatelessWidget {
   const AppListTile({
     super.key,
     required this.child,
-    required this.color,
+    required this.tagForegroundColor,
+    required this.tagBackgroundColor,
     this.onPressed,
   });
 
   final Widget child;
-  final Color color;
+  final Color tagForegroundColor;
+  final Color tagBackgroundColor;
   final VoidCallback? onPressed;
 
   static const double height = 84;
@@ -35,10 +37,10 @@ class AppListTile extends StatelessWidget {
                 SizedBox.fromSize(
                   size: const Size.fromWidth(4),
                   child: Material(
-                    color: color,
+                    color: tagBackgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(2),
-                      side: BorderSide(color: Colors.grey.shade600),
+                      side: BorderSide(color: tagForegroundColor, width: .5),
                     ),
                   ),
                 ),

@@ -26,7 +26,20 @@ class TagsMockImpl extends TagsRepository {
   final BehaviorSubject<Map<String, TagModel>> _tags$ = BehaviorSubject<Map<String, TagModel>>.seeded(tags);
 
   @override
-  Future<TagModel> create(String userId, CreateTagData tag) async => tags.values.first;
+  Future<TagModel> create(String userId, CreateTagData tag) async {
+    final String id = faker.guid.guid();
+    final TagModel newTag = TagModel(
+      id: id,
+      path: '/tags/$userId/$id',
+      title: tag.title,
+      description: tag.description,
+      color: tag.color,
+      createdAt: clock.now(),
+      updatedAt: null,
+    );
+    _tags$.add(tags..putIfAbsent(id, () => newTag));
+    return newTag;
+  }
 
   @override
   Future<bool> update(UpdateTagData tag) async {

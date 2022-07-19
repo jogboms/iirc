@@ -202,41 +202,43 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
               icon: const Icon(Icons.edit_outlined),
               color: theme.colorScheme.onSurface,
             ),
-            const SizedBox(width: 4),
-            IconButton(
-              onPressed: () {
-                final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
+            if (widget.items.isEmpty) ...<Widget>[
+              const SizedBox(width: 4),
+              IconButton(
+                onPressed: () {
+                  final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
 
-                scaffoldMessengerState.showMaterialBanner(
-                  MaterialBanner(
-                    backgroundColor: theme.colorScheme.errorContainer,
-                    content: Text(context.l10n.areYouSureAboutThisMessage),
-                    contentTextStyle: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onErrorContainer,
-                    ),
-                    actions: <Widget>[
-                      Consumer(
-                        builder: (BuildContext context, WidgetRef ref, _) => IconButton(
-                          onPressed: () {
-                            scaffoldMessengerState.hideCurrentMaterialBanner();
-                            _onDelete(context, ref);
-                          },
-                          icon: const Icon(Icons.check_outlined),
-                          color: theme.colorScheme.onErrorContainer,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
-                        icon: const Icon(Icons.close_outlined),
+                  scaffoldMessengerState.showMaterialBanner(
+                    MaterialBanner(
+                      backgroundColor: theme.colorScheme.errorContainer,
+                      content: Text(context.l10n.areYouSureAboutThisMessage),
+                      contentTextStyle: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.onErrorContainer,
                       ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(Icons.delete_forever_outlined),
-              color: theme.colorScheme.error,
-            ),
+                      actions: <Widget>[
+                        Consumer(
+                          builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                            onPressed: () {
+                              scaffoldMessengerState.hideCurrentMaterialBanner();
+                              _onDelete(context, ref);
+                            },
+                            icon: const Icon(Icons.check_outlined),
+                            color: theme.colorScheme.onErrorContainer,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
+                          icon: const Icon(Icons.close_outlined),
+                          color: theme.colorScheme.onErrorContainer,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.delete_forever_outlined),
+                color: theme.colorScheme.error,
+              ),
+            ],
             const SizedBox(width: 2),
           ],
           asSliver: true,

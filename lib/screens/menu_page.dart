@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
 import 'calendar/calendar_page.dart';
@@ -16,13 +18,19 @@ enum MenuPageItem {
 
   static const MenuPageItem defaultPage = items;
 
-  Route<void> Function()? get floatingActionButtonRouteBuilder {
+  Route<void> Function(Object? param)? get floatingActionButtonRouteBuilder {
     switch (this) {
       case items:
+        return (_) => CreateItemPage.route();
       case calendar:
-        return CreateItemPage.route;
+        return (Object? date) {
+          if (date is! DateTime) {
+            throw ArgumentError('Expected a DateTime');
+          }
+          return CreateItemPage.route(asModal: true, date: date);
+        };
       case tags:
-        return CreateTagPage.route;
+        return (_) => CreateTagPage.route();
       case more:
       default:
         return null;
@@ -136,14 +144,18 @@ class _MenuPageState extends State<MenuPage> {
         animation: _controller.animation!,
         builder: (BuildContext context, _) {
           final MenuPageItem menuItem = MenuPageItem.values[_currentPageIndex];
-          final Route<void> Function()? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
+          final Route<void> Function(Object?)? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
 
           return AnimatedScale(
             scale: routeBuilder != null ? 1 : 0,
             duration: const Duration(milliseconds: 250),
-            child: FloatingActionButton(
-              onPressed: () => Navigator.of(context).push<void>(routeBuilder!()),
-              child: _tabRouteViews[menuItem]!.icon,
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
+                onPressed: () => Navigator.of(context).push<void>(
+                  routeBuilder!(ref.read(calendarStateProvider)),
+                ),
+                child: _tabRouteViews[menuItem]!.icon,
+              ),
             ),
           );
         },

@@ -1,21 +1,16 @@
-import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
-import 'package:intl/intl.dart';
 
 import '../home/create_item_page.dart';
-import '../home/item_detail_page.dart';
+import '../widgets/item_calendar_list_view.dart';
 import '../widgets/item_calendar_view.dart';
-import '../widgets/item_list_tile.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
 import 'update_tag_page.dart';
-
-final DateTime kToday = clock.now();
 
 @visibleForTesting
 class TagDetailPageController with ChangeNotifier {
@@ -119,11 +114,13 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
 
   @override
   void initState() {
+    super.initState();
+
     itemCalendarViewController.addListener(() {
       widget.controller.date = itemCalendarViewController.date;
     });
 
-    super.initState();
+    widget.controller.tag = widget.tag;
   }
 
   @override
@@ -193,59 +190,8 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           controller: itemCalendarViewController,
           items: widget.items,
         ),
-        AnimatedBuilder(
-          animation: itemCalendarViewController,
-          builder: (BuildContext context, Widget? child) {
-            final ItemViewModelList items = itemCalendarViewController.items;
-            final DateTime focusedDay = itemCalendarViewController.date;
-            final int count = items.length;
-
-            if (count == 0) {
-              return child!;
-            }
-
-            return SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 48),
-              sliver: SliverList(
-                delegate: SliverSeparatorBuilderDelegate.withHeader(
-                  builder: (BuildContext context, int index) {
-                    final ItemViewModel item = items[index];
-
-                    return ItemListTile(
-                      key: Key(item.id),
-                      item: item,
-                      canShowDate: false,
-                      onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(id: item.id)),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, __) => const SizedBox(height: 8),
-                  headerBuilder: (BuildContext context) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: DefaultTextStyle(
-                      style: theme.textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        color: Colors.grey.shade600,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(DateFormat.yMMMEd().format(focusedDay).toUpperCase()),
-                          Text(context.l10n.itemsCountCaption(count).toUpperCase()),
-                        ],
-                      ),
-                    ),
-                  ),
-                  childCount: count,
-                ),
-              ),
-            );
-          },
-          child: SliverFillRemaining(
-            child: Center(
-              child: Text(context.l10n.noItemsAvailableMessage),
-            ),
-          ),
+        ItemCalendarListView(
+          controller: itemCalendarViewController,
         ),
       ],
     );

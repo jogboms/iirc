@@ -13,21 +13,8 @@ class CreateItemData with EquatableMixin {
   final DateTime date;
   final TagModel? tag;
 
-  CreateItemData copyWith({
-    String? description,
-    DateTime? date,
-    TagModel? tag,
-  }) =>
-      CreateItemData(
-        description: description ?? this.description,
-        date: date ?? this.date,
-        tag: tag ?? this.tag,
-      );
-
   @override
   List<Object?> get props => <Object?>[description, date, tag];
-
-  bool get isValid => description.isNotEmpty && tag != null;
 
   @override
   bool? get stringify => true;

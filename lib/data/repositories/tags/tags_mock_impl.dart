@@ -48,6 +48,13 @@ class TagsMockImpl extends TagsRepository {
   }
 
   @override
+  Future<bool> delete(String path) async {
+    final String id = tags.values.firstWhere((TagModel element) => element.path == path).id;
+    _tags$.add(tags..remove(id));
+    return true;
+  }
+
+  @override
   Stream<TagModelList> fetch() => _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
 }
 

@@ -15,6 +15,7 @@ import '../home/create_item_page.dart';
 import '../home/item_detail_page.dart';
 import '../widgets/item_list_tile.dart';
 import 'providers/selected_tag_provider.dart';
+import 'providers/tag_provider.dart';
 import 'update_tag_page.dart';
 
 final DateTime kToday = clock.now();
@@ -64,19 +65,25 @@ class TagDetailPageState extends State<TagDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) =>
-            ref.watch(selectedTagStateProvider(widget.id)).when(
-                  data: (SelectedTagState state) => _SelectedTagDataView(
-                    key: dataViewKey,
-                    controller: controller,
-                    tag: state.tag,
-                    items: state.items,
+      body: WillPopScope(
+        onWillPop: () async {
+          ScaffoldMessenger.of(context).clearMaterialBanners();
+          return true;
+        },
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+              ref.watch(selectedTagStateProvider(widget.id)).when(
+                    data: (SelectedTagState state) => _SelectedTagDataView(
+                      key: dataViewKey,
+                      controller: controller,
+                      tag: state.tag,
+                      items: state.items,
+                    ),
+                    error: ErrorView.new,
+                    loading: () => child!,
                   ),
-                  error: ErrorView.new,
-                  loading: () => child!,
-                ),
-        child: const LoadingView(),
+          child: const LoadingView(),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push<void>(
@@ -171,12 +178,6 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
-              onPressed: () => Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag)),
-              icon: const Icon(Icons.edit_outlined),
-              color: theme.colorScheme.onSurface,
-            ),
-            const SizedBox(width: 4),
-            IconButton(
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) => Center(
@@ -194,6 +195,47 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
               ),
               icon: const Icon(Icons.info_outline),
               color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
+              onPressed: () => Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag)),
+              icon: const Icon(Icons.edit_outlined),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
+              onPressed: () {
+                final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
+
+                scaffoldMessengerState.showMaterialBanner(
+                  MaterialBanner(
+                    backgroundColor: theme.colorScheme.errorContainer,
+                    content: Text(context.l10n.areYouSureAboutThisMessage),
+                    contentTextStyle: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onErrorContainer,
+                    ),
+                    actions: <Widget>[
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                          onPressed: () {
+                            scaffoldMessengerState.hideCurrentMaterialBanner();
+                            _onDelete(context, ref);
+                          },
+                          icon: const Icon(Icons.check_outlined),
+                          color: theme.colorScheme.onErrorContainer,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
+                        icon: const Icon(Icons.close_outlined),
+                        color: theme.colorScheme.onErrorContainer,
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.delete_forever_outlined),
+              color: theme.colorScheme.error,
             ),
             const SizedBox(width: 2),
           ],
@@ -344,6 +386,15 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
         ),
       ],
     );
+  }
+
+  void _onDelete(BuildContext context, WidgetRef ref) async {
+    await ref.read(tagProvider).delete(widget.tag);
+
+    // TODO: Handle loading state.
+    // TODO: Handle error state.
+
+    return Navigator.pop(context);
   }
 }
 

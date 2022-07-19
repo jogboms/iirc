@@ -28,6 +28,7 @@ void main() async {
     ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
     ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
     ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
+    ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di()))
     ..set<Environment>(environment);
 
   runApp(

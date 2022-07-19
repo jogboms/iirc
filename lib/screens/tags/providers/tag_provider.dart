@@ -24,4 +24,9 @@ class TagProvider {
     final registry = _ref.read(registryProvider);
     return registry.get<UpdateTagUseCase>().call(data);
   }
+
+  Future<bool> delete(TagModel tag) async {
+    final registry = _ref.read(registryProvider);
+    return registry.get<DeleteTagUseCase>().call(tag);
+  }
 }

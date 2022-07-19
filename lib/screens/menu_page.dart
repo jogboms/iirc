@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/widgets.dart';
 
+import 'calendar/calendar_page.dart';
 import 'home/create_item_page.dart';
 import 'home/home_page.dart';
 import 'tags/create_tag_page.dart';
@@ -10,24 +11,15 @@ import 'tags/tags_page.dart';
 enum MenuPageItem {
   tags,
   items,
+  calendar,
   more;
 
   static const MenuPageItem defaultPage = items;
 
-  bool get shouldShowFloatingActionButton {
-    switch (this) {
-      case items:
-      case tags:
-        return true;
-      case more:
-      default:
-        return false;
-    }
-  }
-
   Route<void> Function()? get floatingActionButtonRouteBuilder {
     switch (this) {
       case items:
+      case calendar:
         return CreateItemPage.route;
       case tags:
         return CreateTagPage.route;
@@ -56,6 +48,11 @@ class _MenuPageState extends State<MenuPage> {
           S.current.itemsCaption,
           const Icon(Icons.all_inclusive),
           const HomePage(key: PageStorageKey<String>('items')),
+        ),
+        MenuPageItem.calendar: _TabRouteView(
+          S.current.calendarCaption,
+          const Icon(Icons.calendar_today_outlined),
+          const CalendarPage(key: PageStorageKey<String>('calendar')),
         ),
         MenuPageItem.more: _TabRouteView(
           S.current.moreCaption,

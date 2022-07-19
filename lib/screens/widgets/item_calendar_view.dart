@@ -8,7 +8,7 @@ import 'package:iirc/data.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-final DateTime _kToday = clock.now();
+DateTime get _kToday => clock.now();
 
 class ItemCalendarViewController extends ValueNotifier<DateTime> {
   ItemCalendarViewController({

@@ -41,6 +41,10 @@ enum MenuPageItem {
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
+  static PageRoute<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const MenuPage());
+  }
+
   @override
   State<MenuPage> createState() => _MenuPageState();
 }

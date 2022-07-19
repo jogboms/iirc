@@ -8,8 +8,9 @@ import 'package:iirc/screens.dart';
 import 'package:iirc/widgets.dart';
 
 import 'providers/tag_provider.dart';
+import 'tag_entry_form.dart';
 
-class CreateTagPage extends StatefulWidget {
+class CreateTagPage extends StatelessWidget {
   const CreateTagPage({super.key, required this.asModal});
 
   static PageRoute<void> route({bool asModal = false}) {
@@ -19,85 +20,37 @@ class CreateTagPage extends StatefulWidget {
   final bool asModal;
 
   @override
-  State<CreateTagPage> createState() => CreateTagPageState();
-}
-
-@visibleForTesting
-class CreateTagPageState extends State<CreateTagPage> {
-  final ValueNotifier<CreateTagData> dataNotifier = ValueNotifier<CreateTagData>(
-    const CreateTagData(color: 0, title: '', description: ''),
-  );
-
-  @override
-  void dispose() {
-    dataNotifier.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(context.l10n.createTag),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const SizedBox(height: 12),
-            TextField(
-              decoration: InputDecoration(label: Text(context.l10n.titleLabel)),
-              onChanged: (String value) => dataNotifier.update(title: value),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              decoration: InputDecoration(label: Text(context.l10n.descriptionLabel)),
-              maxLines: 4,
-              onChanged: (String value) => dataNotifier.update(description: value),
-            ),
-            const SizedBox(height: 16),
-            ValueListenableBuilder<CreateTagData>(
-              valueListenable: dataNotifier,
-              builder: (BuildContext context, CreateTagData value, _) => ColorPickerField(
-                initialValue: Color(value.color),
-                onChanged: (Color color) => dataNotifier.update(color: color.value),
-              ),
-            ),
-            const SizedBox(height: 24),
-            ValueListenableBuilder<CreateTagData>(
-              valueListenable: dataNotifier,
-              builder: (BuildContext context, CreateTagData value, Widget? child) => Consumer(
-                builder: (BuildContext context, WidgetRef ref, _) => OutlinedButton(
-                  onPressed: value.isValid ? () => _onSubmit(ref, value) : null,
-                  child: child!,
-                ),
-              ),
-              child: Text(context.l10n.submitCaption),
-            ),
-          ],
-        ),
+      body: TagEntryForm(
+        initialValue: null,
+        type: TagEntryType.create,
+        onSaved: _onSubmit(context),
       ),
     );
   }
 
-  void _onSubmit(WidgetRef ref, CreateTagData data) async {
-    final TagModel tag = await ref.read(tagProvider).create(data);
+  TagEntryValueSaved _onSubmit(BuildContext context) {
+    return (WidgetRef ref, TagEntryData data) async {
+      final TagModel tag = await ref.read(tagProvider).create(CreateTagData(
+            title: data.title,
+            description: data.description,
+            color: data.color,
+          ));
 
-    // TODO: Handle loading state.
+      // TODO: Handle loading state.
+      // TODO: Handle error state.
 
-    if (widget.asModal) {
-      return Navigator.pop(context);
-    }
+      if (asModal) {
+        return Navigator.pop(context);
+      }
 
-    unawaited(
-      Navigator.of(context).pushReplacement(ItemDetailPage.route(id: tag.id)),
-    );
+      unawaited(
+        Navigator.of(context).pushReplacement(ItemDetailPage.route(id: tag.id)),
+      );
+    };
   }
-}
-
-extension on ValueNotifier<CreateTagData> {
-  void update({String? title, String? description, int? color}) =>
-      value = value.copyWith(title: title, description: description, color: color);
 }

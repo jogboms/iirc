@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
+import 'package:intl/intl.dart';
+
+import 'providers/selected_item_provider.dart';
 
 class ItemDetailPage extends StatefulWidget {
   const ItemDetailPage({super.key, required this.id});
@@ -17,33 +22,86 @@ class ItemDetailPage extends StatefulWidget {
 
 @visibleForTesting
 class ItemDetailPageState extends State<ItemDetailPage> {
+  static const Key dataViewKey = Key('dataViewKey');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+            ref.watch(selectedItemStateProvider(widget.id)).when(
+                  data: (ItemViewModel item) => _SelectedItemDataView(
+                    key: dataViewKey,
+                    item: item,
+                  ),
+                  error: ErrorView.new,
+                  loading: () => child!,
+                ),
+        child: const LoadingView(),
+      ),
+    );
+  }
+}
+
+class _SelectedItemDataView extends StatelessWidget {
+  const _SelectedItemDataView({super.key, required this.item});
+
+  final ItemViewModel item;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          CustomAppBar(
-            title: Text(context.l10n.informationCaption),
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {}, // TODO: delete item
-                icon: const Icon(Icons.delete_forever),
-                color: theme.colorScheme.error,
-              ),
-              const SizedBox(width: 4),
-              IconButton(
-                onPressed: () {}, // TODO: edit item
-                icon: const Icon(Icons.edit),
-                color: theme.colorScheme.onSurface,
-              ),
-              const SizedBox(width: 2),
-            ],
-            asSliver: true,
-          )
-        ],
-      ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        CustomAppBar(
+          title: Text(context.l10n.informationCaption),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {}, // TODO: edit item
+              icon: const Icon(Icons.edit_outlined),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
+              onPressed: () {}, // TODO: delete item
+              icon: const Icon(Icons.delete_forever_outlined),
+              color: theme.colorScheme.error,
+            ),
+            const SizedBox(width: 2),
+          ],
+          asSliver: true,
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TagColorLabel(
+                    tag: item.tag,
+                    variant: TagColorLabelVariant.large,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    DateFormat.yMMMEd().format(item.date),
+                    style: theme.textTheme.subtitle2,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  item.description,
+                  style: theme.textTheme.headline6,
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }

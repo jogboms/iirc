@@ -172,7 +172,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           actions: <Widget>[
             IconButton(
               onPressed: () => Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag)),
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit_outlined),
               color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 4),

@@ -71,8 +71,13 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     ),
   );
 
+  late final TextEditingController descriptionTextEditingController = TextEditingController(
+    text: dataNotifier.value.description,
+  );
+
   @override
   void dispose() {
+    descriptionTextEditingController.dispose();
     dataNotifier.dispose();
 
     super.dispose();
@@ -161,6 +166,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             const SizedBox(height: 12),
           ],
           TextField(
+            controller: descriptionTextEditingController,
             decoration: InputDecoration(label: Text(context.l10n.descriptionLabel)),
             maxLines: 4,
             onChanged: (String value) => dataNotifier.update(description: value),

@@ -7,16 +7,16 @@ import '../../utils.dart';
 
 // TODO: improve tests w/ input form
 void main() {
-  group('UpdateTagPage', () {
-    final Finder updateTagPage = find.byType(UpdateTagPage);
+  group('UpdateItemPage', () {
+    final Finder updateItemPage = find.byType(UpdateItemPage);
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      final TagModel dummyTag = TagsMockImpl.generateTag();
-      await tester.pumpWidget(createApp(home: UpdateTagPage(tag: dummyTag)));
+      final ItemModel dummyItem = ItemsMockImpl.generateItem();
+      await tester.pumpWidget(createApp(home: UpdateItemPage(item: dummyItem)));
 
       await tester.pump();
 
-      expect(updateTagPage, findsOneWidget);
+      expect(updateItemPage, findsOneWidget);
     });
   });
 }

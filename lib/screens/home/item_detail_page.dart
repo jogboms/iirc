@@ -6,6 +6,7 @@ import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'providers/selected_item_provider.dart';
+import 'update_item_page.dart';
 
 class ItemDetailPage extends StatefulWidget {
   const ItemDetailPage({super.key, required this.id});
@@ -58,7 +59,7 @@ class _SelectedItemDataView extends StatelessWidget {
           title: Text(context.l10n.informationCaption),
           actions: <Widget>[
             IconButton(
-              onPressed: () {}, // TODO: edit item
+              onPressed: () => Navigator.of(context).push(UpdateItemPage.route(item: item)),
               icon: const Icon(Icons.edit_outlined),
               color: theme.colorScheme.onSurface,
             ),

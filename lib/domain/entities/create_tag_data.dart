@@ -11,21 +11,8 @@ class CreateTagData with EquatableMixin {
   final String description;
   final int color;
 
-  CreateTagData copyWith({
-    String? title,
-    String? description,
-    int? color,
-  }) =>
-      CreateTagData(
-        title: title ?? this.title,
-        description: description ?? this.description,
-        color: color ?? this.color,
-      );
-
   @override
   List<Object> get props => <Object>[title, description, color];
-
-  bool get isValid => title.isNotEmpty && description.isNotEmpty && color != 0;
 
   @override
   bool? get stringify => true;

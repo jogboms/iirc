@@ -1,33 +1,34 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
-import 'package:iirc/screens.dart';
 import 'package:iirc/widgets.dart';
 
 import 'providers/tag_provider.dart';
 import 'tag_entry_form.dart';
 
-class CreateTagPage extends StatelessWidget {
-  const CreateTagPage({super.key, required this.asModal});
+class UpdateTagPage extends StatelessWidget {
+  const UpdateTagPage({super.key, required this.tag});
 
-  static PageRoute<void> route({bool asModal = false}) {
-    return MaterialPageRoute<void>(builder: (_) => CreateTagPage(asModal: asModal));
+  static PageRoute<void> route({required TagModel tag}) {
+    return MaterialPageRoute<void>(builder: (_) => UpdateTagPage(tag: tag));
   }
 
-  final bool asModal;
+  final TagModel tag;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(context.l10n.createTagCaption),
+        title: Text(context.l10n.updateTagCaption),
       ),
       body: TagEntryForm(
-        initialValue: null,
-        type: TagEntryType.create,
+        initialValue: TagEntryData(
+          title: tag.title,
+          description: tag.description,
+          color: tag.color,
+        ),
+        type: TagEntryType.update,
         onSaved: _onSubmit(context),
       ),
     );
@@ -35,7 +36,9 @@ class CreateTagPage extends StatelessWidget {
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, TagEntryData data) async {
-      final TagModel tag = await ref.read(tagProvider).create(CreateTagData(
+      await ref.read(tagProvider).update(UpdateTagData(
+            id: tag.id,
+            path: tag.path,
             title: data.title,
             description: data.description,
             color: data.color,
@@ -43,14 +46,7 @@ class CreateTagPage extends StatelessWidget {
 
       // TODO: Handle loading state.
       // TODO: Handle error state.
-
-      if (asModal) {
-        return Navigator.pop(context);
-      }
-
-      unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: tag.id)),
-      );
+      return Navigator.pop(context);
     };
   }
 }

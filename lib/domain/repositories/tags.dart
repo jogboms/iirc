@@ -7,5 +7,7 @@ abstract class TagsRepository {
 
   Future<bool> update(UpdateTagData tag);
 
+  Future<bool> delete(String path);
+
   Stream<TagModelList> fetch();
 }

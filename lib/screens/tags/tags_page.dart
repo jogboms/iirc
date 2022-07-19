@@ -41,14 +41,22 @@ class _TagsDataView extends StatelessWidget {
   final TagViewModelList tags;
 
   @override
-  Widget build(BuildContext context) => ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        itemBuilder: (BuildContext context, int index) {
-          final TagViewModel tag = tags[index];
-
-          return TagListTile(key: Key(tag.id), tag: tag);
-        },
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemCount: tags.length,
+  Widget build(BuildContext context) {
+    if (tags.isEmpty) {
+      return Center(
+        child: Text(context.l10n.noTagsCreatedMessage),
       );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      itemBuilder: (BuildContext context, int index) {
+        final TagViewModel tag = tags[index];
+
+        return TagListTile(key: Key(tag.id), tag: tag);
+      },
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemCount: tags.length,
+    );
+  }
 }

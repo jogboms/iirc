@@ -3,9 +3,11 @@
   "itemsCaption": "items",
   "tagsCaption": "tags",
   "moreCaption": "more",
+  "noTagsCreatedMessage": "No tags have been created yet",
+  "noItemsCreatedMessage": "No items have been created yet",
   "noItemsAvailableMessage": "No items available for selected date",
   "createItemCaption": "Create Item",
-  "createTag": "Create Tag",
+  "createTagCaption": "Create Tag",
   "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}",
   "selectTagColorCaption": "Select tag color",
   "submitCaption": "Submit",
@@ -13,5 +15,9 @@
   "descriptionLabel": "Description",
   "selectItemDateCaption": "Select item date",
   "createNewTagCaption": "Create new tag",
-  "selectItemTagCaption": "Select item tag"
+  "selectItemTagCaption": "Select item tag",
+  "updateTagCaption": "Update Tag",
+  "updateItemCaption": "Update Item",
+  "informationCaption": "Information",
+  "areYouSureAboutThisMessage": "Are you sure about this?"
 }

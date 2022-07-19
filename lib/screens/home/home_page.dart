@@ -4,8 +4,9 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
-import 'item_list_tile.dart';
-import 'providers/items_provider.dart';
+import '../tags/tag_detail_page.dart';
+import '../widgets/item_list_tile.dart';
+import 'providers/filtered_items_state_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
@@ -41,14 +42,26 @@ class _ItemsDataView extends StatelessWidget {
   final ItemViewModelList items;
 
   @override
-  Widget build(BuildContext context) => ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        itemBuilder: (BuildContext context, int index) {
-          final ItemViewModel item = items[index];
-
-          return ItemListTile(key: Key(item.id), item: item);
-        },
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemCount: items.length,
+  Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return Center(
+        child: Text(context.l10n.noItemsCreatedMessage),
       );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      itemBuilder: (BuildContext context, int index) {
+        final ItemViewModel item = items[index];
+
+        return ItemListTile(
+          key: Key(item.id),
+          item: item,
+          onPressed: () => Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id)),
+        );
+      },
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemCount: items.length,
+    );
+  }
 }

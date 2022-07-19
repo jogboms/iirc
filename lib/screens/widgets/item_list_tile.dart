@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
-
-import 'item_detail_page.dart';
 
 class ItemListTile extends StatelessWidget {
   const ItemListTile({
     super.key,
     required this.item,
+    required this.onPressed,
     this.canShowDate = true,
-    this.canNavigate = true,
   });
 
   final ItemViewModel item;
   final bool canShowDate;
-  final bool canNavigate;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +22,7 @@ class ItemListTile extends StatelessWidget {
     return AppListTile(
       tagForegroundColor: item.tag.foregroundColor,
       tagBackgroundColor: item.tag.backgroundColor,
+      onPressed: onPressed,
       child: Row(
         children: <Widget>[
           Expanded(
@@ -32,20 +30,7 @@ class ItemListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: item.tag.backgroundColor,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    item.tag.title.capitalize(),
-                    style: theme.textTheme.caption?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: item.tag.foregroundColor,
-                    ),
-                  ),
-                ),
+                TagColorLabel(tag: item.tag),
                 const SizedBox(height: 6),
                 Text(
                   item.description,
@@ -82,7 +67,6 @@ class ItemListTile extends StatelessWidget {
             ),
         ],
       ),
-      onPressed: () => canNavigate ? Navigator.of(context).push<void>(ItemDetailPage.route(id: item.tag.id)) : null,
     );
   }
 }

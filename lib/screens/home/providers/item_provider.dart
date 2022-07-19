@@ -19,4 +19,14 @@ class ItemProvider {
 
     return registry.get<CreateItemUseCase>().call(user.id, data);
   }
+
+  Future<bool> update(UpdateItemData data) async {
+    final registry = _ref.read(registryProvider);
+    return registry.get<UpdateItemUseCase>().call(data);
+  }
+
+  Future<bool> delete(ItemModel item) async {
+    final registry = _ref.read(registryProvider);
+    return registry.get<DeleteItemUseCase>().call(item);
+  }
 }

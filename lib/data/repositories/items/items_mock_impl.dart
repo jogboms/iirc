@@ -29,12 +29,13 @@ class ItemsMockImpl extends ItemsRepository {
   @override
   Future<ItemModel> create(String userId, CreateItemData item) async {
     final String id = faker.guid.guid();
+    final TagModel tag = TagsMockImpl.tags[item.tag!.id]!;
     final ItemModel newItem = ItemModel(
       id: id,
       path: '/items/$userId/$id',
       description: item.description,
       date: item.date,
-      tag: item.tag!,
+      tag: tag,
       createdAt: clock.now(),
       updatedAt: null,
     );

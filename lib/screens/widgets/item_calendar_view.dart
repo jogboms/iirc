@@ -23,6 +23,9 @@ class ItemCalendarViewController extends ValueNotifier<DateTime> {
   );
 
   @visibleForTesting
+  void update(DateTime focusedDay) => value = focusedDay;
+
+  @visibleForTesting
   void populate(ItemViewModelList items) {
     _items.clear();
     for (final ItemViewModel item in items) {
@@ -61,12 +64,10 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     }
   }
 
-  void _onFocusDay(DateTime focusedDay) => widget.controller.value = focusedDay;
-
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(widget.controller.value, selectedDay)) {
       setState(() {
-        _onFocusDay(focusedDay);
+        widget.controller.update(focusedDay);
       });
     }
   }
@@ -86,6 +87,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     );
 
     return SliverPersistentHeader(
+      pinned: true,
       delegate: _CustomSliverPersistentHeader(
         height: MediaQuery.of(context).size.height / 2.5,
         color: theme.colorScheme.surface,
@@ -111,10 +113,10 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
             headerPadding: EdgeInsets.zero,
           ),
           shouldFillViewport: true,
-          firstDay: DateTime(1970),
-          lastDay: DateTime(_kToday.year, _kToday.month + 3, _kToday.day),
+          firstDay: DateTime(0),
+          lastDay: DateTime(_kToday.year + 1),
           selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.value, day),
-          onPageChanged: (DateTime focusedDay) => _onFocusDay(focusedDay),
+          onPageChanged: widget.controller.update,
           calendarBuilders: CalendarBuilders<ItemViewModel>(
             prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
               final bool isSelected = isSameDay(date, focusedDay);
@@ -150,23 +152,15 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
               );
             },
             headerTitleBuilder: (BuildContext context, DateTime value) => _CalendarHeader(
-              key: ValueKey<DateTime>(widget.controller.value),
+              key: ObjectKey(value),
               focusedDay: value,
-              onTodayButtonTap: () => setState(() => _onFocusDay(_kToday)),
+              onTodayButtonTap: () => setState(() => widget.controller.update(_kToday)),
             ),
-            singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) {
-              final bool isSelected = isSameDay(day, widget.controller.value);
-
-              return Container(
-                margin: const EdgeInsets.only(right: 2.0),
-                constraints: BoxConstraints.tight(const Size.square(6)),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isSelected ? theme.colorScheme.onInverseSurface : item.tag.backgroundColor,
-                  border: Border.all(color: item.tag.foregroundColor, width: isSelected ? 0 : .5),
-                ),
-              );
-            },
+            singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) => _ItemMarker(
+              key: ObjectKey(item.tag),
+              tag: item.tag,
+              isSelected: isSameDay(day, widget.controller.value),
+            ),
           ),
           focusedDay: widget.controller.value,
           eventLoader: widget.controller.getItemsForDay,
@@ -213,8 +207,30 @@ class _CalendarHeader extends StatelessWidget {
   }
 }
 
+class _ItemMarker extends StatelessWidget {
+  const _ItemMarker({super.key, required this.isSelected, required this.tag});
+
+  final bool isSelected;
+  final TagViewModel tag;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = context.theme;
+
+    return Container(
+      margin: const EdgeInsets.only(right: 2.0),
+      constraints: BoxConstraints.tight(const Size.square(6)),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isSelected ? theme.colorScheme.onInverseSurface : tag.backgroundColor,
+        border: Border.all(color: tag.foregroundColor, width: isSelected ? 0 : .5),
+      ),
+    );
+  }
+}
+
 class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
-  _CustomSliverPersistentHeader({
+  const _CustomSliverPersistentHeader({
     required this.height,
     required this.color,
     required this.child,
@@ -242,5 +258,6 @@ class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
   double get minExtent => height;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
+  bool shouldRebuild(covariant _CustomSliverPersistentHeader oldDelegate) =>
+      height != oldDelegate.height || color != oldDelegate.color || child != oldDelegate.child;
 }

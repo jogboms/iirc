@@ -31,22 +31,3 @@ extension on Expando<Object> {
     return instance as T;
   }
 }
-
-class RegistryProvider extends InheritedWidget {
-  const RegistryProvider({super.key, required this.data, required super.child});
-
-  final Registry data;
-
-  static Registry of(BuildContext context) {
-    final InheritedElement? result = context.getElementForInheritedWidgetOfExactType<RegistryProvider>();
-    assert(result != null, 'No RegistryProvider found in context');
-    return (result!.widget as RegistryProvider).data;
-  }
-
-  @override
-  bool updateShouldNotify(RegistryProvider oldWidget) => oldWidget.data != data;
-}
-
-extension RegistryBuildContext on BuildContext {
-  Registry get registry => RegistryProvider.of(this);
-}

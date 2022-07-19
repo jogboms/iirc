@@ -6,7 +6,6 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../home/providers/items_provider.dart';
 import 'tags_provider.dart';
 
 final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState, String>((ref, id) async {

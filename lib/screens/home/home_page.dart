@@ -4,8 +4,8 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
-import 'item_list_tile.dart';
-import 'providers/items_provider.dart';
+import '../widgets/item_list_tile.dart';
+import 'providers/filtered_items_state_provider.dart';
 
 // TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {

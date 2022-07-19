@@ -3,6 +3,8 @@
   "itemsCaption": "items",
   "tagsCaption": "tags",
   "moreCaption": "more",
+  "noTagsCreatedMessage": "No tags have been created yet",
+  "noItemsCreatedMessage": "No items have been created yet",
   "noItemsAvailableMessage": "No items available for selected date",
   "createItemCaption": "Create Item",
   "createTagCaption": "Create Tag",

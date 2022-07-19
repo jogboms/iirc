@@ -16,5 +16,6 @@
   "selectItemTagCaption": "Select item tag",
   "updateTagCaption": "Update Tag",
   "updateItemCaption": "Update Item",
-  "informationCaption": "Information"
+  "informationCaption": "Information",
+  "areYouSureAboutThisMessage": "Are you sure about this?"
 }

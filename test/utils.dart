@@ -37,6 +37,7 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
       ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
       ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
+      ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
       ..set(environment);
 
 Widget createApp({

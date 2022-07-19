@@ -5,6 +5,7 @@ import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
+import 'providers/item_provider.dart';
 import 'providers/selected_item_provider.dart';
 import 'update_item_page.dart';
 
@@ -28,17 +29,23 @@ class ItemDetailPageState extends State<ItemDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) =>
-            ref.watch(selectedItemStateProvider(widget.id)).when(
-                  data: (ItemViewModel item) => _SelectedItemDataView(
-                    key: dataViewKey,
-                    item: item,
+      body: WillPopScope(
+        onWillPop: () async {
+          ScaffoldMessenger.of(context).clearMaterialBanners();
+          return true;
+        },
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+              ref.watch(selectedItemStateProvider(widget.id)).when(
+                    data: (ItemViewModel item) => _SelectedItemDataView(
+                      key: dataViewKey,
+                      item: item,
+                    ),
+                    error: ErrorView.new,
+                    loading: () => child!,
                   ),
-                  error: ErrorView.new,
-                  loading: () => child!,
-                ),
-        child: const LoadingView(),
+          child: const LoadingView(),
+        ),
       ),
     );
   }
@@ -65,7 +72,36 @@ class _SelectedItemDataView extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             IconButton(
-              onPressed: () {}, // TODO: delete item
+              onPressed: () {
+                final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
+
+                scaffoldMessengerState.showMaterialBanner(
+                  MaterialBanner(
+                    backgroundColor: theme.colorScheme.errorContainer,
+                    content: Text(context.l10n.areYouSureAboutThisMessage),
+                    contentTextStyle: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onErrorContainer,
+                    ),
+                    actions: <Widget>[
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                          onPressed: () {
+                            scaffoldMessengerState.hideCurrentMaterialBanner();
+                            _onDelete(context, ref);
+                          },
+                          icon: const Icon(Icons.check_outlined),
+                          color: theme.colorScheme.onErrorContainer,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
+                        icon: const Icon(Icons.close_outlined),
+                        color: theme.colorScheme.onErrorContainer,
+                      ),
+                    ],
+                  ),
+                );
+              },
               icon: const Icon(Icons.delete_forever_outlined),
               color: theme.colorScheme.error,
             ),
@@ -104,5 +140,14 @@ class _SelectedItemDataView extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void _onDelete(BuildContext context, WidgetRef ref) async {
+    await ref.read(itemProvider).delete(item);
+
+    // TODO: Handle loading state.
+    // TODO: Handle error state.
+
+    return Navigator.pop(context);
   }
 }

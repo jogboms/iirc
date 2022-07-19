@@ -16,7 +16,7 @@ enum MenuPageItem {
   calendar,
   more;
 
-  static const MenuPageItem defaultPage = items;
+  static const MenuPageItem defaultPage = calendar;
 
   Route<void> Function(Object? param)? get floatingActionButtonRouteBuilder {
     switch (this) {

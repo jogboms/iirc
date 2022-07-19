@@ -23,7 +23,7 @@ class CreateTagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(context.l10n.createTag),
+        title: Text(context.l10n.createTagCaption),
       ),
       body: TagEntryForm(
         initialValue: null,

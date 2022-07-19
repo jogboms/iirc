@@ -4,6 +4,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
+import '../tags/tag_detail_page.dart';
 import '../widgets/item_list_tile.dart';
 import 'providers/filtered_items_state_provider.dart';
 
@@ -46,7 +47,11 @@ class _ItemsDataView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final ItemViewModel item = items[index];
 
-          return ItemListTile(key: Key(item.id), item: item);
+          return ItemListTile(
+            key: Key(item.id),
+            item: item,
+            onPressed: () => Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id)),
+          );
         },
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemCount: items.length,

@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../home/create_item_page.dart';
+import '../home/item_detail_page.dart';
 import '../widgets/item_list_tile.dart';
 import 'providers/selected_tag_provider.dart';
 import 'update_tag_page.dart';
@@ -309,7 +310,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
                       key: Key(item.id),
                       item: item,
                       canShowDate: false,
-                      canNavigate: false,
+                      onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(id: item.id)),
                     );
                   },
                   separatorBuilder: (BuildContext context, __) => const SizedBox(height: 8),

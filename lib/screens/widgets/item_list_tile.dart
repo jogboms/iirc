@@ -4,19 +4,17 @@ import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
-import '../tags/tag_detail_page.dart';
-
 class ItemListTile extends StatelessWidget {
   const ItemListTile({
     super.key,
     required this.item,
+    required this.onPressed,
     this.canShowDate = true,
-    this.canNavigate = true,
   });
 
   final ItemViewModel item;
   final bool canShowDate;
-  final bool canNavigate;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +23,7 @@ class ItemListTile extends StatelessWidget {
     return AppListTile(
       tagForegroundColor: item.tag.foregroundColor,
       tagBackgroundColor: item.tag.backgroundColor,
+      onPressed: onPressed,
       child: Row(
         children: <Widget>[
           Expanded(
@@ -82,7 +81,6 @@ class ItemListTile extends StatelessWidget {
             ),
         ],
       ),
-      onPressed: () => canNavigate ? Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id)) : null,
     );
   }
 }

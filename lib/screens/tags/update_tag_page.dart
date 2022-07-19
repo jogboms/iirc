@@ -20,7 +20,7 @@ class UpdateTagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(context.l10n.updateTag),
+        title: Text(context.l10n.updateTagCaption),
       ),
       body: TagEntryForm(
         initialValue: TagEntryData(

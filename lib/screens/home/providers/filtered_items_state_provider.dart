@@ -5,7 +5,7 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-final _filteredItemsProvider = FutureProvider<ItemViewModelList>((ref) async {
+final _filteredItemsProvider = FutureProvider.autoDispose<ItemViewModelList>((ref) async {
   final ItemViewModelList items = await ref.watch(itemsProvider.future);
   return items.uniqueByTag();
 });

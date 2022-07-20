@@ -54,7 +54,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          home: widget.home ?? const MenuPage(),
+          home: widget.home ?? const OnboardingPage(isColdStart: true),
           // home: home ?? const HomePage(),
         ),
       ),

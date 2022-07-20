@@ -10,10 +10,6 @@ class PreserveStateNotifier<T> extends StateNotifier<AsyncValue<T>> {
   }
 
   void _onData(AsyncValue<T>? previous, AsyncValue<T> next) {
-    if (next is AsyncLoading && previous is AsyncData) {
-      state = previous!;
-    } else {
-      state = next;
-    }
+    state = (next is AsyncLoading && previous is AsyncData) ? previous! : next;
   }
 }

@@ -7,6 +7,7 @@ import 'package:iirc/widgets.dart';
 import 'calendar/calendar_page.dart';
 import 'home/create_item_page.dart';
 import 'home/home_page.dart';
+import 'more/more_page.dart';
 import 'tags/create_tag_page.dart';
 import 'tags/tags_page.dart';
 
@@ -41,6 +42,10 @@ enum MenuPageItem {
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
+  static PageRoute<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const MenuPage());
+  }
+
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
@@ -65,7 +70,7 @@ class _MenuPageState extends State<MenuPage> {
         MenuPageItem.more: _TabRouteView(
           S.current.moreCaption,
           const Icon(Icons.more_horiz),
-          Container(key: const PageStorageKey<String>('more'), color: Colors.grey),
+          const MorePage(key: PageStorageKey<String>('more')),
         ),
       };
 

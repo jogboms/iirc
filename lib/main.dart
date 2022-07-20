@@ -29,6 +29,9 @@ void main() async {
     ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
     ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
     ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di()))
+    ..factory((RegistryFactory di) => FetchAuthStateUseCase(auth: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
     ..set<Environment>(environment);
 
   runApp(

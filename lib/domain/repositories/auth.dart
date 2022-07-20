@@ -3,9 +3,9 @@ import '../models/account.dart';
 abstract class AuthRepository {
   Future<AccountModel> get account;
 
-  Future<String> signIn({required String email, required String password});
+  Future<String> signIn();
 
-  Stream<String> get onAuthStateChanged;
+  Stream<String?> get onAuthStateChanged;
 
   Future<void> signOut();
 }

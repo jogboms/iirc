@@ -6,7 +6,7 @@ import 'package:iirc/registry.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-final _tagsProvider = StreamProvider<TagViewModelList>((StreamProviderRef<TagViewModelList> ref) {
+final _tagsProvider = StreamProvider.autoDispose<TagViewModelList>((ref) {
   final Registry registry = ref.read(registryProvider);
   return registry.get<FetchTagsUseCase>().call().map((element) => element.map(TagViewModel.fromTag).toList());
 });

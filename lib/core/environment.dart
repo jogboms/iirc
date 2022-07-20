@@ -6,13 +6,27 @@ enum Environment {
   prod,
   testing;
 
-  bool get isMock => this == Environment.mock;
+  static const String _envMode = String.fromEnvironment('env.mode', defaultValue: 'mock');
 
-  bool get isDev => this == Environment.dev;
+  static Environment _derive() {
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      return testing;
+    }
 
-  bool get isProduction => this == Environment.prod;
+    try {
+      return Environment.values.byName(_envMode);
+    } on ArgumentError {
+      throw Exception("Invalid runtime environment: '$_envMode'. Available environments: ${values.join(', ')}");
+    }
+  }
 
-  bool get isTesting => this == Environment.testing;
+  bool get isMock => this == mock;
+
+  bool get isDev => this == dev;
+
+  bool get isProduction => this == prod;
+
+  bool get isTesting => this == testing;
 
   bool get isDebugging {
     bool condition = false;
@@ -24,21 +38,6 @@ enum Environment {
   }
 }
 
-const String _env = String.fromEnvironment('env.mode', defaultValue: 'mock');
-
 Environment? _environment;
 
-Environment get environment => _environment ??= _getEnvironment();
-
-Environment _getEnvironment() {
-  if (Platform.environment.containsKey('FLUTTER_TEST')) {
-    return Environment.testing;
-  }
-
-  final Map<String, Environment> _envs = Environment.values.asNameMap();
-  if (!_envs.containsKey(_env)) {
-    throw Exception("Invalid runtime environment: '$_env'. Available environments: ${_envs.keys.join(', ')}");
-  }
-
-  return _envs[_env]!;
-}
+Environment get environment => _environment ??= Environment._derive();

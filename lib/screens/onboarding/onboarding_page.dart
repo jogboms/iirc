@@ -9,6 +9,10 @@ import '../menu_page.dart';
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key, required this.isColdStart});
 
+  static PageRoute<void> route({required bool isColdStart}) {
+    return MaterialPageRoute<void>(builder: (_) => OnboardingPage(isColdStart: isColdStart));
+  }
+
   final bool isColdStart;
 
   @override

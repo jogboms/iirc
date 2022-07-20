@@ -23,5 +23,7 @@ class AuthMockImpl extends AuthRepository {
   }
 
   @override
-  Future<void> signOut() async {}
+  Future<void> signOut() async {
+    _authIdState$.add(null);
+  }
 }

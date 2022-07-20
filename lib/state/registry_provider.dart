@@ -3,4 +3,6 @@
 import 'package:iirc/registry.dart';
 import 'package:riverpod/riverpod.dart';
 
-final registryProvider = Provider<Registry>((ref) => throw UnimplementedError());
+/// Container for Registry/Service locator
+/// Should be overridden per [ProviderScope]
+final registryProvider = Provider<Registry>((_) => throw UnimplementedError());

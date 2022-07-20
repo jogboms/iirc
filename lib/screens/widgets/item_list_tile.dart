@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +18,7 @@ class ItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final ThemeData theme = context.theme;
 
     return AppListTile(
       tagForegroundColor: item.tag.foregroundColor,

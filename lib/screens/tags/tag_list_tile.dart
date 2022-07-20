@@ -12,7 +12,7 @@ class TagListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final ThemeData theme = context.theme;
 
     return AppListTile(
       tagForegroundColor: tag.foregroundColor,

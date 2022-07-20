@@ -38,27 +38,24 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return RegistryProvider(
-      data: widget.registry,
-      child: MenuPageProvider(
-        data: menuPageTabController,
-        child: _Banner(
-          key: Key(bannerMessage),
-          message: bannerMessage,
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            onGenerateTitle: (BuildContext context) => context.l10n.appName,
-            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-              S.delegate,
-              _ResetIntlUtilLocaleLocalizationDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            home: widget.home ?? const MenuPage(),
-            // home: home ?? const HomePage(),
-          ),
+    return MenuPageProvider(
+      data: menuPageTabController,
+      child: _Banner(
+        key: Key(bannerMessage),
+        message: bannerMessage,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateTitle: (BuildContext context) => context.l10n.appName,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            S.delegate,
+            _ResetIntlUtilLocaleLocalizationDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          home: widget.home ?? const MenuPage(),
+          // home: home ?? const HomePage(),
         ),
       ),
     );

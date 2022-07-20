@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
+import 'calendar/calendar_page.dart';
 import 'home/create_item_page.dart';
 import 'home/home_page.dart';
 import 'tags/create_tag_page.dart';
@@ -10,27 +13,24 @@ import 'tags/tags_page.dart';
 enum MenuPageItem {
   tags,
   items,
+  calendar,
   more;
 
-  static const MenuPageItem defaultPage = items;
+  static const MenuPageItem defaultPage = calendar;
 
-  bool get shouldShowFloatingActionButton {
+  Route<void> Function(Object? param)? get floatingActionButtonRouteBuilder {
     switch (this) {
       case items:
+        return (_) => CreateItemPage.route();
+      case calendar:
+        return (Object? date) {
+          if (date is! DateTime) {
+            throw ArgumentError('Expected a DateTime');
+          }
+          return CreateItemPage.route(asModal: true, date: date);
+        };
       case tags:
-        return true;
-      case more:
-      default:
-        return false;
-    }
-  }
-
-  Route<void> Function()? get floatingActionButtonRouteBuilder {
-    switch (this) {
-      case items:
-        return CreateItemPage.route;
-      case tags:
-        return CreateTagPage.route;
+        return (_) => CreateTagPage.route();
       case more:
       default:
         return null;
@@ -56,6 +56,11 @@ class _MenuPageState extends State<MenuPage> {
           S.current.itemsCaption,
           const Icon(Icons.all_inclusive),
           const HomePage(key: PageStorageKey<String>('items')),
+        ),
+        MenuPageItem.calendar: _TabRouteView(
+          S.current.calendarCaption,
+          const Icon(Icons.calendar_today_outlined),
+          const CalendarPage(key: PageStorageKey<String>('calendar')),
         ),
         MenuPageItem.more: _TabRouteView(
           S.current.moreCaption,
@@ -139,14 +144,18 @@ class _MenuPageState extends State<MenuPage> {
         animation: _controller.animation!,
         builder: (BuildContext context, _) {
           final MenuPageItem menuItem = MenuPageItem.values[_currentPageIndex];
-          final Route<void> Function()? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
+          final Route<void> Function(Object?)? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
 
           return AnimatedScale(
             scale: routeBuilder != null ? 1 : 0,
             duration: const Duration(milliseconds: 250),
-            child: FloatingActionButton(
-              onPressed: () => Navigator.of(context).push<void>(routeBuilder!()),
-              child: _tabRouteViews[menuItem]!.icon,
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
+                onPressed: () => Navigator.of(context).push<void>(
+                  routeBuilder!(ref.read(calendarStateProvider)),
+                ),
+                child: _tabRouteViews[menuItem]!.icon,
+              ),
             ),
           );
         },

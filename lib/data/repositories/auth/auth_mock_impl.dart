@@ -18,11 +18,10 @@ class AuthMockImpl extends AuthRepository {
 
   @override
   Future<String> signIn() async {
-    await Future<void>.delayed(const Duration(seconds: 2));
     _authIdState$.add(id);
     return id;
   }
 
   @override
-  Future<void> signOut() async => Future<void>.delayed(const Duration(seconds: 2));
+  Future<void> signOut() async {}
 }

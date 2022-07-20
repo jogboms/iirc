@@ -20,5 +20,6 @@
   "updateTagCaption": "Update Tag",
   "updateItemCaption": "Update Item",
   "informationCaption": "Information",
-  "areYouSureAboutThisMessage": "Are you sure about this?"
+  "areYouSureAboutThisMessage": "Are you sure about this?",
+  "continueWithGoogle": "Continue with Google"
 }

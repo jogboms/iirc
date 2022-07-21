@@ -7,11 +7,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.title,
     this.actions = const <Widget>[],
     this.asSliver = false,
+    this.centerTitle,
   });
 
   final Widget title;
   final List<Widget> actions;
   final bool asSliver;
+  final bool? centerTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         elevation: 0,
         backgroundColor: backgroundColor,
         leading: leading,
-        centerTitle: false,
+        centerTitle: centerTitle ?? false,
         title: title,
         actions: actions,
       );
@@ -44,7 +46,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: leading,
       backgroundColor: backgroundColor,
       title: title,
-      centerTitle: true,
+      centerTitle: centerTitle ?? true,
     );
   }
 

@@ -68,6 +68,7 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
         ItemCalendarView(
           controller: itemCalendarViewController,
           items: widget.items,
+          primary: true,
         ),
         ItemCalendarListView(
           controller: itemCalendarViewController,

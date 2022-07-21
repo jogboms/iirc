@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/state.dart';
-import 'package:iirc/widgets.dart';
 
 import 'calendar/calendar_page.dart';
 import 'home/create_item_page.dart';
@@ -99,9 +98,6 @@ class _MenuPageState extends State<MenuPage> {
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: Text(context.l10n.appName),
-      ),
       body: AnimatedBuilder(
         animation: _controller.animation!,
         builder: (BuildContext context, Widget? child) {

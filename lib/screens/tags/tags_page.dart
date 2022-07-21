@@ -42,21 +42,35 @@ class _TagsDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tags.isEmpty) {
-      return Center(
-        child: Text(context.l10n.noTagsCreatedMessage),
-      );
-    }
+    return CustomScrollView(
+      slivers: <Widget>[
+        CustomAppBar(
+          title: Text(context.l10n.tagsCaption.capitalize()),
+          asSliver: true,
+          centerTitle: true,
+        ),
+        if (tags.isEmpty)
+          SliverFillRemaining(
+            child: Center(
+              child: Text(context.l10n.noTagsCreatedMessage),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            sliver: SliverList(
+              delegate: SliverSeparatorBuilderDelegate(
+                builder: (BuildContext context, int index) {
+                  final TagViewModel tag = tags[index];
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      itemBuilder: (BuildContext context, int index) {
-        final TagViewModel tag = tags[index];
-
-        return TagListTile(key: Key(tag.id), tag: tag);
-      },
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemCount: tags.length,
+                  return TagListTile(key: Key(tag.id), tag: tag);
+                },
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),
+                childCount: tags.length,
+              ),
+            ),
+          )
+      ],
     );
   }
 }

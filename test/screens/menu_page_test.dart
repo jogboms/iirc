@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/screens.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,8 +19,10 @@ void main() {
       await tester.pump();
 
       expect(menuPage, findsOneWidget);
-      expect(find.byType(AppBar).descendantOf(menuPage), findsOneWidget);
-      expect(find.text('IIRC').descendantOf(find.byType(AppBar)), findsOneWidget);
+      expect(find.byType(HomePage).descendantOf(menuPage), findsOneWidget);
+      expect(find.byType(TagsPage).descendantOf(menuPage), findsOneWidget);
+      expect(find.byType(CalendarPage).descendantOf(menuPage), findsOneWidget);
+      expect(find.byType(MorePage).descendantOf(menuPage), findsOneWidget);
     });
   });
 }

@@ -5,7 +5,7 @@ import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
 import '../widgets/search_bar.dart';
-import 'providers/tags_provider.dart';
+import 'providers/filtered_tags_state_provider.dart';
 import 'tag_list_tile.dart';
 
 class TagsPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class TagsPageState extends State<TagsPage> {
     return Material(
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
               data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
               error: ErrorView.new,
               loading: () => child!,

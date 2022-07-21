@@ -6,10 +6,8 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-import 'tags_provider.dart';
-
 final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState, String>((ref, id) async {
-  final TagViewModelList tags = await ref.watch(tagsStateProvider.future);
+  final TagViewModelList tags = await ref.watch(tagsProvider.future);
   final ItemViewModelList items = await ref.watch(itemsProvider.future);
 
   return SelectedTagState(

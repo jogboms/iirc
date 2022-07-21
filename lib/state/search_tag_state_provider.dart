@@ -5,9 +5,9 @@ import 'package:riverpod/riverpod.dart';
 
 enum SearchTagMode { title, description }
 
-final searchTagQueryStateProvider = StateProvider<String>((ref) => '');
+final searchTagQueryStateProvider = StateProvider.autoDispose<String>((ref) => '');
 
-final searchTagModeStateProvider = StateProvider<SearchTagMode>((ref) => SearchTagMode.title);
+final searchTagModeStateProvider = StateProvider.autoDispose<SearchTagMode>((ref) => SearchTagMode.title);
 
 List<T> filterBySearchTagQuery<T>(
   AutoDisposeFutureProviderRef<List<T>> ref, {

@@ -4,7 +4,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
-import '../menu_page.dart';
+import '../menu/menu_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key, required this.isColdStart});

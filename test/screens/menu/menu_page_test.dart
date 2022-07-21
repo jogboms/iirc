@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/screens.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../utils.dart';
+import '../../utils.dart';
 
 void main() {
   group('MenuPage', () {

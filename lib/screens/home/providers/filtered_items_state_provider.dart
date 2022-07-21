@@ -6,10 +6,10 @@ import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
 final _filteredItemsProvider = FutureProvider.autoDispose<ItemViewModelList>(
-  (ref) async => filterBySearchTagTitleQuery(
+  (ref) async => filterBySearchTagQuery(
     ref,
     elements: (await ref.watch(itemsProvider.future)).uniqueByTag(),
-    byKey: (element) => element.tag.title,
+    byTag: (element) => element.tag,
   ),
 );
 

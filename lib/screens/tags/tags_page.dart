@@ -44,10 +44,8 @@ class _TagsDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        CustomAppBar(
-          title: SearchBar(
-            title: context.l10n.tagsCaption.capitalize(),
-          ),
+        const CustomAppBar(
+          title: SearchBar(),
           asSliver: true,
           centerTitle: true,
         ),

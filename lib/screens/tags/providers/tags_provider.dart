@@ -12,10 +12,10 @@ final _tagsProvider = StreamProvider.autoDispose<TagViewModelList>((ref) {
 });
 
 final _filteredTagsProvider = FutureProvider.autoDispose<TagViewModelList>(
-  (ref) async => filterBySearchTagTitleQuery(
+  (ref) async => filterBySearchTagQuery(
     ref,
     elements: await ref.watch(_tagsProvider.future),
-    byKey: (element) => element.title,
+    byTag: (element) => element,
   ),
 );
 

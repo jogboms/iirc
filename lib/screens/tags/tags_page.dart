@@ -4,10 +4,10 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
+import '../widgets/search_bar.dart';
 import 'providers/tags_provider.dart';
 import 'tag_list_tile.dart';
 
-// TODO(Jogboms): Improve UI.
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
 
@@ -45,7 +45,9 @@ class _TagsDataView extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         CustomAppBar(
-          title: Text(context.l10n.tagsCaption.capitalize()),
+          title: SearchBar(
+            title: context.l10n.tagsCaption.capitalize(),
+          ),
           asSliver: true,
           centerTitle: true,
         ),

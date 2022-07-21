@@ -11,7 +11,15 @@ final _tagsProvider = StreamProvider.autoDispose<TagViewModelList>((ref) {
   return registry.get<FetchTagsUseCase>().call().map((element) => element.map(TagViewModel.fromTag).toList());
 });
 
+final _filteredTagsProvider = FutureProvider.autoDispose<TagViewModelList>(
+  (ref) async => filterBySearchTagTitleQuery(
+    ref,
+    elements: await ref.watch(_tagsProvider.future),
+    byKey: (element) => element.title,
+  ),
+);
+
 final tagsStateProvider =
     StateNotifierProvider.autoDispose<PreserveStateNotifier<TagViewModelList>, AsyncValue<TagViewModelList>>(
-  (ref) => PreserveStateNotifier(_tagsProvider, ref),
+  (ref) => PreserveStateNotifier(_filteredTagsProvider, ref),
 );

@@ -6,9 +6,9 @@ import 'package:iirc/widgets.dart';
 
 import '../tags/tag_detail_page.dart';
 import '../widgets/item_list_tile.dart';
+import '../widgets/search_bar.dart';
 import 'providers/filtered_items_state_provider.dart';
 
-// TODO(Jogboms): Improve UI.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -46,7 +46,9 @@ class _ItemsDataView extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         CustomAppBar(
-          title: Text(context.l10n.itemsCaption.capitalize()),
+          title: SearchBar(
+            title: context.l10n.itemsCaption.capitalize(),
+          ),
           asSliver: true,
           centerTitle: true,
         ),

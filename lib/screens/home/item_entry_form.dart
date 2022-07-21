@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../tags/create_tag_page.dart';
-import '../tags/providers/tags_provider.dart';
 
 enum ItemEntryType { create, update }
 
@@ -130,7 +130,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
           if (widget.initialValue?.tag == null) ...<Widget>[
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                final List<TagModel> tags = ref.watch(tagsStateProvider).value ?? <TagModel>[];
+                final List<TagModel> tags = ref.watch(tagsProvider).value ?? <TagModel>[];
 
                 if (tags.isEmpty) {
                   return child!;

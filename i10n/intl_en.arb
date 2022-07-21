@@ -22,5 +22,6 @@
   "informationCaption": "Information",
   "areYouSureAboutThisMessage": "Are you sure about this?",
   "continueWithGoogle": "Continue with Google",
-  "logoutCaption": "Logout"
+  "logoutCaption": "Logout",
+  "searchByTagCaption": "Search by Tag"
 }

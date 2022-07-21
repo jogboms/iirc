@@ -5,10 +5,13 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
-final _filteredItemsProvider = FutureProvider.autoDispose<ItemViewModelList>((ref) async {
-  final ItemViewModelList items = await ref.watch(itemsProvider.future);
-  return items.uniqueByTag();
-});
+final _filteredItemsProvider = FutureProvider.autoDispose<ItemViewModelList>(
+  (ref) async => filterBySearchTagQuery(
+    ref,
+    elements: (await ref.watch(itemsProvider.future)).uniqueByTag(),
+    byTag: (element) => element.tag,
+  ),
+);
 
 final filteredItemsStateProvider =
     StateNotifierProvider.autoDispose<PreserveStateNotifier<ItemViewModelList>, AsyncValue<ItemViewModelList>>(

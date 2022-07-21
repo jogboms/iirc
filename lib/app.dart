@@ -23,40 +23,23 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
   late final Environment environment = widget.registry.get();
   late final String bannerMessage = environment.name.toUpperCase();
 
-  late final TabController menuPageTabController = TabController(
-    vsync: this,
-    length: MenuPageItem.values.length,
-    initialIndex: MenuPageItem.defaultPage.index,
-  );
-
-  @override
-  void dispose() {
-    menuPageTabController.dispose();
-
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MenuPageProvider(
-      data: menuPageTabController,
-      child: _Banner(
-        key: Key(bannerMessage),
-        message: bannerMessage,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          onGenerateTitle: (BuildContext context) => context.l10n.appName,
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            S.delegate,
-            _ResetIntlUtilLocaleLocalizationDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          home: widget.home ?? const OnboardingPage(isColdStart: true),
-          // home: home ?? const HomePage(),
-        ),
+    return _Banner(
+      key: Key(bannerMessage),
+      message: bannerMessage,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        onGenerateTitle: (BuildContext context) => context.l10n.appName,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          S.delegate,
+          _ResetIntlUtilLocaleLocalizationDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        home: widget.home ?? const OnboardingPage(isColdStart: true),
       ),
     );
   }

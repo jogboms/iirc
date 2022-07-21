@@ -4,10 +4,10 @@ import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/widgets.dart';
 
-import 'providers/tags_provider.dart';
+import '../widgets/search_bar.dart';
+import 'providers/filtered_tags_state_provider.dart';
 import 'tag_list_tile.dart';
 
-// TODO(Jogboms): Improve UI.
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
 
@@ -24,7 +24,7 @@ class TagsPageState extends State<TagsPage> {
     return Material(
       color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
       child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(tagsStateProvider).when(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
               data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
               error: ErrorView.new,
               loading: () => child!,
@@ -42,21 +42,35 @@ class _TagsDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tags.isEmpty) {
-      return Center(
-        child: Text(context.l10n.noTagsCreatedMessage),
-      );
-    }
+    return CustomScrollView(
+      slivers: <Widget>[
+        const CustomAppBar(
+          title: SearchBar(),
+          asSliver: true,
+          centerTitle: true,
+        ),
+        if (tags.isEmpty)
+          SliverFillRemaining(
+            child: Center(
+              child: Text(context.l10n.noTagsCreatedMessage),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            sliver: SliverList(
+              delegate: SliverSeparatorBuilderDelegate(
+                builder: (BuildContext context, int index) {
+                  final TagViewModel tag = tags[index];
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      itemBuilder: (BuildContext context, int index) {
-        final TagViewModel tag = tags[index];
-
-        return TagListTile(key: Key(tag.id), tag: tag);
-      },
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemCount: tags.length,
+                  return TagListTile(key: Key(tag.id), tag: tag);
+                },
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),
+                childCount: tags.length,
+              ),
+            ),
+          )
+      ],
     );
   }
 }

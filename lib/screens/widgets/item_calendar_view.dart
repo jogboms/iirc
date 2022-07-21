@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:intl/intl.dart';
@@ -38,10 +39,16 @@ class ItemCalendarViewController extends ValueNotifier<DateTime> {
 }
 
 class ItemCalendarView extends StatefulWidget {
-  const ItemCalendarView({super.key, required this.controller, required this.items});
+  const ItemCalendarView({
+    super.key,
+    required this.controller,
+    required this.items,
+    this.primary = false,
+  });
 
   final ItemCalendarViewController controller;
   final ItemViewModelList items;
+  final bool primary;
 
   @override
   State<ItemCalendarView> createState() => _ItemCalendarViewState();
@@ -75,12 +82,8 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
 
-    const BoxDecoration headerBoxDecoration = BoxDecoration(
-      gradient: LinearGradient(
-        colors: <Color>[Colors.purpleAccent, Colors.blueAccent],
-      ),
-    );
     final TextStyle dayOfWeekTextStyle = theme.textTheme.labelSmall!.copyWith(
       color: theme.colorScheme.onBackground,
       fontWeight: FontWeight.w600,
@@ -89,14 +92,23 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _CustomSliverPersistentHeader(
-        height: MediaQuery.of(context).size.height / 2.5,
+        safeArea: widget.primary ? mediaQuery.padding.top : 0,
+        height: mediaQuery.size.height / 2.5,
         color: theme.colorScheme.surface,
+        header: ValueListenableBuilder<DateTime>(
+          valueListenable: widget.controller,
+          builder: (BuildContext context, DateTime value, _) => _CalendarHeader(
+            key: ObjectKey(value),
+            focusedDay: value,
+            onTodayButtonTap: () => setState(() => widget.controller.update(_kToday)),
+          ),
+        ),
         child: TableCalendar<ItemViewModel>(
           calendarFormat: CalendarFormat.month,
           startingDayOfWeek: StartingDayOfWeek.sunday,
-          calendarStyle: const CalendarStyle(),
           currentDay: _kToday,
-          daysOfWeekHeight: 34,
+          daysOfWeekHeight: kToolbarHeight * .75,
+          headerVisible: false,
           daysOfWeekStyle: DaysOfWeekStyle(
             decoration: BoxDecoration(
               color: theme.colorScheme.inverseSurface,
@@ -105,16 +117,9 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
             weekendStyle: dayOfWeekTextStyle,
             dowTextFormatter: (DateTime day, dynamic locale) => DateFormat.E(locale).format(day).toUpperCase(),
           ),
-          headerStyle: const HeaderStyle(
-            formatButtonVisible: false,
-            leftChevronVisible: false,
-            rightChevronVisible: false,
-            decoration: headerBoxDecoration,
-            headerPadding: EdgeInsets.zero,
-          ),
           shouldFillViewport: true,
           firstDay: DateTime(0),
-          lastDay: DateTime(_kToday.year + 1),
+          lastDay: DateTime(_kToday.year + 2),
           selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.value, day),
           onPageChanged: widget.controller.update,
           calendarBuilders: CalendarBuilders<ItemViewModel>(
@@ -151,11 +156,6 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
                 ),
               );
             },
-            headerTitleBuilder: (BuildContext context, DateTime value) => _CalendarHeader(
-              key: ObjectKey(value),
-              focusedDay: value,
-              onTodayButtonTap: () => setState(() => widget.controller.update(_kToday)),
-            ),
             singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) => _ItemMarker(
               key: ObjectKey(item.tag),
               tag: item.tag,
@@ -231,33 +231,66 @@ class _ItemMarker extends StatelessWidget {
 
 class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
   const _CustomSliverPersistentHeader({
+    required this.safeArea,
     required this.height,
     required this.color,
+    required this.header,
     required this.child,
   });
 
+  final double safeArea;
   final double height;
   final Color color;
+  final Widget header;
   final Widget child;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => Material(
-        color: color,
-        elevation: 5,
-        shadowColor: Colors.black12,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: child,
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    Widget widget = Material(
+      color: color,
+      elevation: 5,
+      shadowColor: Colors.black12,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: headerHeight,
+              padding: EdgeInsets.only(top: safeArea),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: <Color>[Colors.purpleAccent, Colors.blueAccent],
+                ),
+              ),
+              child: header,
+            ),
+            Expanded(child: child),
+          ],
         ),
+      ),
+    );
+    if (safeArea != 0) {
+      widget = AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: widget,
       );
+    }
+    return widget;
+  }
+
+  double get headerHeight => kToolbarHeight + safeArea;
 
   @override
-  double get maxExtent => height;
+  double get maxExtent => minExtent;
 
   @override
-  double get minExtent => height;
+  double get minExtent => height + headerHeight;
 
   @override
   bool shouldRebuild(covariant _CustomSliverPersistentHeader oldDelegate) =>
-      height != oldDelegate.height || color != oldDelegate.color || child != oldDelegate.child;
+      safeArea != oldDelegate.safeArea ||
+      height != oldDelegate.height ||
+      color != oldDelegate.color ||
+      header != oldDelegate.header ||
+      child != oldDelegate.child;
 }

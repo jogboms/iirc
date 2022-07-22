@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/screens.dart';
 import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,6 +9,12 @@ import '../../utils.dart';
 void main() {
   group('OnboardingPage', () {
     final Finder onboardingPage = find.byType(OnboardingPage);
+
+    setUp(() {
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
+      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
+    });
 
     tearDown(() => mockRepositories.reset());
 

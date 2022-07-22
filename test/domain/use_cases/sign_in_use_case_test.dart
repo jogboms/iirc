@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -12,9 +13,13 @@ void main() {
     tearDown(() => reset(authRepository));
 
     test('should sign in', () {
-      when(() => authRepository.signIn()).thenAnswer((_) async => '1');
+      final AccountModel dummyAccount = AuthMockImpl.generateAccount();
 
-      expect(useCase(), completion('1'));
+      when(() => authRepository.signIn()).thenAnswer((_) async => '1');
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => dummyAccount);
+
+      expect(useCase(), completion(dummyAccount));
     });
 
     test('should bubble errors', () {

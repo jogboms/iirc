@@ -13,6 +13,12 @@ void main() {
   group('TagDetailPage', () {
     final Finder tagDetailPage = find.byType(TagDetailPage);
 
+    setUp(() {
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
+      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
+    });
+
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {

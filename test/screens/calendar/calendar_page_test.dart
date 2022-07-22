@@ -15,6 +15,12 @@ void main() {
   group('CalendarPage', () {
     final Finder calendarPage = find.byType(CalendarPage);
 
+    setUp(() {
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
+      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
+    });
+
     testWidgets('smoke test', (WidgetTester tester) async {
       await tester.pumpWidget(createApp(home: const CalendarPage()));
 

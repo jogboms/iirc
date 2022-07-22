@@ -25,10 +25,10 @@ Registry createRegistry({
   Environment environment = Environment.testing,
 }) =>
     Registry()
-      ..set<AuthRepository>(mockRepositories.auth)
-      ..set<UsersRepository>(mockRepositories.users)
-      ..set<ItemsRepository>(mockRepositories.items)
-      ..set<TagsRepository>(mockRepositories.tags)
+      ..set(mockRepositories.auth)
+      ..set(mockRepositories.users)
+      ..set(mockRepositories.items)
+      ..set(mockRepositories.tags)
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))

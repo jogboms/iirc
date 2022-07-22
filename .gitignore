@@ -52,4 +52,3 @@ app.*.map.json
 *.g.dart
 
 .fvm/flutter_sdk
-lib/firebase_options.prod.dart

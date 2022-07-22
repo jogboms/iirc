@@ -5,7 +5,9 @@ import 'package:faker/faker.dart';
 import 'package:iirc/core.dart';
 import 'package:rxdart/transformers.dart';
 
+import '../network/firebase/cloud_db.dart';
 import '../network/firebase/exception.dart';
+import '../network/firebase/models.dart';
 
 extension ListExtensions<T> on Iterable<T> {
   Map<String, T> foldToMap(String Function(T) keyBuilder) => fold(<String, T>{},
@@ -27,6 +29,29 @@ extension RandomGeneratorExtensions on RandomGenerator {
 
 extension RandomEnum<T extends Object> on Iterable<T> {
   T random() => elementAt(Random().nextInt(length - 1));
+}
+
+extension FetchEntriesExtensions on FireStoreDb {
+  static const String entriesCollectionName = 'entries';
+
+  String deriveEntriesPath(String userId, [String? id]) =>
+      '$path/$userId/$entriesCollectionName' + (id != null ? '/$id' : '');
+
+  Stream<List<T>> fetchEntries<T>({
+    required String userId,
+    required Future<T> Function(MapDocumentSnapshot) mapper,
+    required bool isDev,
+  }) =>
+      instance
+          .collection(deriveEntriesPath(userId))
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .asyncMap(
+            (MapQuerySnapshot item) async => <T>[
+              for (final MapDocumentSnapshot document in item.docs) await mapper(document),
+            ],
+          )
+          .mapErrorToAppException(isDev);
 }
 
 extension AppExceptionStreamExtension<T> on Stream<T> {

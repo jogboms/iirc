@@ -11,7 +11,7 @@ class CreateItemData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModel? tag;
+  final TagModel? tag; // TODO: remove nullability
 
   @override
   List<Object?> get props => <Object?>[description, date, tag];

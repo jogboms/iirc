@@ -10,5 +10,11 @@ final userProvider = FutureProvider.autoDispose<UserModel>((ref) async {
   final registry = ref.read(registryProvider);
   final account = await ref.watch(accountProvider.future);
 
-  return registry.get<FetchUserUseCase>().call(account.id);
+  final user = await registry.get<FetchUserUseCase>().call(account.id);
+  if (user == null) {
+    // TODO: improve error message
+    throw Exception('Failed to retrieve user details');
+  }
+
+  return user;
 });

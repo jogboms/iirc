@@ -24,9 +24,9 @@ void main() {
     tearDown(() => reset(itemsRepository));
 
     test('should create an dummyItem', () {
-      when(() => itemsRepository.create(any(), any())).thenAnswer((_) async => dummyItem);
+      when(() => itemsRepository.create(any(), any())).thenAnswer((_) async => dummyItem.id);
 
-      expect(useCase('1', dummyCreateItemData), completion(dummyItem));
+      expect(useCase('1', dummyCreateItemData), completion(dummyItem.id));
     });
 
     test('should bubble fetch errors', () {

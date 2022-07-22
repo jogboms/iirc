@@ -5,8 +5,11 @@ import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'registry_provider.dart';
+import 'user_provider.dart';
 
-final itemsProvider = StreamProvider.autoDispose<ItemViewModelList>((ref) {
+final itemsProvider = StreamProvider.autoDispose<ItemViewModelList>((ref) async* {
   final registry = ref.read(registryProvider);
-  return registry.get<FetchItemsUseCase>().call().map((element) => element.map(ItemViewModel.fromItem).toList());
+  final user = await ref.watch(userProvider.future);
+
+  yield* registry.get<FetchItemsUseCase>().call(user.id).map((element) => element.map(ItemViewModel.fromItem).toList());
 });

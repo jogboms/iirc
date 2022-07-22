@@ -27,18 +27,10 @@ class OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, _) {
-          ref.listen<AsyncValue<String?>>(authIdProvider, (_, AsyncValue<String?> snapshot) {
-            if (snapshot.value != null) {
-              Navigator.of(context).pushReplacement(MenuPage.route());
-            }
-          });
-
-          return _OnboardingDataView(
-            key: dataViewKey,
-            isColdStart: widget.isColdStart,
-          );
-        },
+        builder: (BuildContext context, _, __) => _OnboardingDataView(
+          key: dataViewKey,
+          isColdStart: widget.isColdStart,
+        ),
       ),
     );
   }
@@ -71,6 +63,12 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
     final AuthState authState = ref.watch(authStateProvider);
+
+    ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
+      if (state == AuthState.complete) {
+        Navigator.of(context).pushReplacement(MenuPage.route());
+      }
+    });
 
     return Container(
       alignment: Alignment.bottomCenter,

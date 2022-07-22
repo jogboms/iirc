@@ -3,11 +3,11 @@ import '../entities/update_item_data.dart';
 import '../models/item.dart';
 
 abstract class ItemsRepository {
-  Future<ItemModel> create(String userId, CreateItemData item);
+  Future<String> create(String userId, CreateItemData item);
 
   Future<bool> update(UpdateItemData item);
 
   Future<bool> delete(String path);
 
-  Stream<ItemModelList> fetch();
+  Stream<ItemModelList> fetch(String userId);
 }

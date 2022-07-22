@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/data.dart';
+import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
 import 'package:iirc/widgets.dart';
 import 'package:mocktail/mocktail.dart';
@@ -7,14 +9,22 @@ import 'package:mocktail/mocktail.dart';
 import 'utils.dart';
 
 void main() {
+  final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+
+  setUpAll(() {
+    registerFallbackValue(dummyAccount);
+  });
+
   testWidgets('Smoke test', (WidgetTester tester) async {
     final Finder onboardingPage = find.byType(OnboardingPage);
     final Finder menuPage = find.byType(MenuPage);
 
     when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+    when(() => mockRepositories.auth.account).thenAnswer((_) async => dummyAccount);
     when(() => mockRepositories.auth.signIn()).thenAnswer((_) async => '1');
-    when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
-    when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
+    when(() => mockRepositories.users.create(any())).thenAnswer((_) async => '1');
+    when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
+    when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
 
     addTearDown(() => mockRepositories.reset());
 

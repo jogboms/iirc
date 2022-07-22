@@ -8,17 +8,29 @@ import 'package:iirc/state.dart';
 import 'package:intl/intl_standalone.dart';
 
 import 'app.dart';
+import 'firebase_options.dev.dart' as dev;
+import 'firebase_options.prod.dart' as prod;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await findSystemLocale();
 
+  final _Repository repository =
+      environment.isMock ? _Repository.mock() : await _Repository.firebase(environment.isDev);
+
   final Registry registry = Registry()
-    ..set<AuthRepository>(AuthMockImpl())
-    ..set<UsersRepository>(UsersMockImpl())
-    ..set<ItemsRepository>(ItemsMockImpl())
-    ..set<TagsRepository>(TagsMockImpl())
+
+    /// Repositories.
+    /// Do not use directly within the app.
+    /// Added to Registry only for convenience with the UseCase factories.
+    ..set(repository.auth)
+    ..set(repository.users)
+    ..set(repository.items)
+    ..set(repository.tags)
+
+    /// UseCases.
+    /// Callable classes that may contain logic or else route directly to repositories.
     ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
     ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
     ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
@@ -32,7 +44,11 @@ void main() async {
     ..factory((RegistryFactory di) => FetchAuthStateUseCase(auth: di()))
     ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
     ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
-    ..set<Environment>(environment);
+    ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
+    ..factory((RegistryFactory di) => GetUserUseCase(users: di()))
+
+    /// Environment.
+    ..set(environment);
 
   runApp(
     ProviderScope(
@@ -44,4 +60,34 @@ void main() async {
       ),
     ),
   );
+}
+
+class _Repository {
+  const _Repository._({required this.auth, required this.items, required this.tags, required this.users});
+
+  static Future<_Repository> firebase(bool isDev) async {
+    final Firebase instance = await Firebase.initialize(
+      options: isDev ? dev.DefaultFirebaseOptions.currentPlatform : prod.DefaultFirebaseOptions.currentPlatform,
+      isAnalyticsEnabled: !isDev,
+    );
+
+    return _Repository._(
+      auth: AuthFirebaseImpl(firebase: instance),
+      items: ItemsFirebaseImpl(firebase: instance, isDev: isDev),
+      tags: TagsFirebaseImpl(firebase: instance, isDev: isDev),
+      users: UsersFirebaseImpl(firebase: instance),
+    );
+  }
+
+  static _Repository mock() => _Repository._(
+        auth: AuthMockImpl(),
+        items: ItemsMockImpl(),
+        tags: TagsMockImpl(),
+        users: UsersMockImpl(),
+      );
+
+  final AuthRepository auth;
+  final ItemsRepository items;
+  final TagsRepository tags;
+  final UsersRepository users;
 }

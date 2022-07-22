@@ -13,7 +13,7 @@ class TagProvider {
 
   final AutoDisposeProviderRef _ref;
 
-  Future<TagModel> create(CreateTagData data) async {
+  Future<String> create(CreateTagData data) async {
     final registry = _ref.read(registryProvider);
     final user = await _ref.read(userProvider.future);
 

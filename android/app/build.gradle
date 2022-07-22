@@ -22,8 +22,16 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 ext.minimumSdkVersion = 21
 
@@ -46,7 +54,7 @@ android {
 
     defaultConfig {
         applicationId "io.github.jogboms.iirc"
-        minSdkVersion project.ext.minSdkVersion
+        minSdkVersion project.ext.minimumSdkVersion
         targetSdkVersion 30
         versionCode generateVersionCode(flutterVersionName, project.ext.minimumSdkVersion) + flutterVersionCode.toInteger()
         versionName flutterVersionName

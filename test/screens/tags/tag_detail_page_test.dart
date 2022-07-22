@@ -13,11 +13,17 @@ void main() {
   group('TagDetailPage', () {
     final Finder tagDetailPage = find.byType(TagDetailPage);
 
+    setUp(() {
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
+      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
+    });
+
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
@@ -27,8 +33,8 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
@@ -45,8 +51,8 @@ void main() {
         (_) => ItemsMockImpl.generateItem(tag: tag, date: now),
       );
 
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
 
       await tester.pumpWidget(createApp(home: TagDetailPage(id: tag.id)));
 
@@ -62,8 +68,8 @@ void main() {
     testWidgets('should show error if tags fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.error(expectedError));
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[]));
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.error(expectedError));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[]));
 
       await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 
@@ -77,8 +83,8 @@ void main() {
     testWidgets('should show error if items fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[]));
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[]));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
 
       await tester.pumpWidget(createApp(home: const TagDetailPage(id: '1')));
 

@@ -24,9 +24,9 @@ void main() {
     tearDown(() => reset(tagsRepository));
 
     test('should create a tag', () {
-      when(() => tagsRepository.create(any(), any())).thenAnswer((_) async => dummyTag);
+      when(() => tagsRepository.create(any(), any())).thenAnswer((_) async => dummyTag.id);
 
-      expect(useCase('1', dummyCreateTagData), completion(dummyTag));
+      expect(useCase('1', dummyCreateTagData), completion(dummyTag.id));
     });
 
     test('should bubble fetch errors', () {

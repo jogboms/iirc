@@ -35,7 +35,7 @@ class CreateTagPage extends StatelessWidget {
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, TagEntryData data) async {
-      final TagModel tag = await ref.read(tagProvider).create(CreateTagData(
+      final String id = await ref.read(tagProvider).create(CreateTagData(
             title: data.title,
             description: data.description,
             color: data.color,
@@ -49,7 +49,7 @@ class CreateTagPage extends StatelessWidget {
       }
 
       unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: tag.id)),
+        Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
       );
     };
   }

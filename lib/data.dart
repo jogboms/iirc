@@ -1,6 +1,16 @@
 export 'data/models/item_view_model.dart';
 export 'data/models/tag_view_model.dart';
+export 'data/network/firebase/analytics.dart';
+export 'data/network/firebase/cloud_db.dart';
+export 'data/network/firebase/crashlytics.dart';
+export 'data/network/firebase/exception.dart';
+export 'data/network/firebase/firebase.dart';
+export 'data/network/firebase/models.dart';
+export 'data/repositories/auth/auth_firebase_impl.dart';
 export 'data/repositories/auth/auth_mock_impl.dart';
+export 'data/repositories/items/items_firebase_impl.dart';
 export 'data/repositories/items/items_mock_impl.dart';
+export 'data/repositories/tags/tags_firebase_impl.dart';
 export 'data/repositories/tags/tags_mock_impl.dart';
+export 'data/repositories/users/users_firebase_impl.dart';
 export 'data/repositories/users/users_mock_impl.dart';

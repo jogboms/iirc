@@ -11,6 +11,12 @@ void main() {
   group('ItemDetailPage', () {
     final Finder itemDetailPage = find.byType(ItemDetailPage);
 
+    setUp(() {
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
+      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
+      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
+    });
+
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
@@ -22,8 +28,8 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
 
@@ -35,7 +41,7 @@ void main() {
     testWidgets('should show details of item', (WidgetTester tester) async {
       final ItemModel item = ItemsMockImpl.generateItem();
 
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[item]));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[item]));
 
       await tester.pumpWidget(createApp(home: ItemDetailPage(id: item.id)));
 
@@ -48,7 +54,7 @@ void main() {
     testWidgets('should show error if item fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
 
       await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
 

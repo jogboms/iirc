@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:faker/faker.dart';
 import 'package:iirc/domain.dart';
 
@@ -10,8 +11,12 @@ class UsersMockImpl implements UsersRepository {
     email: faker.internet.disposableEmail(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
+    createdAt: clock.now(),
   );
 
   @override
-  Future<UserModel> fetch(String uid) async => user;
+  Future<String> create(AccountModel account) async => user.id;
+
+  @override
+  Future<UserModel?> fetch(String uid) async => user;
 }

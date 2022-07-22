@@ -48,7 +48,7 @@ class CreateItemPageState extends State<CreateItemPage> {
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, ItemEntryData data) async {
-      final ItemModel item = await ref.read(itemProvider).create(CreateItemData(
+      await ref.read(itemProvider).create(CreateItemData(
             description: data.description,
             date: data.date,
             tag: data.tag,
@@ -62,7 +62,7 @@ class CreateItemPageState extends State<CreateItemPage> {
       }
 
       unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: item.tag.id)),
+        Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag!.id)),
       );
     };
   }

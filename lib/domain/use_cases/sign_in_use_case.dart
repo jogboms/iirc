@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import '../models/account.dart';
 import '../repositories/auth.dart';
 
 class SignInUseCase {
@@ -5,5 +8,20 @@ class SignInUseCase {
 
   final AuthRepository _auth;
 
-  Future<String> call() => _auth.signIn();
+  Future<AccountModel> call() async {
+    final Completer<AccountModel> completer = Completer<AccountModel>();
+
+    await _auth.signIn();
+
+    late StreamSubscription<void> sub;
+    sub = _auth.onAuthStateChanged.where((String? id) => id != null).listen((_) {
+      completer.complete(_auth.account);
+      sub.cancel();
+    }, onError: (Object error, StackTrace st) {
+      completer.completeError(error, st);
+      sub.cancel();
+    });
+
+    return completer.future;
+  }
 }

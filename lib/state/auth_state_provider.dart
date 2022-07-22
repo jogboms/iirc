@@ -23,7 +23,9 @@ class AuthStateProvider extends StateNotifier<AuthState> {
       if (user == null) {
         await registry.get<CreateUserUseCase>().call(account);
       }
-      state = AuthState.success;
+      if (mounted) {
+        state = AuthState.complete;
+      }
     } catch (e) {
       final String message = e.toString();
       if (message.isNotEmpty) {
@@ -42,8 +44,16 @@ class AuthStateProvider extends StateNotifier<AuthState> {
 
     try {
       final registry = _ref.read(registryProvider);
-      return registry.get<SignOutUseCase>().call();
-    } finally {
+      await registry.get<SignOutUseCase>().call();
+      if (mounted) {
+        state = AuthState.complete;
+      }
+    } catch (e) {
+      final String message = e.toString();
+      if (message.isNotEmpty) {
+        // TODO: log this
+      }
+
       if (mounted) {
         state = AuthState.idle;
       }
@@ -51,4 +61,4 @@ class AuthStateProvider extends StateNotifier<AuthState> {
   }
 }
 
-enum AuthState { idle, loading, success }
+enum AuthState { idle, loading, complete }

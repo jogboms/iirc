@@ -65,7 +65,7 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
     final AuthState authState = ref.watch(authStateProvider);
 
     ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
-      if (state == AuthState.success) {
+      if (state == AuthState.complete) {
         Navigator.of(context).pushReplacement(MenuPage.route());
       }
     });

@@ -11,8 +11,8 @@ class LogoutListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = context.theme;
 
-    ref.listen<AsyncValue<String?>>(authIdProvider, (_, AsyncValue<String?> snapshot) {
-      if (snapshot.value == null) {
+    ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
+      if (state == AuthState.complete) {
         Navigator.of(context).pushAndRemoveUntil(
           OnboardingPage.route(isColdStart: false),
           (_) => false,

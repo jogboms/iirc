@@ -20,6 +20,7 @@ export 'domain/use_cases/fetch_items_use_case.dart';
 export 'domain/use_cases/fetch_tags_use_case.dart';
 export 'domain/use_cases/fetch_user_use_case.dart';
 export 'domain/use_cases/get_account_use_case.dart';
+export 'domain/use_cases/get_user_use_case.dart';
 export 'domain/use_cases/sign_in_use_case.dart';
 export 'domain/use_cases/sign_out_use_case.dart';
 export 'domain/use_cases/update_item_use_case.dart';

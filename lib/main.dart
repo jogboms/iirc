@@ -33,6 +33,7 @@ void main() async {
     ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
     ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
     ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
+    ..factory((RegistryFactory di) => GetUserUseCase(users: di()))
     ..set<Environment>(environment);
 
   runApp(

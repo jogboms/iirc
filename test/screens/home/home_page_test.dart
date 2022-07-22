@@ -16,7 +16,7 @@ void main() {
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const HomePage()));
 
@@ -26,7 +26,7 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const HomePage()));
 
@@ -39,7 +39,7 @@ void main() {
       final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
 
-      when(() => mockRepositories.items.fetch()).thenAnswer(
+      when(() => mockRepositories.items.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
@@ -59,7 +59,7 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.items.fetch()).thenAnswer(
+      when(() => mockRepositories.items.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.error(expectedError),
       );
 

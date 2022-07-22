@@ -13,8 +13,8 @@ void main() {
 
     when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
     when(() => mockRepositories.auth.signIn()).thenAnswer((_) async => '1');
-    when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
-    when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
+    when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
+    when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
 
     addTearDown(() => mockRepositories.reset());
 

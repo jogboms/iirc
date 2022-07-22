@@ -9,5 +9,5 @@ abstract class ItemsRepository {
 
   Future<bool> delete(String path);
 
-  Stream<ItemModelList> fetch();
+  Stream<ItemModelList> fetch(String userId);
 }

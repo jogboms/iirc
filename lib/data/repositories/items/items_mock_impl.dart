@@ -57,7 +57,8 @@ class ItemsMockImpl extends ItemsRepository {
   }
 
   @override
-  Stream<ItemModelList> fetch() => _items$.stream.map((Map<String, ItemModel> event) => event.values.toList());
+  Stream<ItemModelList> fetch(String userId) =>
+      _items$.stream.map((Map<String, ItemModel> event) => event.values.toList());
 }
 
 extension on ItemModel {

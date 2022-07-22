@@ -6,5 +6,5 @@ class FetchTagsUseCase {
 
   final TagsRepository _tags;
 
-  Stream<TagModelList> call() => _tags.fetch();
+  Stream<TagModelList> call(String userId) => _tags.fetch(userId);
 }

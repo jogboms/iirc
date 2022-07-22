@@ -24,7 +24,7 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const CalendarPage()));
 
@@ -41,7 +41,7 @@ void main() {
         (_) => ItemsMockImpl.generateItem(tag: tag, date: now),
       );
 
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
 
       await tester.pumpWidget(createApp(home: const CalendarPage()));
 
@@ -59,7 +59,7 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.items.fetch()).thenAnswer(
+      when(() => mockRepositories.items.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.error(expectedError),
       );
 

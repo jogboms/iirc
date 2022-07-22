@@ -15,27 +15,27 @@ void main() {
     test('should fetch items', () {
       final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
 
-      when(() => itemsRepository.fetch()).thenAnswer(
+      when(() => itemsRepository.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.value(expectedItems),
       );
 
-      expect(useCase(), emits(expectedItems));
+      expect(useCase('1'), emits(expectedItems));
     });
 
     test('should bubble fetch errors', () {
-      when(() => itemsRepository.fetch()).thenThrow(Exception('an error'));
+      when(() => itemsRepository.fetch(any())).thenThrow(Exception('an error'));
 
-      expect(() => useCase(), throwsException);
+      expect(() => useCase('1'), throwsException);
     });
 
     test('should bubble stream errors', () {
       final Exception expectedError = Exception('an error');
 
-      when(() => itemsRepository.fetch()).thenAnswer(
+      when(() => itemsRepository.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.error(expectedError),
       );
 
-      expect(useCase(), emitsError(expectedError));
+      expect(useCase('1'), emitsError(expectedError));
     });
   });
 }

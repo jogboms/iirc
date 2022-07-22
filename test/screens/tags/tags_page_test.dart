@@ -16,7 +16,7 @@ void main() {
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const TagsPage()));
 
@@ -26,7 +26,7 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const TagsPage()));
 
@@ -38,7 +38,7 @@ void main() {
     testWidgets('should show list of tags', (WidgetTester tester) async {
       final TagModelList expectedItems = TagModelList.generate(3, (_) => TagsMockImpl.generateTag());
 
-      when(() => mockRepositories.tags.fetch()).thenAnswer(
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
         (_) => Stream<TagModelList>.value(expectedItems),
       );
 
@@ -57,7 +57,7 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.tags.fetch()).thenAnswer(
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
         (_) => Stream<TagModelList>.error(expectedError),
       );
 

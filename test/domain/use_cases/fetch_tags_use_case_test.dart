@@ -15,27 +15,27 @@ void main() {
     test('should fetch tags', () {
       final TagModelList expectedTags = TagModelList.generate(3, (_) => TagsMockImpl.generateTag());
 
-      when(() => tagsRepository.fetch()).thenAnswer(
+      when(() => tagsRepository.fetch(any())).thenAnswer(
         (_) => Stream<TagModelList>.value(expectedTags),
       );
 
-      expect(useCase(), emits(expectedTags));
+      expect(useCase('1'), emits(expectedTags));
     });
 
     test('should bubble fetch errors', () {
-      when(() => tagsRepository.fetch()).thenThrow(Exception('an error'));
+      when(() => tagsRepository.fetch(any())).thenThrow(Exception('an error'));
 
-      expect(() => useCase(), throwsException);
+      expect(() => useCase('1'), throwsException);
     });
 
     test('should bubble stream errors', () {
       final Exception expectedError = Exception('an error');
 
-      when(() => tagsRepository.fetch()).thenAnswer(
+      when(() => tagsRepository.fetch(any())).thenAnswer(
         (_) => Stream<TagModelList>.error(expectedError),
       );
 
-      expect(useCase(), emitsError(expectedError));
+      expect(useCase('1'), emitsError(expectedError));
     });
   });
 }

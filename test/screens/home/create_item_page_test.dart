@@ -12,8 +12,8 @@ void main() {
     tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch()).thenAnswer((_) async* {});
-      when(() => mockRepositories.items.fetch()).thenAnswer((_) async* {});
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
+      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
 
       await tester.pumpWidget(createApp(home: const CreateItemPage(asModal: false)));
 

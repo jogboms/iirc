@@ -6,5 +6,5 @@ class FetchItemsUseCase {
 
   final ItemsRepository _items;
 
-  Stream<ItemModelList> call() => _items.fetch();
+  Stream<ItemModelList> call(String userId) => _items.fetch(userId);
 }

@@ -9,5 +9,5 @@ abstract class TagsRepository {
 
   Future<bool> delete(String path);
 
-  Stream<TagModelList> fetch();
+  Stream<TagModelList> fetch(String userId);
 }

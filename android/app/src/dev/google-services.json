@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "719782367161",
+    "project_id": "iirc-dev",
+    "storage_bucket": "iirc-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719782367161:android:85907390745011ca2e7068",
+        "android_client_info": {
+          "package_name": "io.github.jogboms.iirc.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719782367161-cldhpp1f15ll6tskgvc5ifrjsl5j6pq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQdDZ9vOsSf8_02RQL3xDTyaHutHd2ot4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719782367161-cldhpp1f15ll6tskgvc5ifrjsl5j6pq5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "719782367161-cghuklli071oace8pij2fosav8p89ou8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.github.jogboms.iirc.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

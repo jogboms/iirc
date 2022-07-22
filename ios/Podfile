@@ -31,6 +31,9 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # This version should always match the version of the firebase_core version
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '9.3.0'
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

@@ -8,14 +8,20 @@ environment:
 
 dependencies:
   clock: ^1.1.0
+  cloud_firestore: ^3.4.0
   cupertino_icons: ^1.0.5
   equatable: ^2.0.3
   faker: ^2.0.0
+  firebase_analytics: ^9.2.1
+  firebase_auth: ^3.5.0
+  firebase_core: ^1.20.0
+  firebase_crashlytics: ^2.8.6
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^1.0.4
+  google_sign_in: ^5.4.0
   intl: ^0.17.0
   intl_utils: ^2.6.1
   logging: ^1.0.2

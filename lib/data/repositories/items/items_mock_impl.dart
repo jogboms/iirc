@@ -27,7 +27,7 @@ class ItemsMockImpl extends ItemsRepository {
   final BehaviorSubject<Map<String, ItemModel>> _items$ = BehaviorSubject<Map<String, ItemModel>>.seeded(items);
 
   @override
-  Future<ItemModel> create(String userId, CreateItemData item) async {
+  Future<String> create(String userId, CreateItemData item) async {
     final String id = faker.guid.guid();
     final TagModel tag = TagsMockImpl.tags[item.tag!.id]!;
     final ItemModel newItem = ItemModel(
@@ -40,7 +40,7 @@ class ItemsMockImpl extends ItemsRepository {
       updatedAt: null,
     );
     _items$.add(items..putIfAbsent(id, () => newItem));
-    return newItem;
+    return id;
   }
 
   @override

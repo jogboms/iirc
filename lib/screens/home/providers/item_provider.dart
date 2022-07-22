@@ -13,7 +13,7 @@ class ItemProvider {
 
   final AutoDisposeProviderRef _ref;
 
-  Future<ItemModel> create(CreateItemData data) async {
+  Future<String> create(CreateItemData data) async {
     final registry = _ref.read(registryProvider);
     final user = await _ref.read(userProvider.future);
 

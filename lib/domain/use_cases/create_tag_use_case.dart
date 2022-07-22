@@ -1,5 +1,4 @@
 import '../entities/create_tag_data.dart';
-import '../models/tag.dart';
 import '../repositories/tags.dart';
 
 class CreateTagUseCase {
@@ -7,5 +6,5 @@ class CreateTagUseCase {
 
   final TagsRepository _tags;
 
-  Future<TagModel> call(String userId, CreateTagData tag) => _tags.create(userId, tag);
+  Future<String> call(String userId, CreateTagData tag) => _tags.create(userId, tag);
 }

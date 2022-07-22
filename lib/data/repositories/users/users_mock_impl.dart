@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:faker/faker.dart';
 import 'package:iirc/domain.dart';
 
@@ -10,6 +11,7 @@ class UsersMockImpl implements UsersRepository {
     email: faker.internet.disposableEmail(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
+    createdAt: clock.now(),
   );
 
   @override

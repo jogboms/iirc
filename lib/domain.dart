@@ -12,6 +12,7 @@ export 'domain/repositories/tags.dart';
 export 'domain/repositories/users.dart';
 export 'domain/use_cases/create_item_use_case.dart';
 export 'domain/use_cases/create_tag_use_case.dart';
+export 'domain/use_cases/create_user_use_case.dart';
 export 'domain/use_cases/delete_item_use_case.dart';
 export 'domain/use_cases/delete_tag_use_case.dart';
 export 'domain/use_cases/fetch_auth_state_use_case.dart';

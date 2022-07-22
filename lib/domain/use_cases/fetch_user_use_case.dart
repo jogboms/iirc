@@ -6,5 +6,5 @@ class FetchUserUseCase {
 
   final UsersRepository _users;
 
-  Future<UserModel> call(String uid) => _users.fetch(uid);
+  Future<UserModel?> call(String uid) => _users.fetch(uid);
 }

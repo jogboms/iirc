@@ -1,9 +1,9 @@
-import 'package:iirc/data/repositories/extensions.dart';
 import 'package:iirc/domain.dart';
 
 import '../../network/firebase/exception.dart';
 import '../../network/firebase/firebase.dart';
 import '../../network/firebase/models.dart';
+import '../extensions.dart';
 
 class AuthFirebaseImpl extends AuthRepository {
   AuthFirebaseImpl({required this.firebase});
@@ -24,15 +24,15 @@ class AuthFirebaseImpl extends AuthRepository {
   Future<String> signIn() async {
     try {
       return await firebase.auth.signInWithGoogle();
-    } on AppFirebaseException catch (e, stackTrace) {
+    } on AppFirebaseAuthException catch (e, stackTrace) {
       switch (e.type) {
-        case AppFirebaseExceptionType.invalidEmail:
+        case AppFirebaseAuthExceptionType.invalidEmail:
           Error.throwWithStackTrace(const AuthException.invalidEmail(), stackTrace);
-        case AppFirebaseExceptionType.userNotFound:
+        case AppFirebaseAuthExceptionType.userNotFound:
           Error.throwWithStackTrace(const AuthException.userNotFound(), stackTrace);
-        case AppFirebaseExceptionType.tooManyRequests:
+        case AppFirebaseAuthExceptionType.tooManyRequests:
           Error.throwWithStackTrace(const AuthException.tooManyRequests(), stackTrace);
-        case AppFirebaseExceptionType.userDisabled:
+        case AppFirebaseAuthExceptionType.userDisabled:
           Error.throwWithStackTrace(const AuthException.userDisabled(), stackTrace);
         default:
           Error.throwWithStackTrace(AuthException.unknown(e), stackTrace);

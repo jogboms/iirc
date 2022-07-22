@@ -1,5 +1,4 @@
-import 'package:clock/clock.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:iirc/domain.dart';
 
 import '../../network/firebase/cloud_db.dart';
@@ -21,14 +20,14 @@ class UsersFirebaseImpl implements UsersRepository {
       'email': account.email,
       'firstName': names?.first ?? '',
       'lastName': names != null && names.length > 1 ? names.sublist(1).join(' ') : '',
-      'createdAt': Timestamp.fromDate(clock.now()),
+      'createdAt': Timestamp.now(),
     });
     return account.id;
   }
 
   @override
   Future<UserModel?> fetch(String uid) async {
-    final DocumentSnapshot<Map<String, dynamic>> doc = await db.fetchOne(uid).get();
+    final MapDocumentSnapshot doc = await db.fetchOne(uid).get();
     if (!doc.exists) {
       return null;
     }

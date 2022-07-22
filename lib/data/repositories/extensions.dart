@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:clock/clock.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:iirc/core.dart';
 import 'package:rxdart/transformers.dart';
+
+import '../network/firebase/exception.dart';
 
 extension ListExtensions<T> on Iterable<T> {
   Map<String, T> foldToMap(String Function(T) keyBuilder) => fold(<String, T>{},
@@ -31,7 +32,7 @@ extension RandomEnum<T extends Object> on Iterable<T> {
 extension AppExceptionStreamExtension<T> on Stream<T> {
   Stream<T> mapErrorToAppException(bool isDev) => onErrorResume((Object error, [StackTrace? stackTrace]) {
         stackTrace ??= StackTrace.current;
-        if (error is FirebaseException) {
+        if (error is AppFirebaseException) {
           if (error.code == 'permission-denied' && !isDev) {
             return Stream<T>.empty();
           }

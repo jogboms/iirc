@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'models.dart';
+
 class CloudDb {
   CloudDb(this.instance);
 
@@ -13,7 +15,7 @@ class FireStoreDb {
 
   final String path;
 
-  CollectionReference<Map<String, dynamic>> fetchAll() => instance.collection(path);
+  CollectionReference<DynamicMap> fetchAll() => instance.collection(path);
 
-  DocumentReference<Map<String, dynamic>> fetchOne(String uuid) => instance.doc('$path/$uuid');
+  DocumentReference<DynamicMap> fetchOne(String uuid) => instance.doc('$path/$uuid');
 }

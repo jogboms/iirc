@@ -1,11 +1,16 @@
-class AppFirebaseException implements Exception {
-  const AppFirebaseException(this.type);
+import 'package:firebase_core/firebase_core.dart';
 
-  final AppFirebaseExceptionType type;
+typedef AppFirebaseException = FirebaseException;
+
+class AppFirebaseAuthException implements Exception {
+  const AppFirebaseAuthException(this.type);
+
+  final AppFirebaseAuthExceptionType type;
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is AppFirebaseException && runtimeType == other.runtimeType && type == other.type;
+      identical(this, other) ||
+      other is AppFirebaseAuthException && runtimeType == other.runtimeType && type == other.type;
 
   @override
   int get hashCode => type.hashCode;
@@ -16,7 +21,7 @@ class AppFirebaseException implements Exception {
   }
 }
 
-enum AppFirebaseExceptionType {
+enum AppFirebaseAuthExceptionType {
   canceled,
   invalidEmail,
   userDisabled,

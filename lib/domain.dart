@@ -1,3 +1,4 @@
+export 'domain/entities/auth_exception.dart';
 export 'domain/entities/create_item_data.dart';
 export 'domain/entities/create_tag_data.dart';
 export 'domain/entities/update_item_data.dart';

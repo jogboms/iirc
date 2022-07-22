@@ -11,9 +11,9 @@ class Auth {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
 
-  FireUser get getUser => _mapFirebaseUserToUser(_auth.currentUser);
+  FireUser? get getUser => _mapFirebaseUserToUser(_auth.currentUser);
 
-  Stream<FireUser> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
+  Stream<FireUser?> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
 
   Future<String> signInWithGoogle() async {
     try {
@@ -71,9 +71,9 @@ class Auth {
     await _googleSignIn.signOut();
   }
 
-  FireUser _mapFirebaseUserToUser(User? _user) {
+  FireUser? _mapFirebaseUserToUser(User? _user) {
     if (_user == null) {
-      throw const AppFirebaseException(AppFirebaseExceptionType.userNotFound);
+      return null;
     }
     return FireUser(_user);
   }

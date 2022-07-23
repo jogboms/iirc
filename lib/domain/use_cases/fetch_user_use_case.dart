@@ -6,5 +6,12 @@ class FetchUserUseCase {
 
   final UsersRepository _users;
 
-  Future<UserModel?> call(String uid) => _users.fetch(uid);
+  Future<UserModel?> call(String uid) async {
+    try {
+      return _users.fetch(uid);
+    } catch (e) {
+      // TODO: log this
+      return null;
+    }
+  }
 }

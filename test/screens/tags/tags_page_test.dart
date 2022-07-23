@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
-import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../utils.dart';
 
@@ -13,17 +13,7 @@ void main() {
   group('TagsPage', () {
     final Finder tagsPage = find.byType(TagsPage);
 
-    setUp(() {
-      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
-      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
-      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
-    });
-
-    tearDown(() => mockRepositories.reset());
-
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
-
       await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
@@ -32,8 +22,6 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
-
       await tester.pumpWidget(createApp(home: const TagsPage()));
 
       await tester.pump();
@@ -42,18 +30,24 @@ void main() {
     });
 
     testWidgets('should show list of tags', (WidgetTester tester) async {
-      final TagModelList expectedItems = TagModelList.generate(3, (_) => TagsMockImpl.generateTag());
-
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
-        (_) => Stream<TagModelList>.value(expectedItems),
+      final TagViewModelList expectedItems = TagViewModelList.generate(
+        3,
+        (_) => TagViewModel.fromTag(TagsMockImpl.generateTag()),
       );
 
-      await tester.pumpWidget(createApp(home: const TagsPage()));
+      await tester.pumpWidget(createApp(
+        home: const TagsPage(),
+        overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(expectedItems),
+          ),
+        ],
+      ));
 
       await tester.pump();
       await tester.pump();
 
-      for (final TagModel item in expectedItems) {
+      for (final TagViewModel item in expectedItems) {
         expect(find.byKey(Key(item.id)).descendantOf(tagsPage), findsOneWidget);
         expect(find.text(item.title.capitalize()), findsOneWidget);
         expect(find.text(item.description), findsOneWidget);
@@ -63,11 +57,14 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
-        (_) => Stream<TagModelList>.error(expectedError),
-      );
-
-      await tester.pumpWidget(createApp(home: const TagsPage()));
+      await tester.pumpWidget(createApp(
+        home: const TagsPage(),
+        overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncError<TagViewModelList>(expectedError),
+          ),
+        ],
+      ));
 
       await tester.pump();
       await tester.pump();

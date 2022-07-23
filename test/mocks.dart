@@ -15,8 +15,6 @@ class MockFetchTagsUseCase extends Mock implements FetchTagsUseCase {}
 
 class MockGetAccountUseCase extends Mock implements GetAccountUseCase {}
 
-class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
-
 class MockCreateItemUseCase extends Mock implements CreateItemUseCase {}
 
 class MockCreateTagUseCase extends Mock implements CreateTagUseCase {}
@@ -37,4 +35,4 @@ class MockSignOutUseCase extends Mock implements SignOutUseCase {}
 
 class MockCreateUserUseCase extends Mock implements CreateUserUseCase {}
 
-class MockGetUserUseCase extends Mock implements GetUserUseCase {}
+class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}

@@ -34,7 +34,6 @@ void main() async {
     ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
     ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
     ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
-    ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
     ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
     ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
     ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
@@ -45,7 +44,7 @@ void main() async {
     ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
     ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
     ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
-    ..factory((RegistryFactory di) => GetUserUseCase(users: di()))
+    ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
 
     /// Environment.
     ..set(environment);

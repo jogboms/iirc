@@ -26,7 +26,6 @@ class MockUseCases {
   final FetchItemsUseCase fetchItemsUseCase = MockFetchItemsUseCase();
   final FetchTagsUseCase fetchTagsUseCase = MockFetchTagsUseCase();
   final GetAccountUseCase getAccountUseCase = MockGetAccountUseCase();
-  final FetchUserUseCase fetchUserUseCase = MockFetchUserUseCase();
   final CreateItemUseCase createItemUseCase = MockCreateItemUseCase();
   final CreateTagUseCase createTagUseCase = MockCreateTagUseCase();
   final UpdateTagUseCase updateTagUseCase = MockUpdateTagUseCase();
@@ -37,13 +36,12 @@ class MockUseCases {
   final SignInUseCase signInUseCase = MockSignInUseCase();
   final SignOutUseCase signOutUseCase = MockSignOutUseCase();
   final CreateUserUseCase createUserUseCase = MockCreateUserUseCase();
-  final GetUserUseCase getUserUseCase = MockGetUserUseCase();
+  final FetchUserUseCase fetchUserUseCase = MockFetchUserUseCase();
 
   void reset() => <Object>[
         fetchItemsUseCase,
         fetchTagsUseCase,
         getAccountUseCase,
-        fetchUserUseCase,
         createItemUseCase,
         createTagUseCase,
         updateTagUseCase,
@@ -54,7 +52,7 @@ class MockUseCases {
         signInUseCase,
         signOutUseCase,
         createUserUseCase,
-        getUserUseCase
+        fetchUserUseCase
       ].forEach(mt.reset);
 }
 
@@ -71,7 +69,6 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
-      ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
       ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
@@ -82,18 +79,20 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
       ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
       ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
-      ..factory((RegistryFactory di) => GetUserUseCase(users: di()))
+      ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..set(environment);
 
 Widget createApp({
   Widget? home,
   Registry? registry,
+  List<Override>? overrides,
 }) {
   registry ??= createRegistry();
 
   return ProviderScope(
     overrides: <Override>[
       registryProvider.overrideWithValue(registry),
+      ...?overrides,
     ],
     child: App(
       registry: registry,

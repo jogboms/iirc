@@ -2,22 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/screens.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../utils.dart';
 
 void main() {
   group('ItemDetailPage', () {
     final Finder itemDetailPage = find.byType(ItemDetailPage);
-
-    setUp(() {
-      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
-      when(() => mockRepositories.auth.account).thenAnswer((_) async => AuthMockImpl.generateAccount());
-      when(() => mockRepositories.users.fetch(any())).thenAnswer((_) async => UsersMockImpl.user);
-    });
-
-    tearDown(() => mockRepositories.reset());
 
     testWidgets('smoke test', (WidgetTester tester) async {
       await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
@@ -28,9 +21,6 @@ void main() {
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[]));
-      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
-
       await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
 
       await tester.pump();
@@ -40,12 +30,18 @@ void main() {
 
     testWidgets('should show details of item', (WidgetTester tester) async {
       final TagModel tag = TagsMockImpl.generateTag();
-      final ItemModel item = ItemsMockImpl.generateItem(tag: tag);
+      final NormalizedItemModel item = ItemsMockImpl.generateNormalizedItem(tag: tag);
 
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
-      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(<ItemModel>[item]));
-
-      await tester.pumpWidget(createApp(home: ItemDetailPage(id: item.id)));
+      await tester.pumpWidget(createApp(
+        home: ItemDetailPage(id: item.id),
+        overrides: <Override>[
+          selectedItemStateProvider(item.id).overrideWithValue(
+            PreserveStateNotifier.withState<ItemViewModel>(
+              AsyncData<ItemViewModel>(ItemViewModel.fromItem(item)),
+            ),
+          ),
+        ],
+      ));
 
       await tester.pump();
       await tester.pump();
@@ -56,10 +52,16 @@ void main() {
     testWidgets('should show error if item fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[]));
-      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.error(expectedError));
-
-      await tester.pumpWidget(createApp(home: const ItemDetailPage(id: '1')));
+      await tester.pumpWidget(createApp(
+        home: const ItemDetailPage(id: '1'),
+        overrides: <Override>[
+          selectedItemStateProvider('1').overrideWithValue(
+            PreserveStateNotifier.withState<ItemViewModel>(
+              AsyncError<ItemViewModel>(expectedError),
+            ),
+          ),
+        ],
+      ));
 
       await tester.pump();
       await tester.pump();

@@ -14,12 +14,12 @@ class ItemViewModel with EquatableMixin implements ItemModel {
     required this.updatedAt,
   });
 
-  static ItemViewModel fromItem(ItemModel item) => ItemViewModel._(
+  static ItemViewModel fromItem(ItemModel item, TagModel tag) => ItemViewModel._(
         id: item.id,
         path: item.path,
         description: item.description,
         date: item.date,
-        tag: TagViewModel.fromTag(item.tag),
+        tag: TagViewModel.fromTag(tag),
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       );

@@ -12,17 +12,14 @@ class InsightsPage extends StatefulWidget {
 class _InsightsPageState extends State<InsightsPage> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          CustomAppBar(
-            title: Text(context.l10n.insightsCaption.capitalize()),
-            asSliver: true,
-            centerTitle: true,
-          ),
-        ],
-      ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        CustomAppBar(
+          title: Text(context.l10n.insightsCaption.capitalize()),
+          asSliver: true,
+          centerTitle: true,
+        ),
+      ],
     );
   }
 }

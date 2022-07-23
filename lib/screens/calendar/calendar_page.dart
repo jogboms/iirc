@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iirc/core.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
@@ -20,19 +19,16 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
-              data: (ItemViewModelList items) => _ItemsDataView(
-                key: dataViewKey,
-                items: items,
-              ),
-              error: ErrorView.new,
-              loading: () => child!,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
+            data: (ItemViewModelList items) => _ItemsDataView(
+              key: dataViewKey,
+              items: items,
             ),
-        child: const LoadingView(),
-      ),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const LoadingView(),
     );
   }
 }

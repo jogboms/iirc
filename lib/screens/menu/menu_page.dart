@@ -10,6 +10,7 @@ import '../insights/insights_page.dart';
 import '../more/more_page.dart';
 import '../tags/create_tag_page.dart';
 import '../tags/tags_page.dart';
+import 'menu_page_container.dart';
 import 'menu_page_item_provider.dart';
 
 class MenuPage extends StatefulWidget {
@@ -105,8 +106,7 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
                 width: width,
                 child: KeyedSubtree(
                   key: _destinationKeys[item.key],
-                  child: Material(
-                    type: MaterialType.transparency,
+                  child: MenuPageContainer(
                     child: _tabRouteViews[item.key]!.widget,
                   ),
                 ),

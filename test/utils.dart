@@ -22,6 +22,44 @@ class MockRepositories {
 
 final MockRepositories mockRepositories = MockRepositories();
 
+class MockUseCases {
+  final FetchItemsUseCase fetchItemsUseCase = MockFetchItemsUseCase();
+  final FetchTagsUseCase fetchTagsUseCase = MockFetchTagsUseCase();
+  final GetAccountUseCase getAccountUseCase = MockGetAccountUseCase();
+  final FetchUserUseCase fetchUserUseCase = MockFetchUserUseCase();
+  final CreateItemUseCase createItemUseCase = MockCreateItemUseCase();
+  final CreateTagUseCase createTagUseCase = MockCreateTagUseCase();
+  final UpdateTagUseCase updateTagUseCase = MockUpdateTagUseCase();
+  final UpdateItemUseCase updateItemUseCase = MockUpdateItemUseCase();
+  final DeleteItemUseCase deleteItemUseCase = MockDeleteItemUseCase();
+  final DeleteTagUseCase deleteTagUseCase = MockDeleteTagUseCase();
+  final FetchAuthStateUseCase fetchAuthStateUseCase = MockFetchAuthStateUseCase();
+  final SignInUseCase signInUseCase = MockSignInUseCase();
+  final SignOutUseCase signOutUseCase = MockSignOutUseCase();
+  final CreateUserUseCase createUserUseCase = MockCreateUserUseCase();
+  final GetUserUseCase getUserUseCase = MockGetUserUseCase();
+
+  void reset() => <Object>[
+        fetchItemsUseCase,
+        fetchTagsUseCase,
+        getAccountUseCase,
+        fetchUserUseCase,
+        createItemUseCase,
+        createTagUseCase,
+        updateTagUseCase,
+        updateItemUseCase,
+        deleteItemUseCase,
+        deleteTagUseCase,
+        fetchAuthStateUseCase,
+        signInUseCase,
+        signOutUseCase,
+        createUserUseCase,
+        getUserUseCase
+      ].forEach(mt.reset);
+}
+
+final MockUseCases mockUseCases = MockUseCases();
+
 Registry createRegistry({
   Environment environment = Environment.testing,
 }) =>

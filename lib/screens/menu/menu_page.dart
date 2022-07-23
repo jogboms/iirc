@@ -6,6 +6,7 @@ import 'package:iirc/state.dart';
 import '../calendar/calendar_page.dart';
 import '../home/create_item_page.dart';
 import '../home/home_page.dart';
+import '../insights/insights_page.dart';
 import '../more/more_page.dart';
 import '../tags/create_tag_page.dart';
 import '../tags/tags_page.dart';
@@ -69,6 +70,11 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
           S.current.calendarCaption,
           const Icon(Icons.calendar_today_outlined),
           const CalendarPage(key: PageStorageKey<String>('calendar')),
+        ),
+        MenuPageItem.insights: _TabRouteView(
+          S.current.insightsCaption,
+          const Icon(Icons.insights_outlined),
+          const InsightsPage(key: PageStorageKey<String>('insights')),
         ),
         MenuPageItem.more: _TabRouteView(
           S.current.moreCaption,
@@ -166,6 +172,7 @@ extension on MenuPageItem {
         };
       case MenuPageItem.tags:
         return (_) => CreateTagPage.route();
+      case MenuPageItem.insights:
       case MenuPageItem.more:
       default:
         return null;

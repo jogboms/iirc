@@ -140,6 +140,12 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
+              onPressed: () {}, // TODO: route to insights details
+              icon: const Icon(Icons.insights_outlined),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) => Center(

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "719782367161-74pbgeft1rlp5sjgb35stgbhed7edt47.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.jogboms.iirc.dev",
+            "certificate_hash": "b0991302395ec95c09039172a3b86d0b7810524b"
+          }
+        },
+        {
           "client_id": "719782367161-cldhpp1f15ll6tskgvc5ifrjsl5j6pq5.apps.googleusercontent.com",
           "client_type": 3
         }

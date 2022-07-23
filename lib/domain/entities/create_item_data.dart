@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../models/tag.dart';
+import '../models/item.dart';
 
 class CreateItemData with EquatableMixin {
   const CreateItemData({
@@ -11,7 +11,7 @@ class CreateItemData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModel? tag; // TODO: remove nullability
+  final TagModelReference? tag; // TODO: remove nullability
 
   @override
   List<Object?> get props => <Object?>[description, date, tag];

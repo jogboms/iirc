@@ -3,7 +3,7 @@ import 'package:iirc/domain.dart';
 
 import 'tag_view_model.dart';
 
-class ItemViewModel with EquatableMixin implements ItemModel {
+class ItemViewModel with EquatableMixin implements ItemModelInterface<TagViewModel> {
   const ItemViewModel._({
     required this.id,
     required this.date,

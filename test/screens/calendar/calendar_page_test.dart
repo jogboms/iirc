@@ -42,19 +42,24 @@ void main() {
     testWidgets('should show list of items for date', (WidgetTester tester) async {
       final TagModel tag = TagsMockImpl.generateTag();
       final DateTime now = clock.now();
-      final ItemModelList expectedItems = ItemModelList.generate(
+      final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
-        (_) => ItemsMockImpl.generateItem(tag: tag, date: now),
+        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateItem(tag: tag, date: now), tag),
       );
 
-      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) => Stream<ItemModelList>.value(expectedItems));
+      when(() => mockRepositories.items.fetch(any())).thenAnswer(
+        (_) => Stream<ItemModelList>.value(expectedItems.asItemModelList),
+      );
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
+        (_) => Stream<TagModelList>.value(<TagModel>[tag]),
+      );
 
       await tester.pumpWidget(createApp(home: const CalendarPage()));
 
       await tester.pump();
       await tester.pump();
 
-      for (final ItemModel item in expectedItems) {
+      for (final ItemViewModel item in expectedItems) {
         final Finder itemWidget = find.byKey(Key(item.id));
         expect(itemWidget.descendantOf(calendarPage), findsOneWidget);
         expect(find.text(item.description).descendantOf(itemWidget), findsOneWidget);

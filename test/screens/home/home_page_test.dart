@@ -42,11 +42,18 @@ void main() {
     });
 
     testWidgets('should show unique list of items', (WidgetTester tester) async {
-      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
-      final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemModel element) => element.tag);
+      final TagModel tag = TagsMockImpl.generateTag();
+      final ItemViewModelList expectedItems = ItemViewModelList.generate(
+        3,
+        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateItem(tag: tag), tag),
+      );
+      final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
       when(() => mockRepositories.items.fetch(any())).thenAnswer(
-        (_) => Stream<ItemModelList>.value(expectedItems),
+        (_) => Stream<ItemModelList>.value(expectedItems.asItemModelList),
+      );
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
+        (_) => Stream<TagModelList>.value(<TagModel>[tag]),
       );
 
       await tester.pumpWidget(createApp(home: const HomePage()));
@@ -55,7 +62,7 @@ void main() {
       await tester.pump();
 
       for (final TagModel tag in uniqueTags) {
-        final ItemModel item = expectedItems.firstWhere((ItemModel element) => element.tag == tag);
+        final ItemViewModel item = expectedItems.firstWhere((ItemViewModel element) => element.tag.id == tag.id);
         expect(find.byKey(Key(item.id)).descendantOf(homePage), findsOneWidget);
         expect(find.text(item.description), findsOneWidget);
         expect(find.text(item.tag.title.capitalize()), findsOneWidget);
@@ -67,6 +74,9 @@ void main() {
 
       when(() => mockRepositories.items.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.error(expectedError),
+      );
+      when(() => mockRepositories.tags.fetch(any())).thenAnswer(
+        (_) => Stream<TagModelList>.value(<TagModel>[]),
       );
 
       await tester.pumpWidget(createApp(home: const HomePage()));

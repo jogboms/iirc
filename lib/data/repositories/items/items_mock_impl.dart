@@ -15,7 +15,7 @@ class ItemsMockImpl extends ItemsRepository {
       path: '/items/${AuthMockImpl.id}/$id',
       description: faker.lorem.sentence(),
       date: date ?? faker.randomGenerator.dateTime,
-      tag: tag ?? TagsMockImpl.tags.values.random(),
+      tag: (tag ?? TagsMockImpl.tags.values.random()).reference,
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );
@@ -29,13 +29,12 @@ class ItemsMockImpl extends ItemsRepository {
   @override
   Future<String> create(String userId, CreateItemData item) async {
     final String id = faker.guid.guid();
-    final TagModel tag = TagsMockImpl.tags[item.tag!.id]!;
     final ItemModel newItem = ItemModel(
       id: id,
       path: '/items/$userId/$id',
       description: item.description,
       date: item.date,
-      tag: tag,
+      tag: item.tag!,
       createdAt: clock.now(),
       updatedAt: null,
     );

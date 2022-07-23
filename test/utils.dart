@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/app.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/registry.dart';
 import 'package:iirc/state.dart';
@@ -70,4 +71,16 @@ extension FinderExtensions on Finder {
 extension UniqueByExtension<E> on Iterable<E> {
   Set<U> uniqueBy<U>(U Function(E) fn) =>
       fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
+}
+
+extension ItemModelListExtensions on ItemViewModelList {
+  ItemModelList get asItemModelList => map((ItemViewModel e) => ItemModel(
+        id: e.id,
+        path: e.path,
+        description: e.description,
+        date: e.date,
+        tag: e.tag.reference,
+        createdAt: e.createdAt,
+        updatedAt: e.updatedAt,
+      )).toList(growable: false);
 }

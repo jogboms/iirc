@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../models/tag.dart';
+import '../models/item.dart';
 
 class UpdateItemData with EquatableMixin {
   const UpdateItemData({
@@ -15,7 +15,7 @@ class UpdateItemData with EquatableMixin {
   final String path;
   final String description;
   final DateTime date;
-  final TagModel tag;
+  final TagModelReference tag;
 
   @override
   List<Object?> get props => <Object?>[id, path, description, date, tag];

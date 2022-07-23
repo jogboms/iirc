@@ -6,5 +6,5 @@ class DeleteItemUseCase {
 
   final ItemsRepository _items;
 
-  Future<bool> call(ItemModel item) => _items.delete(item.path);
+  Future<bool> call(ItemModelInterface item) => _items.delete(item.path);
 }

@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import 'tag.dart';
 
-class ItemModel with EquatableMixin {
-  const ItemModel({
+class BaseItemModel<T> with EquatableMixin {
+  const BaseItemModel({
     required this.id,
     required this.path,
     required this.description,
@@ -17,7 +17,7 @@ class ItemModel with EquatableMixin {
   final String path;
   final String description;
   final DateTime date;
-  final TagModel tag;
+  final T tag;
   final DateTime createdAt;
   final DateTime? updatedAt;
 
@@ -28,4 +28,58 @@ class ItemModel with EquatableMixin {
   bool? get stringify => true;
 }
 
+class ItemModel extends BaseItemModel<TagModelReference> {
+  const ItemModel({
+    required super.id,
+    required super.path,
+    required super.description,
+    required super.date,
+    required super.tag,
+    required super.createdAt,
+    required super.updatedAt,
+  });
+}
+
+class NormalizedItemModel extends BaseItemModel<TagModel> {
+  const NormalizedItemModel({
+    required super.id,
+    required super.path,
+    required super.description,
+    required super.date,
+    required super.tag,
+    required super.createdAt,
+    required super.updatedAt,
+  });
+}
+
+class TagModelReference with EquatableMixin {
+  const TagModelReference({required this.id, required this.path});
+
+  final String id;
+  final String path;
+
+  @override
+  List<Object> get props => <Object>[id, path];
+
+  @override
+  bool? get stringify => true;
+}
+
+extension TagModelReferenceExtension on TagModel {
+  TagModelReference get reference => TagModelReference(id: id, path: path);
+}
+
+extension NormalizedItemModelExtension on NormalizedItemModel {
+  ItemModel get denormalize => ItemModel(
+        id: id,
+        path: path,
+        description: description,
+        date: date,
+        tag: tag.reference,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
 typedef ItemModelList = List<ItemModel>;
+typedef NormalizedItemModelList = List<NormalizedItemModel>;

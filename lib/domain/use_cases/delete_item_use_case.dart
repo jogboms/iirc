@@ -1,4 +1,3 @@
-import '../models/item.dart';
 import '../repositories/items.dart';
 
 class DeleteItemUseCase {
@@ -6,5 +5,5 @@ class DeleteItemUseCase {
 
   final ItemsRepository _items;
 
-  Future<bool> call(ItemModel item) => _items.delete(item.path);
+  Future<bool> call(String path) => _items.delete(path);
 }

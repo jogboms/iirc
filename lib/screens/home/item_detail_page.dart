@@ -124,7 +124,7 @@ class _SelectedItemDataView extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
-    await ref.read(itemProvider).delete(item);
+    await ref.read(itemProvider).delete(item.path);
 
     // TODO: Handle loading state.
     // TODO: Handle error state.

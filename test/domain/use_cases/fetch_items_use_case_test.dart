@@ -8,18 +8,22 @@ import '../../utils.dart';
 void main() {
   group('FetchItemsUseCase', () {
     final ItemsRepository itemsRepository = mockRepositories.items;
-    final FetchItemsUseCase useCase = FetchItemsUseCase(items: itemsRepository);
+    final TagsRepository tagsRepository = mockRepositories.tags;
+    final FetchItemsUseCase useCase = FetchItemsUseCase(items: itemsRepository, tags: tagsRepository);
 
     tearDown(() => reset(itemsRepository));
 
     test('should fetch items', () {
-      final ItemModelList expectedItems = ItemModelList.generate(3, (_) => ItemsMockImpl.generateItem());
+      final TagModel tag = TagsMockImpl.generateTag();
+      final NormalizedItemModelList expectedItems = <NormalizedItemModel>[
+        ItemsMockImpl.generateNormalizedItem(tag: tag)
+      ];
 
-      when(() => itemsRepository.fetch(any())).thenAnswer(
-        (_) => Stream<ItemModelList>.value(expectedItems),
-      );
+      when(() => itemsRepository.fetch(any()))
+          .thenAnswer((_) => Stream<ItemModelList>.value(expectedItems.asItemModelList));
+      when(() => tagsRepository.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
 
-      expect(useCase('1'), emits(expectedItems));
+      expectLater(useCase('1'), emits(expectedItems));
     });
 
     test('should bubble fetch errors', () {

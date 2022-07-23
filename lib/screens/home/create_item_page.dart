@@ -51,7 +51,7 @@ class CreateItemPageState extends State<CreateItemPage> {
       await ref.read(itemProvider).create(CreateItemData(
             description: data.description,
             date: data.date,
-            tag: data.tag,
+            tag: data.tag!.reference,
           ));
 
       // TODO: Handle loading state.

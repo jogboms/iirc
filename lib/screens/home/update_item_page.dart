@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/widgets.dart';
 
@@ -10,11 +11,11 @@ import 'providers/item_provider.dart';
 class UpdateItemPage extends StatefulWidget {
   const UpdateItemPage({super.key, required this.item});
 
-  static PageRoute<void> route({required ItemModel item}) {
+  static PageRoute<void> route({required ItemViewModel item}) {
     return MaterialPageRoute<void>(builder: (_) => UpdateItemPage(item: item));
   }
 
-  final ItemModel item;
+  final ItemViewModel item;
 
   @override
   State<UpdateItemPage> createState() => UpdateItemPageState();
@@ -47,7 +48,7 @@ class UpdateItemPageState extends State<UpdateItemPage> {
             path: widget.item.path,
             description: data.description,
             date: data.date,
-            tag: data.tag!,
+            tag: data.tag!.reference,
           ));
 
       // TODO: Handle loading state.

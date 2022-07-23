@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iirc/data.dart';
 import 'package:iirc/screens.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:iirc/state.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../utils.dart';
 
@@ -8,13 +10,15 @@ void main() {
   group('MenuPage', () {
     final Finder menuPage = find.byType(MenuPage);
 
-    tearDown(() => mockRepositories.reset());
-
     testWidgets('smoke test', (WidgetTester tester) async {
-      when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
-      when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
-
-      await tester.pumpWidget(createApp(home: const MenuPage()));
+      await tester.pumpWidget(createApp(
+        home: const MenuPage(),
+        overrides: <Override>[
+          itemsProvider.overrideWithValue(
+            AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
+          ),
+        ],
+      ));
 
       await tester.pump();
 

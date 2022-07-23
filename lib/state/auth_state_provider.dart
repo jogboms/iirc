@@ -19,7 +19,7 @@ class AuthStateProvider extends StateNotifier<AuthState> {
 
     try {
       final account = await registry.get<SignInUseCase>().call();
-      final user = await registry.get<GetUserUseCase>().call(account.id);
+      final user = await registry.get<FetchUserUseCase>().call(account.id);
       if (user == null) {
         await registry.get<CreateUserUseCase>().call(account);
       }

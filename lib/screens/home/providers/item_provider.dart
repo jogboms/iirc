@@ -25,8 +25,8 @@ class ItemProvider {
     return registry.get<UpdateItemUseCase>().call(data);
   }
 
-  Future<bool> delete(ItemModel item) async {
+  Future<bool> delete(String path) async {
     final registry = _ref.read(registryProvider);
-    return registry.get<DeleteItemUseCase>().call(item);
+    return registry.get<DeleteItemUseCase>().call(path);
   }
 }

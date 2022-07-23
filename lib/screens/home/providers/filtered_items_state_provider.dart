@@ -1,7 +1,6 @@
 // ignore_for_file: always_specify_types
 
 import 'package:iirc/data.dart';
-import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -18,7 +17,7 @@ final filteredItemsStateProvider =
   (ref) => PreserveStateNotifier(_filteredItemsProvider, ref),
 );
 
-extension UniqueByTagExtension<E extends ItemModel> on Iterable<E> {
+extension UniqueByTagExtension<E extends ItemViewModel> on Iterable<E> {
   List<E> uniqueByTag() => fold(
         <String, E>{},
         (Map<String, E> previousValue, E element) => previousValue..putIfAbsent(element.tag.id, () => element),

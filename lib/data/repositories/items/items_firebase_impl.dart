@@ -6,7 +6,6 @@ import '../../network/firebase/cloud_db.dart';
 import '../../network/firebase/firebase.dart';
 import '../../network/firebase/models.dart';
 import '../derive_date_from_timestamp.dart';
-import '../derive_tag_from_reference.dart';
 import '../extensions.dart';
 
 class ItemsFirebaseImpl implements ItemsRepository {
@@ -56,12 +55,14 @@ class ItemsFirebaseImpl implements ItemsRepository {
 
 Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
   final DynamicMap data = document.data()!;
+  final MapDocumentReference tag = data['tag'] as MapDocumentReference;
+
   return ItemModel(
     id: document.id,
     path: document.reference.path,
     description: data['description'] as String,
     date: deriveDateFromTimestamp(data['date'] as Timestamp),
-    tag: await deriveTagFromReference(data['tag'] as MapDocumentReference),
+    tag: TagModelReference(id: tag.id, path: tag.path),
     createdAt: deriveDateFromTimestamp(data['createdAt'] as Timestamp),
     updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as Timestamp) : null,
   );

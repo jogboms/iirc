@@ -21,7 +21,7 @@ class ItemEntryData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModel? tag;
+  final TagModel? tag; // TODO: remove nullability
 
   ItemEntryData copyWith({
     String? description,

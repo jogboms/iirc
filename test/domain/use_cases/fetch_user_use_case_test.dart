@@ -20,10 +20,10 @@ void main() {
       expect(useCase('1'), completion(dummyUser));
     });
 
-    test('should bubble fetch errors', () {
+    test('should fail gracefully with null', () {
       when(() => usersRepository.fetch(any())).thenThrow(Exception('an error'));
 
-      expect(() => useCase('1'), throwsException);
+      expect(useCase('1'), completion(isNull));
     });
   });
 }

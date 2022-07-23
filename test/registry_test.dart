@@ -17,14 +17,40 @@ void main() {
               ..set<int>(1),
             throwsAssertionError);
       });
+
+      test('throws an assertion error when factory is registered more than once', () {
+        expect(
+            () => Registry()
+              ..factory((_) => 1)
+              ..factory((_) => 2),
+            throwsAssertionError);
+      });
+
+      test('throws an assertion error when factory is registered when normal exists', () {
+        expect(
+            () => Registry()
+              ..set(1)
+              ..factory((_) => 2),
+            throwsAssertionError);
+      });
     });
 
-    test('replace', () {
-      final Registry registry = Registry()
-        ..set(1)
-        ..replace(2);
+    group('replace', () {
+      test('works as expected', () {
+        final Registry registry = Registry()
+          ..set(1)
+          ..replace(2);
 
-      expect(registry.get<int>(), 2);
+        expect(registry.get<int>(), 2);
+      });
+
+      test('should replace factory methods', () {
+        final Registry registry = Registry()
+          ..factory((_) => 1)
+          ..replace(2);
+
+        expect(registry.get<int>(), 2);
+      });
     });
 
     group('factory', () {
@@ -63,7 +89,7 @@ void main() {
       });
 
       test('throws an assertion error when not registered', () {
-        expect(() => Registry().get<int>(), throwsAssertionError);
+        expect(() => Registry().get<int>(), throwsArgumentError);
       });
     });
   });

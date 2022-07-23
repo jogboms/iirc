@@ -30,7 +30,7 @@ Registry createRegistry({
       ..set(mockRepositories.users)
       ..set(mockRepositories.items)
       ..set(mockRepositories.tags)
-      ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
+      ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
       ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
@@ -75,6 +75,18 @@ extension UniqueByExtension<E> on Iterable<E> {
 
 extension ItemModelListExtensions on ItemViewModelList {
   ItemModelList get asItemModelList => map((ItemViewModel e) => ItemModel(
+        id: e.id,
+        path: e.path,
+        description: e.description,
+        date: e.date,
+        tag: e.tag.reference,
+        createdAt: e.createdAt,
+        updatedAt: e.updatedAt,
+      )).toList(growable: false);
+}
+
+extension NormalizedItemModelListExtensions on NormalizedItemModelList {
+  ItemModelList get asItemModelList => map((NormalizedItemModel e) => ItemModel(
         id: e.id,
         path: e.path,
         description: e.description,

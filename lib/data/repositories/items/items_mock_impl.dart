@@ -21,6 +21,19 @@ class ItemsMockImpl extends ItemsRepository {
     );
   }
 
+  static NormalizedItemModel generateNormalizedItem({TagModel? tag, DateTime? date}) {
+    final String id = faker.guid.guid();
+    return NormalizedItemModel(
+      id: id,
+      path: '/items/${AuthMockImpl.id}/$id',
+      description: faker.lorem.sentence(),
+      date: date ?? faker.randomGenerator.dateTime,
+      tag: (tag ?? TagsMockImpl.tags.values.random()),
+      createdAt: faker.randomGenerator.dateTime,
+      updatedAt: clock.now(),
+    );
+  }
+
   static final Map<String, ItemModel> items =
       faker.randomGenerator.amount((_) => generateItem(), 5, min: 5).foldToMap((ItemModel element) => element.id);
 

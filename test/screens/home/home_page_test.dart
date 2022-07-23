@@ -45,7 +45,7 @@ void main() {
       final TagModel tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
-        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateItem(tag: tag), tag),
+        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateNormalizedItem(tag: tag)),
       );
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 

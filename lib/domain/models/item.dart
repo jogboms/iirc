@@ -1,27 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import 'tag.dart';
 
-@optionalTypeArgs
-abstract class ItemModelInterface<T> {
-  String get id;
-
-  String get path;
-
-  String get description;
-
-  DateTime get date;
-
-  T get tag;
-
-  DateTime get createdAt;
-
-  DateTime? get updatedAt;
-}
-
-class ItemModel with EquatableMixin implements ItemModelInterface<TagModelReference> {
-  const ItemModel({
+class BaseItemModel<T> with EquatableMixin {
+  const BaseItemModel({
     required this.id,
     required this.path,
     required this.description,
@@ -31,19 +13,12 @@ class ItemModel with EquatableMixin implements ItemModelInterface<TagModelRefere
     required this.updatedAt,
   });
 
-  @override
   final String id;
-  @override
   final String path;
-  @override
   final String description;
-  @override
   final DateTime date;
-  @override
-  final TagModelReference tag;
-  @override
+  final T tag;
   final DateTime createdAt;
-  @override
   final DateTime? updatedAt;
 
   @override
@@ -51,6 +26,30 @@ class ItemModel with EquatableMixin implements ItemModelInterface<TagModelRefere
 
   @override
   bool? get stringify => true;
+}
+
+class ItemModel extends BaseItemModel<TagModelReference> {
+  const ItemModel({
+    required super.id,
+    required super.path,
+    required super.description,
+    required super.date,
+    required super.tag,
+    required super.createdAt,
+    required super.updatedAt,
+  });
+}
+
+class NormalizedItemModel extends BaseItemModel<TagModel> {
+  const NormalizedItemModel({
+    required super.id,
+    required super.path,
+    required super.description,
+    required super.date,
+    required super.tag,
+    required super.createdAt,
+    required super.updatedAt,
+  });
 }
 
 class TagModelReference with EquatableMixin {
@@ -70,4 +69,17 @@ extension TagModelReferenceExtension on TagModel {
   TagModelReference get reference => TagModelReference(id: id, path: path);
 }
 
+extension NormalizedItemModelExtension on NormalizedItemModel {
+  ItemModel get denormalize => ItemModel(
+        id: id,
+        path: path,
+        description: description,
+        date: date,
+        tag: tag.reference,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
 typedef ItemModelList = List<ItemModel>;
+typedef NormalizedItemModelList = List<NormalizedItemModel>;

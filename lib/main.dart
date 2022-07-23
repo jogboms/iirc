@@ -31,7 +31,7 @@ void main() async {
 
     /// UseCases.
     /// Callable classes that may contain logic or else route directly to repositories.
-    ..factory((RegistryFactory di) => FetchItemsUseCase(items: di()))
+    ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
     ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
     ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
     ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))

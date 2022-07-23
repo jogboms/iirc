@@ -44,7 +44,7 @@ void main() {
       final DateTime now = clock.now();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
-        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateItem(tag: tag, date: now), tag),
+        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateNormalizedItem(tag: tag, date: now)),
       );
 
       when(() => mockRepositories.items.fetch(any())).thenAnswer(

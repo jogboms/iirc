@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iirc/generated/l10n.dart';
 
 extension L10nExtensions on BuildContext {
-  S get l10n => S.of(this);
+  L10n get l10n => L10n.of(this);
 }
 
 extension BuildContextThemeExtensions on BuildContext {

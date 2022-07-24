@@ -57,27 +57,27 @@ class _MenuPageDataView extends StatefulWidget {
 class _MenuPageDataViewState extends State<_MenuPageDataView> {
   Map<MenuPageItem, _TabRouteView> get _tabRouteViews => <MenuPageItem, _TabRouteView>{
         MenuPageItem.tags: _TabRouteView(
-          S.current.tagsCaption,
+          L10n.current.tagsCaption,
           const Icon(Icons.tag),
           const TagsPage(key: PageStorageKey<String>('tags')),
         ),
         MenuPageItem.items: _TabRouteView(
-          S.current.itemsCaption,
+          L10n.current.itemsCaption,
           const Icon(Icons.all_inclusive),
           const HomePage(key: PageStorageKey<String>('items')),
         ),
         MenuPageItem.calendar: _TabRouteView(
-          S.current.calendarCaption,
+          L10n.current.calendarCaption,
           const Icon(Icons.calendar_today_outlined),
           const CalendarPage(key: PageStorageKey<String>('calendar')),
         ),
         MenuPageItem.insights: _TabRouteView(
-          S.current.insightsCaption,
+          L10n.current.insightsCaption,
           const Icon(Icons.insights_outlined),
           const InsightsPage(key: PageStorageKey<String>('insights')),
         ),
         MenuPageItem.more: _TabRouteView(
-          S.current.moreCaption,
+          L10n.current.moreCaption,
           const Icon(Icons.more_horiz),
           const MorePage(key: PageStorageKey<String>('more')),
         ),

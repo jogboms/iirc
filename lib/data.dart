@@ -1,5 +1,3 @@
-export 'data/models/item_view_model.dart';
-export 'data/models/tag_view_model.dart';
 export 'data/network/firebase/analytics.dart';
 export 'data/network/firebase/cloud_db.dart';
 export 'data/network/firebase/crashlytics.dart';

@@ -1,7 +1,6 @@
 // ignore_for_file: always_specify_types
 
 import 'package:equatable/equatable.dart';
-import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/state.dart';
 import 'package:riverpod/riverpod.dart';

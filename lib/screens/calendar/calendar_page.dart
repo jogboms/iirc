@@ -6,6 +6,7 @@ import 'package:iirc/widgets.dart';
 
 import '../widgets/item_calendar_list_view.dart';
 import '../widgets/item_calendar_view.dart';
+import '../widgets/item_calendar_view_header.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -68,10 +69,13 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
+        ItemCalendarViewHeader(
+          controller: itemCalendarViewController,
+          primary: true,
+        ),
         ItemCalendarView(
           controller: itemCalendarViewController,
           items: widget.items,
-          primary: true,
         ),
         ItemCalendarListView(
           controller: itemCalendarViewController,

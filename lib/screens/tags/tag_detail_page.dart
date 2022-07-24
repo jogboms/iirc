@@ -8,6 +8,7 @@ import 'package:iirc/widgets.dart';
 import '../home/create_item_page.dart';
 import '../widgets/item_calendar_list_view.dart';
 import '../widgets/item_calendar_view.dart';
+import '../widgets/item_calendar_view_header.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
 import 'update_tag_page.dart';
@@ -191,6 +192,9 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             const SizedBox(width: 2),
           ],
           asSliver: true,
+        ),
+        ItemCalendarViewHeader(
+          controller: itemCalendarViewController,
         ),
         ItemCalendarView(
           controller: itemCalendarViewController,

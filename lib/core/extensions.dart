@@ -13,6 +13,10 @@ extension MenuPageThemeDataExtensions on ThemeData {
   Color get menuPageBackgroundColor => brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400;
 }
 
+extension CalendarViewHeaderThemeDataExtensions on ThemeData {
+  List<Color> get calendarViewHeaderGradient => <Color>[Colors.purpleAccent, Colors.blueAccent];
+}
+
 extension StringExtensions on String {
   String capitalize() => this[0].toUpperCase() + substring(1);
 }

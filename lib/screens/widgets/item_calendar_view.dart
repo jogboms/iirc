@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/state.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +12,12 @@ DateTime get _kToday => clock.now();
 
 class ItemCalendarViewController extends ValueNotifier<DateTime> {
   ItemCalendarViewController({
+    @visibleForTesting this.height = 324,
     @visibleForTesting DateTime? date,
   }) : super(date ?? _kToday);
+
+  final double height;
+  final double weekDayHeight = kToolbarHeight * .75;
 
   List<ItemViewModel> get items => getItemsForDay(value);
 
@@ -23,8 +26,25 @@ class ItemCalendarViewController extends ValueNotifier<DateTime> {
     hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
   );
 
+  void today() => forceUpdate(_kToday);
+
   @visibleForTesting
   void update(DateTime focusedDay) => value = focusedDay;
+
+  @visibleForTesting
+  bool get forcedUpdate => _forcedUpdate;
+  bool _forcedUpdate = false;
+
+  @visibleForTesting
+  void forceUpdate(DateTime focusedDay) {
+    _forcedUpdate = true;
+    update(focusedDay);
+  }
+
+  @visibleForTesting
+  void reset() {
+    _forcedUpdate = false;
+  }
 
   @visibleForTesting
   void populate(ItemViewModelList items) {
@@ -43,12 +63,10 @@ class ItemCalendarView extends StatefulWidget {
     super.key,
     required this.controller,
     required this.items,
-    this.primary = false,
   });
 
   final ItemCalendarViewController controller;
   final ItemViewModelList items;
-  final bool primary;
 
   @override
   State<ItemCalendarView> createState() => _ItemCalendarViewState();
@@ -60,6 +78,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     super.initState();
 
     widget.controller.populate(widget.items);
+    widget.controller.addListener(_forceUpdate);
   }
 
   @override
@@ -71,18 +90,28 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     }
   }
 
+  @override
+  void dispose() {
+    widget.controller.removeListener(_forceUpdate);
+
+    super.dispose();
+  }
+
+  void _forceUpdate() {
+    if (widget.controller.forcedUpdate) {
+      setState(() => widget.controller.reset());
+    }
+  }
+
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(widget.controller.value, selectedDay)) {
-      setState(() {
-        widget.controller.update(focusedDay);
-      });
+      widget.controller.forceUpdate(focusedDay);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
 
     final TextStyle dayOfWeekTextStyle = theme.textTheme.labelSmall!.copyWith(
       color: theme.colorScheme.onBackground,
@@ -90,25 +119,16 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     );
 
     return SliverPersistentHeader(
-      pinned: true,
       delegate: _CustomSliverPersistentHeader(
-        safeArea: widget.primary ? mediaQuery.padding.top : 0,
-        height: mediaQuery.size.height / 2.5,
+        height: widget.controller.height,
         color: theme.colorScheme.surface,
-        header: ValueListenableBuilder<DateTime>(
-          valueListenable: widget.controller,
-          builder: (BuildContext context, DateTime value, _) => _CalendarHeader(
-            key: ObjectKey(value),
-            focusedDay: value,
-            onTodayButtonTap: () => setState(() => widget.controller.update(_kToday)),
-          ),
-        ),
         child: TableCalendar<ItemViewModel>(
           calendarFormat: CalendarFormat.month,
           startingDayOfWeek: StartingDayOfWeek.sunday,
           currentDay: _kToday,
           daysOfWeekHeight: kToolbarHeight * .75,
           headerVisible: false,
+          sixWeekMonthsEnforced: true,
           daysOfWeekStyle: DaysOfWeekStyle(
             decoration: BoxDecoration(
               color: theme.colorScheme.inverseSurface,
@@ -171,42 +191,6 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
   }
 }
 
-class _CalendarHeader extends StatelessWidget {
-  const _CalendarHeader({
-    super.key,
-    required this.focusedDay,
-    required this.onTodayButtonTap,
-  });
-
-  final DateTime focusedDay;
-  final VoidCallback onTodayButtonTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = context.theme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              DateFormat.yMMMM().format(focusedDay).toUpperCase(),
-              style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.calendar_today, size: 20.0),
-            color: theme.colorScheme.onBackground,
-            visualDensity: VisualDensity.compact,
-            onPressed: onTodayButtonTap,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ItemMarker extends StatelessWidget {
   const _ItemMarker({super.key, required this.isSelected, required this.tag});
 
@@ -231,66 +215,33 @@ class _ItemMarker extends StatelessWidget {
 
 class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
   const _CustomSliverPersistentHeader({
-    required this.safeArea,
     required this.height,
     required this.color,
-    required this.header,
     required this.child,
   });
 
-  final double safeArea;
   final double height;
   final Color color;
-  final Widget header;
   final Widget child;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    Widget widget = Material(
-      color: color,
-      elevation: 5,
-      shadowColor: Colors.black12,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: headerHeight,
-              padding: EdgeInsets.only(top: safeArea),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[Colors.purpleAccent, Colors.blueAccent],
-                ),
-              ),
-              child: header,
-            ),
-            Expanded(child: child),
-          ],
+  Widget build(BuildContext context, _, __) => Material(
+        color: color,
+        elevation: 5,
+        shadowColor: Colors.black12,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: child,
         ),
-      ),
-    );
-    if (safeArea != 0) {
-      widget = AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: widget,
       );
-    }
-    return widget;
-  }
-
-  double get headerHeight => kToolbarHeight + safeArea;
 
   @override
   double get maxExtent => minExtent;
 
   @override
-  double get minExtent => height + headerHeight;
+  double get minExtent => height;
 
   @override
   bool shouldRebuild(covariant _CustomSliverPersistentHeader oldDelegate) =>
-      safeArea != oldDelegate.safeArea ||
-      height != oldDelegate.height ||
-      color != oldDelegate.color ||
-      header != oldDelegate.header ||
-      child != oldDelegate.child;
+      height != oldDelegate.height || color != oldDelegate.color || child != oldDelegate.child;
 }

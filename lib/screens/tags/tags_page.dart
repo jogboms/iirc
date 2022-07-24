@@ -21,13 +21,16 @@ class TagsPageState extends State<TagsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
-            data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
-            error: ErrorView.new,
-            loading: () => child!,
-          ),
-      child: const LoadingView(),
+    return Material(
+      color: context.theme.menuPageBackgroundColor,
+      child: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
+              data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const LoadingView(),
+      ),
     );
   }
 }

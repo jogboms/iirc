@@ -22,13 +22,16 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
-            data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
-            error: ErrorView.new,
-            loading: () => child!,
-          ),
-      child: const LoadingView(),
+    return Material(
+      color: context.theme.menuPageBackgroundColor,
+      child: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
+              data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const LoadingView(),
+      ),
     );
   }
 }

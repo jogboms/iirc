@@ -13,7 +13,6 @@ void main() {
       await tester.pump();
 
       expect(insightsPage, findsOneWidget);
-      expect(find.byType(LogoutListTile).descendantOf(insightsPage), findsOneWidget);
     });
   });
 }

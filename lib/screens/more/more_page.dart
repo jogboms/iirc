@@ -14,22 +14,25 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        CustomAppBar(
-          title: Text(context.l10n.moreCaption.capitalize()),
-          asSliver: true,
-          centerTitle: true,
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(<Widget>[
-              const LogoutListTile(),
-            ]),
+    return Material(
+      color: context.theme.menuPageBackgroundColor,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          CustomAppBar(
+            title: Text(context.l10n.moreCaption.capitalize()),
+            asSliver: true,
+            centerTitle: true,
           ),
-        )
-      ],
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(<Widget>[
+                const LogoutListTile(),
+              ]),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

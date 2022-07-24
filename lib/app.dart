@@ -32,13 +32,13 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => context.l10n.appName,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          S.delegate,
+          L10n.delegate,
           _ResetIntlUtilLocaleLocalizationDelegate(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: S.delegate.supportedLocales,
+        supportedLocales: L10n.delegate.supportedLocales,
         home: widget.home ?? const OnboardingPage(isColdStart: true),
       ),
     );

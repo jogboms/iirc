@@ -50,6 +50,6 @@ flutter_icons:
 
 flutter_intl:
   enabled: true
-  class_name: S
+  class_name: L10n
   main_locale: en
-  arb_dir: i10n
+  arb_dir: l10n

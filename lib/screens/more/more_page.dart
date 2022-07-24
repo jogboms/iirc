@@ -15,7 +15,7 @@ class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
+      color: context.theme.menuPageBackgroundColor,
       child: CustomScrollView(
         slivers: <Widget>[
           CustomAppBar(

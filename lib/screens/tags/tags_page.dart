@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
 import '../widgets/search_bar.dart';
@@ -22,7 +22,7 @@ class TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: context.theme.brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade400,
+      color: context.theme.menuPageBackgroundColor,
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
               data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),

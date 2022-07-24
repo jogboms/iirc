@@ -11,6 +11,7 @@ enum MenuPageItem {
   tags,
   items,
   calendar,
+  insights,
   more;
 
   static const MenuPageItem defaultPage = calendar;

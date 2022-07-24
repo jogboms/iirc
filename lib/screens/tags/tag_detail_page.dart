@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
 import '../home/create_item_page.dart';
 import '../widgets/item_calendar_list_view.dart';
 import '../widgets/item_calendar_view.dart';
+import '../widgets/item_calendar_view_header.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
 import 'update_tag_page.dart';
@@ -140,6 +141,12 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
+              onPressed: () {}, // TODO: route to insights details
+              icon: const Icon(Icons.insights_outlined),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
+            IconButton(
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) => Center(
@@ -185,6 +192,9 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             const SizedBox(width: 2),
           ],
           asSliver: true,
+        ),
+        ItemCalendarViewHeader(
+          controller: itemCalendarViewController,
         ),
         ItemCalendarView(
           controller: itemCalendarViewController,

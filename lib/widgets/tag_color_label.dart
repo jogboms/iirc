@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
+import 'package:iirc/state.dart';
 
 enum TagColorLabelVariant { normal, large }
 

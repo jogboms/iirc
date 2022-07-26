@@ -3,6 +3,7 @@
   "itemsCaption": "items",
   "tagsCaption": "tags",
   "calendarCaption": "calendar",
+  "insightsCaption": "insights",
   "moreCaption": "more",
   "noTagsCreatedMessage": "No tags have been created yet",
   "noItemsCreatedMessage": "No items have been created yet",

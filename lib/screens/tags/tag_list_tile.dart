@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
-import 'package:iirc/data.dart';
+import 'package:iirc/state.dart';
 import 'package:iirc/widgets.dart';
 
 import 'tag_detail_page.dart';

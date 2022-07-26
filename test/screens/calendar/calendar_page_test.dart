@@ -33,6 +33,10 @@ void main() {
     });
 
     testWidgets('should show list of items for date', (WidgetTester tester) async {
+      final double devicePixelRatio = tester.binding.window.devicePixelRatio;
+      tester.binding.window.devicePixelRatioTestValue = .25;
+      addTearDown(() => tester.binding.window.devicePixelRatioTestValue = devicePixelRatio);
+
       final TagModel tag = TagsMockImpl.generateTag();
       final DateTime now = clock.now();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(

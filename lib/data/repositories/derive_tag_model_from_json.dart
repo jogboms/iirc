@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 
 import '../../domain/models/tag.dart';
 import '../network/firebase/models.dart';

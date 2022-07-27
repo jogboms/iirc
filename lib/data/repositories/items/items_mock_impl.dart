@@ -8,18 +8,8 @@ import '../extensions.dart';
 import '../tags/tags_mock_impl.dart';
 
 class ItemsMockImpl extends ItemsRepository {
-  static ItemModel generateItem({TagModel? tag, DateTime? date}) {
-    final String id = faker.guid.guid();
-    return ItemModel(
-      id: id,
-      path: '/items/${AuthMockImpl.id}/$id',
-      description: faker.lorem.sentence(),
-      date: date ?? faker.randomGenerator.dateTime,
-      tag: (tag ?? TagsMockImpl.tags.values.random()).reference,
-      createdAt: faker.randomGenerator.dateTime,
-      updatedAt: clock.now(),
-    );
-  }
+  static ItemModel generateItem({TagModel? tag, DateTime? date}) =>
+      generateNormalizedItem(tag: tag, date: date).denormalize;
 
   static NormalizedItemModel generateNormalizedItem({TagModel? tag, DateTime? date}) {
     final String id = faker.guid.guid();
@@ -82,5 +72,17 @@ extension on ItemModel {
         tag: update.tag,
         createdAt: createdAt,
         updatedAt: clock.now(),
+      );
+}
+
+extension on NormalizedItemModel {
+  ItemModel get denormalize => ItemModel(
+        id: id,
+        path: path,
+        description: description,
+        date: date,
+        tag: tag.reference,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
       );
 }

@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue, Timestamp;
 import 'package:iirc/domain.dart';
 
 import '../../network/firebase/cloud_db.dart';
@@ -20,7 +20,7 @@ class UsersFirebaseImpl implements UsersRepository {
       'email': account.email,
       'firstName': names?.first ?? '',
       'lastName': names != null && names.length > 1 ? names.sublist(1).join(' ') : '',
-      'createdAt': Timestamp.now(),
+      'createdAt': FieldValue.serverTimestamp(),
     });
     return account.id;
   }
@@ -32,11 +32,11 @@ class UsersFirebaseImpl implements UsersRepository {
       return null;
     }
 
-    return deriveUserModelFromJson(doc.id, doc.reference.path, doc.data()!);
+    return _deriveUserModelFromJson(doc.id, doc.reference.path, doc.data()!);
   }
 }
 
-Future<UserModel> deriveUserModelFromJson(String id, String path, DynamicMap data) async => UserModel(
+Future<UserModel> _deriveUserModelFromJson(String id, String path, DynamicMap data) async => UserModel(
       id: id,
       path: path,
       email: data['email'] as String,

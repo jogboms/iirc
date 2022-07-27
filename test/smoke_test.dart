@@ -2,8 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
-import 'package:iirc/screens.dart';
-import 'package:iirc/widgets.dart';
+import 'package:iirc/presentation.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'utils.dart';

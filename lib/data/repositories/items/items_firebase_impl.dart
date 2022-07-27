@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue, Timestamp;
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,7 +26,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
       'description': item.description,
       'date': Timestamp.fromDate(item.date),
       'tag': stores.instance.doc(item.tag!.path),
-      'createdAt': Timestamp.now(),
+      'createdAt': FieldValue.serverTimestamp(),
     });
     return id;
   }
@@ -43,7 +43,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
       'description': item.description,
       'date': Timestamp.fromDate(item.date),
       'tag': stores.instance.doc(item.tag.path),
-      'updatedAt': Timestamp.now(),
+      'updatedAt': FieldValue.serverTimestamp(),
     });
     return true;
   }

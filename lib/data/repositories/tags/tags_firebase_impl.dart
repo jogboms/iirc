@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue;
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,7 +26,7 @@ class TagsFirebaseImpl implements TagsRepository {
       'title': tag.title,
       'description': tag.description,
       'color': tag.color,
-      'createdAt': Timestamp.now(),
+      'createdAt': FieldValue.serverTimestamp(),
     });
     return id;
   }
@@ -37,7 +37,7 @@ class TagsFirebaseImpl implements TagsRepository {
       'title': tag.title,
       'description': tag.description,
       'color': tag.color,
-      'updatedAt': Timestamp.now(),
+      'updatedAt': FieldValue.serverTimestamp(),
     });
     return true;
   }

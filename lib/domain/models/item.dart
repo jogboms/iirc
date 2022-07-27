@@ -69,17 +69,5 @@ extension TagModelReferenceExtension on TagModel {
   TagModelReference get reference => TagModelReference(id: id, path: path);
 }
 
-extension NormalizedItemModelExtension on NormalizedItemModel {
-  ItemModel get denormalize => ItemModel(
-        id: id,
-        path: path,
-        description: description,
-        date: date,
-        tag: tag.reference,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
-}
-
 typedef ItemModelList = List<ItemModel>;
 typedef NormalizedItemModelList = List<NormalizedItemModel>;

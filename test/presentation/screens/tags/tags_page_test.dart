@@ -29,7 +29,7 @@ void main() {
     testWidgets('should show list of tags', (WidgetTester tester) async {
       final TagViewModelList expectedItems = TagViewModelList.generate(
         3,
-        (_) => TagViewModel.fromTag(TagsMockImpl.generateTag()),
+        (_) => TagsMockImpl.generateTag().asViewModel,
       );
 
       await tester.pumpWidget(createApp(

@@ -35,7 +35,7 @@ void main() {
         overrides: <Override>[
           selectedItemStateProvider(item.id).overrideWithValue(
             PreserveStateNotifier.withState<ItemViewModel>(
-              AsyncData<ItemViewModel>(ItemViewModel.fromItem(item)),
+              AsyncData<ItemViewModel>(item.asViewModel),
             ),
           ),
         ],

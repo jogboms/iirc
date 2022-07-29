@@ -129,10 +129,9 @@ Future<void> main() async {
 
     test('should keep searching on query change', () async {
       final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderListener<NormalizedItemModelList> listener = ProviderListener<NormalizedItemModelList>();
 
-      final List<NormalizedItemModelList> log = <NormalizedItemModelList>[];
-
-      container.listen<NormalizedItemModelList>(provider, (_, NormalizedItemModelList next) => log.add(next));
+      container.listen<NormalizedItemModelList>(provider, listener);
 
       container.read(searchTagQueryStateProvider.state).state = 'Orange';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -142,7 +141,7 @@ Future<void> main() async {
       await container.pump();
 
       expect(
-        log,
+        listener.log,
         <NormalizedItemModelList>[
           <NormalizedItemModel>[expectedItems[1]],
           <NormalizedItemModel>[expectedItems[0]],
@@ -152,10 +151,9 @@ Future<void> main() async {
 
     test('should keep searching on mode change', () async {
       final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderListener<NormalizedItemModelList> listener = ProviderListener<NormalizedItemModelList>();
 
-      final List<NormalizedItemModelList> log = <NormalizedItemModelList>[];
-
-      container.listen<NormalizedItemModelList>(provider, (_, NormalizedItemModelList next) => log.add(next));
+      container.listen<NormalizedItemModelList>(provider, listener);
 
       container.read(searchTagQueryStateProvider.state).state = 'Alpha';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.title;
@@ -165,7 +163,7 @@ Future<void> main() async {
       await container.pump();
 
       expect(
-        log,
+        listener.log,
         <NormalizedItemModelList>[
           <NormalizedItemModel>[expectedItems[0]],
           <NormalizedItemModel>[],

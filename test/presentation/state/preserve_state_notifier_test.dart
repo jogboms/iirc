@@ -4,17 +4,9 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../utils.dart';
 
-class Listener<T extends AsyncValue<String>> {
-  final List<T> log = <T>[];
-
-  void call(T? previous, T next) => log.add(next);
-
-  void reset() => log.clear();
-}
-
 Future<void> main() async {
   group('PreserveStateNotifier', () {
-    final Listener<AsyncValue<String>> listener = Listener<AsyncValue<String>>();
+    final ProviderListener<AsyncValue<String>> listener = ProviderListener<AsyncValue<String>>();
 
     StateController<String> createProvider() {
       final StateController<String> controller = StateController<String>('');

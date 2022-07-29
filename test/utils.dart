@@ -138,6 +138,14 @@ extension MockUseCasesExtensions on Registry {
     ..replace<FetchUserUseCase>(mockUseCases.fetchUserUseCase);
 }
 
+class ProviderListener<T> {
+  final List<T> log = <T>[];
+
+  void call(T? previous, T next) => log.add(next);
+
+  void reset() => log.clear();
+}
+
 extension FinderExtensions on Finder {
   Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
 }
@@ -145,6 +153,10 @@ extension FinderExtensions on Finder {
 extension UniqueByExtension<E> on Iterable<E> {
   Set<U> uniqueBy<U>(U Function(E) fn) =>
       fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
+}
+
+extension TagModelViewModelExtensions on TagModel {
+  TagViewModel get asViewModel => TagViewModel.fromTag(this);
 }
 
 extension ItemModelListExtensions on ItemViewModelList {
@@ -169,4 +181,8 @@ extension NormalizedItemModelListExtensions on NormalizedItemModelList {
         createdAt: e.createdAt,
         updatedAt: e.updatedAt,
       )).toList(growable: false);
+}
+
+extension NormalizedItemModelViewModelExtensions on NormalizedItemModel {
+  ItemViewModel get asViewModel => ItemViewModel.fromItem(this);
 }

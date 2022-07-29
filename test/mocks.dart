@@ -27,8 +27,6 @@ class MockDeleteItemUseCase extends Mock implements DeleteItemUseCase {}
 
 class MockDeleteTagUseCase extends Mock implements DeleteTagUseCase {}
 
-class MockFetchAuthStateUseCase extends Mock implements FetchAuthStateUseCase {}
-
 class MockSignInUseCase extends Mock implements SignInUseCase {}
 
 class MockSignOutUseCase extends Mock implements SignOutUseCase {}

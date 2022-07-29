@@ -17,7 +17,6 @@ export 'presentation/screens/tags/tag_detail_page.dart';
 export 'presentation/screens/tags/tags_page.dart';
 export 'presentation/screens/tags/update_tag_page.dart';
 export 'presentation/state/account_provider.dart';
-export 'presentation/state/auth_id_provider.dart';
 export 'presentation/state/auth_state_provider.dart';
 export 'presentation/state/calendar_state_provider.dart';
 export 'presentation/state/items_provider.dart';

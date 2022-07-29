@@ -3,4 +3,4 @@
 import 'package:clock/clock.dart';
 import 'package:riverpod/riverpod.dart';
 
-final calendarStateProvider = StateProvider<DateTime>((ref) => clock.now());
+final calendarStateProvider = StateProvider<DateTime>((_) => clock.now());

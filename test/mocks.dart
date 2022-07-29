@@ -38,3 +38,5 @@ class MockCreateUserUseCase extends Mock implements CreateUserUseCase {}
 class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
 
 class FakeUpdateUserData extends Fake implements UpdateUserData {}
+
+class FakeAccountModel extends Fake implements AccountModel {}

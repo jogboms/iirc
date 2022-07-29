@@ -81,6 +81,20 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..set(environment);
 
+ProviderContainer createProviderContainer({
+  ProviderContainer? parent,
+  List<Override> overrides = const <Override>[],
+  List<ProviderObserver>? observers,
+}) {
+  final ProviderContainer container = ProviderContainer(
+    parent: parent,
+    overrides: overrides,
+    observers: observers,
+  );
+  addTearDown(container.dispose);
+  return container;
+}
+
 Widget createApp({
   Widget? home,
   Registry? registry,
@@ -98,6 +112,24 @@ Widget createApp({
       home: home,
     ),
   );
+}
+
+extension MockUseCasesExtensions on Registry {
+  Registry withMockedUseCases() => this
+    ..replace<FetchItemsUseCase>(mockUseCases.fetchItemsUseCase)
+    ..replace<FetchTagsUseCase>(mockUseCases.fetchTagsUseCase)
+    ..replace<GetAccountUseCase>(mockUseCases.getAccountUseCase)
+    ..replace<CreateItemUseCase>(mockUseCases.createItemUseCase)
+    ..replace<CreateTagUseCase>(mockUseCases.createTagUseCase)
+    ..replace<UpdateUserUseCase>(mockUseCases.updateUserUseCase)
+    ..replace<UpdateTagUseCase>(mockUseCases.updateTagUseCase)
+    ..replace<UpdateItemUseCase>(mockUseCases.updateItemUseCase)
+    ..replace<DeleteItemUseCase>(mockUseCases.deleteItemUseCase)
+    ..replace<DeleteTagUseCase>(mockUseCases.deleteTagUseCase)
+    ..replace<SignInUseCase>(mockUseCases.signInUseCase)
+    ..replace<SignOutUseCase>(mockUseCases.signOutUseCase)
+    ..replace<CreateUserUseCase>(mockUseCases.createUserUseCase)
+    ..replace<FetchUserUseCase>(mockUseCases.fetchUserUseCase);
 }
 
 extension FinderExtensions on Finder {

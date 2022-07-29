@@ -2,30 +2,54 @@
 
 import 'package:clock/clock.dart';
 import 'package:iirc/domain.dart';
+import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'registry_provider.dart';
 
-final authStateProvider = StateNotifierProvider.autoDispose<AuthStateProvider, AuthState>(AuthStateProvider.new);
+final authStateProvider = StateNotifierProvider.autoDispose<AuthStateNotifier, AuthState>((ref) {
+  final di = ref.read(registryProvider).get;
 
-class AuthStateProvider extends StateNotifier<AuthState> {
-  AuthStateProvider(AutoDisposeStateNotifierProviderRef ref)
-      : _ref = ref,
-        super(AuthState.idle);
+  return AuthStateNotifier(
+    signInUseCase: di(),
+    signOutUseCase: di(),
+    fetchUserUseCase: di(),
+    createUserUseCase: di(),
+    updateUserUseCase: di(),
+  );
+});
 
-  final AutoDisposeStateNotifierProviderRef _ref;
+class AuthStateNotifier extends StateNotifier<AuthState> {
+  @visibleForTesting
+  AuthStateNotifier({
+    required this.signInUseCase,
+    required this.signOutUseCase,
+    required this.fetchUserUseCase,
+    required this.createUserUseCase,
+    required this.updateUserUseCase,
+  }) : super(AuthState.idle);
+
+  @visibleForTesting
+  final SignInUseCase signInUseCase;
+  @visibleForTesting
+  final SignOutUseCase signOutUseCase;
+  @visibleForTesting
+  final FetchUserUseCase fetchUserUseCase;
+  @visibleForTesting
+  final CreateUserUseCase createUserUseCase;
+  @visibleForTesting
+  final UpdateUserUseCase updateUserUseCase;
 
   void signIn() async {
     state = AuthState.loading;
-    final di = _ref.read(registryProvider).get;
 
     try {
-      final account = await di<SignInUseCase>().call();
-      final user = await di<FetchUserUseCase>().call(account.id);
+      final account = await signInUseCase();
+      final user = await fetchUserUseCase(account.id);
       if (user == null) {
-        await di<CreateUserUseCase>().call(account);
+        await createUserUseCase(account);
       } else {
-        await di<UpdateUserUseCase>().call(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
+        await updateUserUseCase(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
       }
 
       if (mounted) {
@@ -37,7 +61,7 @@ class AuthStateProvider extends StateNotifier<AuthState> {
         // TODO: log this
       }
 
-      await di<SignOutUseCase>().call();
+      await signOutUseCase();
       if (mounted) {
         state = AuthState.idle;
       }
@@ -48,8 +72,7 @@ class AuthStateProvider extends StateNotifier<AuthState> {
     state = AuthState.loading;
 
     try {
-      final registry = _ref.read(registryProvider);
-      await registry.get<SignOutUseCase>().call();
+      await signOutUseCase();
       if (mounted) {
         state = AuthState.complete;
       }

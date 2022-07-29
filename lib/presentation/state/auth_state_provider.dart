@@ -1,5 +1,6 @@
 // ignore_for_file: always_specify_types
 
+import 'package:clock/clock.dart';
 import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -16,14 +17,17 @@ class AuthStateProvider extends StateNotifier<AuthState> {
 
   void signIn() async {
     state = AuthState.loading;
-    final registry = _ref.read(registryProvider);
+    final di = _ref.read(registryProvider).get;
 
     try {
-      final account = await registry.get<SignInUseCase>().call();
-      final user = await registry.get<FetchUserUseCase>().call(account.id);
+      final account = await di<SignInUseCase>().call();
+      final user = await di<FetchUserUseCase>().call(account.id);
       if (user == null) {
-        await registry.get<CreateUserUseCase>().call(account);
+        await di<CreateUserUseCase>().call(account);
+      } else {
+        await di<UpdateUserUseCase>().call(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
       }
+
       if (mounted) {
         state = AuthState.complete;
       }
@@ -33,7 +37,7 @@ class AuthStateProvider extends StateNotifier<AuthState> {
         // TODO: log this
       }
 
-      await registry.get<SignOutUseCase>().call();
+      await di<SignOutUseCase>().call();
       if (mounted) {
         state = AuthState.idle;
       }

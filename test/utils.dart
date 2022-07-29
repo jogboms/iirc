@@ -83,12 +83,18 @@ Registry createRegistry({
 
 ProviderContainer createProviderContainer({
   ProviderContainer? parent,
-  List<Override> overrides = const <Override>[],
+  Registry? registry,
+  List<Override>? overrides,
   List<ProviderObserver>? observers,
 }) {
   final ProviderContainer container = ProviderContainer(
     parent: parent,
-    overrides: overrides,
+    overrides: <Override>[
+      registryProvider.overrideWithValue(
+        registry ?? createRegistry().withMockedUseCases(),
+      ),
+      ...?overrides,
+    ],
     observers: observers,
   );
   addTearDown(container.dispose);

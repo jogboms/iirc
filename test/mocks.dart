@@ -37,6 +37,22 @@ class MockCreateUserUseCase extends Mock implements CreateUserUseCase {}
 
 class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
 
+class MockAsyncCallback<T> extends Mock {
+  Future<T> call();
+}
+
+class FakeCreateItemData extends Fake implements CreateItemData {}
+
+class FakeUpdateItemData extends Fake implements UpdateItemData {}
+
+class FakeCreateTagData extends Fake implements CreateTagData {}
+
+class FakeUpdateTagData extends Fake implements UpdateTagData {}
+
 class FakeUpdateUserData extends Fake implements UpdateUserData {}
 
 class FakeAccountModel extends Fake implements AccountModel {}
+
+class FakeItemModel extends Fake implements ItemModel {}
+
+class FakeTagModel extends Fake implements TagModel {}

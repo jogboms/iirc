@@ -34,13 +34,7 @@ Future<void> main() async {
     }
 
     test('should create new instance with idle state when read', () {
-      final ProviderContainer container = createProviderContainer(
-        overrides: <Override>[
-          registryProvider.overrideWithValue(
-            createRegistry(),
-          ),
-        ],
-      );
+      final ProviderContainer container = createProviderContainer();
       addTearDown(() => container.dispose());
 
       expect(container.read(authStateProvider), AuthState.idle);

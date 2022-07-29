@@ -27,6 +27,7 @@ class MockUseCases {
   final GetAccountUseCase getAccountUseCase = MockGetAccountUseCase();
   final CreateItemUseCase createItemUseCase = MockCreateItemUseCase();
   final CreateTagUseCase createTagUseCase = MockCreateTagUseCase();
+  final UpdateUserUseCase updateUserUseCase = MockUpdateUserUseCase();
   final UpdateTagUseCase updateTagUseCase = MockUpdateTagUseCase();
   final UpdateItemUseCase updateItemUseCase = MockUpdateItemUseCase();
   final DeleteItemUseCase deleteItemUseCase = MockDeleteItemUseCase();
@@ -42,6 +43,7 @@ class MockUseCases {
         getAccountUseCase,
         createItemUseCase,
         createTagUseCase,
+        updateUserUseCase,
         updateTagUseCase,
         updateItemUseCase,
         deleteItemUseCase,
@@ -68,6 +70,7 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
       ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+      ..factory((RegistryFactory di) => UpdateUserUseCase(users: di()))
       ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
       ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))

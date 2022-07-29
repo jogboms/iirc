@@ -36,6 +36,7 @@ void main() async {
     ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
     ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
     ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+    ..factory((RegistryFactory di) => UpdateUserUseCase(users: di()))
     ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
     ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
     ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))

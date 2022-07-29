@@ -5,6 +5,7 @@ import 'package:iirc/presentation.dart';
 import 'package:iirc/registry.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
 import '../../../utils.dart';
 
 void main() {
@@ -13,13 +14,19 @@ void main() {
     final Registry registry = createRegistry()
       ..replace<SignInUseCase>(mockUseCases.signInUseCase)
       ..replace<SignOutUseCase>(mockUseCases.signOutUseCase)
+      ..replace<UpdateUserUseCase>(mockUseCases.updateUserUseCase)
       ..replace<FetchUserUseCase>(mockUseCases.fetchUserUseCase);
+
+    setUpAll(() {
+      registerFallbackValue(FakeUpdateUserData());
+    });
 
     tearDown(() => mockUseCases.reset());
 
     testWidgets('should auto-login w/ cold start', (WidgetTester tester) async {
       when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => AuthMockImpl.generateAccount());
       when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => UsersMockImpl.user);
+      when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
 
       await tester.pumpWidget(createApp(
         home: const OnboardingPage(isColdStart: true),
@@ -60,6 +67,7 @@ void main() {
     testWidgets('should navigate to MenuPage on successful login', (WidgetTester tester) async {
       when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => AuthMockImpl.generateAccount());
       when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => UsersMockImpl.user);
+      when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
 
       await tester.pumpWidget(createApp(
         home: const OnboardingPage(isColdStart: true),

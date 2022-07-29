@@ -19,6 +19,8 @@ class MockCreateItemUseCase extends Mock implements CreateItemUseCase {}
 
 class MockCreateTagUseCase extends Mock implements CreateTagUseCase {}
 
+class MockUpdateUserUseCase extends Mock implements UpdateUserUseCase {}
+
 class MockUpdateTagUseCase extends Mock implements UpdateTagUseCase {}
 
 class MockUpdateItemUseCase extends Mock implements UpdateItemUseCase {}
@@ -34,3 +36,5 @@ class MockSignOutUseCase extends Mock implements SignOutUseCase {}
 class MockCreateUserUseCase extends Mock implements CreateUserUseCase {}
 
 class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
+
+class FakeUpdateUserData extends Fake implements UpdateUserData {}

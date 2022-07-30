@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
-import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
 import 'package:iirc/registry.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,11 +10,7 @@ import '../../../utils.dart';
 void main() {
   group('OnboardingPage', () {
     final Finder onboardingPage = find.byType(OnboardingPage);
-    final Registry registry = createRegistry()
-      ..replace<SignInUseCase>(mockUseCases.signInUseCase)
-      ..replace<SignOutUseCase>(mockUseCases.signOutUseCase)
-      ..replace<UpdateUserUseCase>(mockUseCases.updateUserUseCase)
-      ..replace<FetchUserUseCase>(mockUseCases.fetchUserUseCase);
+    final Registry registry = createRegistry().withMockedUseCases();
 
     setUpAll(() {
       registerFallbackValue(FakeUpdateUserData());

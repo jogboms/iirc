@@ -5,29 +5,33 @@ import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'mocks.dart';
 import 'utils.dart';
 
 void main() {
   final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+  final UserModel dummyUser = UsersMockImpl.user;
 
   setUpAll(() {
     registerFallbackValue(dummyAccount);
+    registerFallbackValue(FakeUpdateUserData());
   });
 
   testWidgets('Smoke test', (WidgetTester tester) async {
     final Finder onboardingPage = find.byType(OnboardingPage);
     final Finder menuPage = find.byType(MenuPage);
 
-    when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
-    when(() => mockRepositories.auth.account).thenAnswer((_) async => dummyAccount);
-    when(() => mockRepositories.auth.signIn()).thenAnswer((_) async => '1');
-    when(() => mockRepositories.users.create(any())).thenAnswer((_) async => '1');
-    when(() => mockRepositories.items.fetch(any())).thenAnswer((_) async* {});
-    when(() => mockRepositories.tags.fetch(any())).thenAnswer((_) async* {});
+    when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => dummyUser);
+    when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+    when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
 
-    addTearDown(() => mockRepositories.reset());
+    addTearDown(() => mockUseCases.reset());
 
-    await tester.pumpWidget(createApp());
+    await tester.pumpWidget(
+      createApp(
+        registry: createRegistry().withMockedUseCases(),
+      ),
+    );
 
     await tester.pump();
 
@@ -43,6 +47,7 @@ void main() {
     expect(find.byType(HomePage).descendantOf(menuPage), findsOneWidget);
     expect(find.byType(TagsPage).descendantOf(menuPage), findsOneWidget);
     expect(find.byType(CalendarPage).descendantOf(menuPage), findsOneWidget);
+    expect(find.byType(InsightsPage).descendantOf(menuPage), findsOneWidget);
     expect(find.byType(MorePage).descendantOf(menuPage), findsOneWidget);
   });
 }

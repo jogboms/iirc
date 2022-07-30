@@ -7,6 +7,7 @@ class UserModel with EquatableMixin {
     required this.email,
     required this.firstName,
     required this.lastName,
+    required this.lastSeenAt,
     required this.createdAt,
   });
 
@@ -15,10 +16,11 @@ class UserModel with EquatableMixin {
   final String email;
   final String firstName;
   final String lastName;
+  final DateTime lastSeenAt;
   final DateTime createdAt;
 
   @override
-  List<Object> get props => <Object>[id, path, email, firstName, lastName, createdAt];
+  List<Object> get props => <Object>[id, path, email, firstName, lastName, lastSeenAt, createdAt];
 
   @override
   bool? get stringify => true;

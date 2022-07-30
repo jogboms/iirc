@@ -20,9 +20,18 @@ class UsersFirebaseImpl implements UsersRepository {
       'email': account.email,
       'firstName': names?.first ?? '',
       'lastName': names != null && names.length > 1 ? names.sublist(1).join(' ') : '',
+      'lastSeenAt': FieldValue.serverTimestamp(),
       'createdAt': FieldValue.serverTimestamp(),
     });
     return account.id;
+  }
+
+  @override
+  Future<bool> update(UpdateUserData user) async {
+    await db.fetchOne(user.id).update(<String, Object>{
+      'lastSeenAt': Timestamp.fromDate(user.lastSeenAt),
+    });
+    return true;
   }
 
   @override
@@ -42,5 +51,6 @@ Future<UserModel> _deriveUserModelFromJson(String id, String path, DynamicMap da
       email: data['email'] as String,
       firstName: data['first_name'] as String? ?? '',
       lastName: data['last_name'] as String? ?? '',
+      lastSeenAt: deriveDateFromTimestamp(data['lastSeenAt'] as Timestamp),
       createdAt: deriveDateFromTimestamp(data['createdAt'] as Timestamp),
     );

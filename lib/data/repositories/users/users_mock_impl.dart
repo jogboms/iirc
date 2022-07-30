@@ -11,11 +11,15 @@ class UsersMockImpl implements UsersRepository {
     email: faker.internet.disposableEmail(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
+    lastSeenAt: clock.ago(days: 1),
     createdAt: clock.now(),
   );
 
   @override
   Future<String> create(AccountModel account) async => user.id;
+
+  @override
+  Future<bool> update(UpdateUserData user) async => true;
 
   @override
   Future<UserModel?> fetch(String uid) async => user;

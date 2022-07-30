@@ -8,11 +8,11 @@ import '../extensions.dart';
 import '../tags/tags_mock_impl.dart';
 
 class ItemsMockImpl extends ItemsRepository {
-  static ItemModel generateItem({TagModel? tag, DateTime? date}) =>
-      generateNormalizedItem(tag: tag, date: date).denormalize;
+  static ItemModel generateItem({String? id, TagModel? tag, DateTime? date}) =>
+      generateNormalizedItem(id: id, tag: tag, date: date).denormalize;
 
-  static NormalizedItemModel generateNormalizedItem({TagModel? tag, DateTime? date}) {
-    final String id = faker.guid.guid();
+  static NormalizedItemModel generateNormalizedItem({String? id, TagModel? tag, DateTime? date}) {
+    id ??= faker.guid.guid();
     return NormalizedItemModel(
       id: id,
       path: '/items/${AuthMockImpl.id}/$id',

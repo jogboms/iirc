@@ -12,7 +12,7 @@ void main() {
 
     testWidgets('smoke test', (WidgetTester tester) async {
       final TagModel dummyTag = TagsMockImpl.generateTag();
-      final ItemViewModel dummyItem = ItemViewModel.fromItem(ItemsMockImpl.generateNormalizedItem(tag: dummyTag));
+      final ItemViewModel dummyItem = ItemsMockImpl.generateNormalizedItem(tag: dummyTag).asViewModel;
       await tester.pumpWidget(createApp(home: UpdateItemPage(item: dummyItem)));
 
       await tester.pump();

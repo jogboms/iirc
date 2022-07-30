@@ -1,34 +1,40 @@
 // ignore_for_file: always_specify_types
 
-import 'package:flutter/widgets.dart';
 import 'package:iirc/domain.dart';
+import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../../state/registry_provider.dart';
 import '../../../state/user_provider.dart';
 
-final itemProvider = Provider.autoDispose<ItemProvider>(ItemProvider.new);
+final itemProvider = Provider.autoDispose<ItemProvider>((ref) {
+  final di = ref.read(registryProvider).get;
+
+  return ItemProvider(
+    fetchUser: () => ref.read(userProvider.future),
+    createItemUseCase: di(),
+    deleteItemUseCase: di(),
+    updateItemUseCase: di(),
+  );
+});
 
 @visibleForTesting
 class ItemProvider {
-  const ItemProvider(AutoDisposeProviderRef ref) : _ref = ref;
+  const ItemProvider({
+    required this.fetchUser,
+    required this.createItemUseCase,
+    required this.updateItemUseCase,
+    required this.deleteItemUseCase,
+  });
 
-  final AutoDisposeProviderRef _ref;
+  final Future<UserModel> Function() fetchUser;
+  final CreateItemUseCase createItemUseCase;
+  final UpdateItemUseCase updateItemUseCase;
+  final DeleteItemUseCase deleteItemUseCase;
 
-  Future<String> create(CreateItemData data) async {
-    final registry = _ref.read(registryProvider);
-    final user = await _ref.read(userProvider.future);
+  Future<String> create(CreateItemData data) async => createItemUseCase((await fetchUser()).id, data);
 
-    return registry.get<CreateItemUseCase>().call(user.id, data);
-  }
+  Future<bool> update(UpdateItemData data) async => updateItemUseCase(data);
 
-  Future<bool> update(UpdateItemData data) async {
-    final registry = _ref.read(registryProvider);
-    return registry.get<UpdateItemUseCase>().call(data);
-  }
-
-  Future<bool> delete(String path) async {
-    final registry = _ref.read(registryProvider);
-    return registry.get<DeleteItemUseCase>().call(path);
-  }
+  Future<bool> delete(String path) async => deleteItemUseCase(path);
 }

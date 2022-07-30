@@ -10,7 +10,7 @@ final searchTagQueryStateProvider = StateProvider.autoDispose<String>((ref) => '
 final searchTagModeStateProvider = StateProvider.autoDispose<SearchTagMode>((ref) => SearchTagMode.title);
 
 List<T> filterBySearchTagQuery<T>(
-  AutoDisposeFutureProviderRef<List<T>> ref, {
+  AutoDisposeRef ref, {
   required List<T> elements,
   required TagModel Function(T) byTag,
 }) {

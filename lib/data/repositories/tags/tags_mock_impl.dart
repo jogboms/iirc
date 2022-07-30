@@ -7,8 +7,8 @@ import '../auth/auth_mock_impl.dart';
 import '../extensions.dart';
 
 class TagsMockImpl extends TagsRepository {
-  static TagModel generateTag() {
-    final String id = faker.guid.guid();
+  static TagModel generateTag({String? id}) {
+    id ??= faker.guid.guid();
     return TagModel(
       id: id,
       path: '/tags/${AuthMockImpl.id}/$id',

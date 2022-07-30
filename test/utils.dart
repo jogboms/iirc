@@ -27,11 +27,11 @@ class MockUseCases {
   final GetAccountUseCase getAccountUseCase = MockGetAccountUseCase();
   final CreateItemUseCase createItemUseCase = MockCreateItemUseCase();
   final CreateTagUseCase createTagUseCase = MockCreateTagUseCase();
+  final UpdateUserUseCase updateUserUseCase = MockUpdateUserUseCase();
   final UpdateTagUseCase updateTagUseCase = MockUpdateTagUseCase();
   final UpdateItemUseCase updateItemUseCase = MockUpdateItemUseCase();
   final DeleteItemUseCase deleteItemUseCase = MockDeleteItemUseCase();
   final DeleteTagUseCase deleteTagUseCase = MockDeleteTagUseCase();
-  final FetchAuthStateUseCase fetchAuthStateUseCase = MockFetchAuthStateUseCase();
   final SignInUseCase signInUseCase = MockSignInUseCase();
   final SignOutUseCase signOutUseCase = MockSignOutUseCase();
   final CreateUserUseCase createUserUseCase = MockCreateUserUseCase();
@@ -43,11 +43,11 @@ class MockUseCases {
         getAccountUseCase,
         createItemUseCase,
         createTagUseCase,
+        updateUserUseCase,
         updateTagUseCase,
         updateItemUseCase,
         deleteItemUseCase,
         deleteTagUseCase,
-        fetchAuthStateUseCase,
         signInUseCase,
         signOutUseCase,
         createUserUseCase,
@@ -70,16 +70,36 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
       ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+      ..factory((RegistryFactory di) => UpdateUserUseCase(users: di()))
       ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
       ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
       ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
       ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di()))
-      ..factory((RegistryFactory di) => FetchAuthStateUseCase(auth: di()))
       ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
       ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
       ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
       ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..set(environment);
+
+ProviderContainer createProviderContainer({
+  ProviderContainer? parent,
+  Registry? registry,
+  List<Override>? overrides,
+  List<ProviderObserver>? observers,
+}) {
+  final ProviderContainer container = ProviderContainer(
+    parent: parent,
+    overrides: <Override>[
+      registryProvider.overrideWithValue(
+        registry ?? createRegistry().withMockedUseCases(),
+      ),
+      ...?overrides,
+    ],
+    observers: observers,
+  );
+  addTearDown(container.dispose);
+  return container;
+}
 
 Widget createApp({
   Widget? home,
@@ -100,6 +120,32 @@ Widget createApp({
   );
 }
 
+extension MockUseCasesExtensions on Registry {
+  Registry withMockedUseCases() => this
+    ..replace<FetchItemsUseCase>(mockUseCases.fetchItemsUseCase)
+    ..replace<FetchTagsUseCase>(mockUseCases.fetchTagsUseCase)
+    ..replace<GetAccountUseCase>(mockUseCases.getAccountUseCase)
+    ..replace<CreateItemUseCase>(mockUseCases.createItemUseCase)
+    ..replace<CreateTagUseCase>(mockUseCases.createTagUseCase)
+    ..replace<UpdateUserUseCase>(mockUseCases.updateUserUseCase)
+    ..replace<UpdateTagUseCase>(mockUseCases.updateTagUseCase)
+    ..replace<UpdateItemUseCase>(mockUseCases.updateItemUseCase)
+    ..replace<DeleteItemUseCase>(mockUseCases.deleteItemUseCase)
+    ..replace<DeleteTagUseCase>(mockUseCases.deleteTagUseCase)
+    ..replace<SignInUseCase>(mockUseCases.signInUseCase)
+    ..replace<SignOutUseCase>(mockUseCases.signOutUseCase)
+    ..replace<CreateUserUseCase>(mockUseCases.createUserUseCase)
+    ..replace<FetchUserUseCase>(mockUseCases.fetchUserUseCase);
+}
+
+class ProviderListener<T> {
+  final List<T> log = <T>[];
+
+  void call(T? previous, T next) => log.add(next);
+
+  void reset() => log.clear();
+}
+
 extension FinderExtensions on Finder {
   Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
 }
@@ -107,6 +153,10 @@ extension FinderExtensions on Finder {
 extension UniqueByExtension<E> on Iterable<E> {
   Set<U> uniqueBy<U>(U Function(E) fn) =>
       fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
+}
+
+extension TagModelViewModelExtensions on TagModel {
+  TagViewModel get asViewModel => TagViewModel.fromTag(this);
 }
 
 extension ItemModelListExtensions on ItemViewModelList {
@@ -131,4 +181,22 @@ extension NormalizedItemModelListExtensions on NormalizedItemModelList {
         createdAt: e.createdAt,
         updatedAt: e.updatedAt,
       )).toList(growable: false);
+}
+
+extension NormalizedItemModelViewModelExtensions on NormalizedItemModel {
+  ItemViewModel get asViewModel => ItemViewModel.fromItem(this);
+}
+
+extension TagModelCopyWith on TagModel {
+  TagModel copyWith({String? title, String? description}) {
+    return TagModel(
+      id: id,
+      path: path,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      color: color,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
 }

@@ -48,7 +48,7 @@ class _OnboardingDataView extends ConsumerStatefulWidget {
 @visibleForTesting
 class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
   static const Key signInButtonKey = Key('signInButtonKey');
-  late final AuthStateProvider auth = ref.read(authStateProvider.notifier);
+  late final AuthStateNotifier auth = ref.read(authStateProvider.notifier);
 
   @override
   void initState() {

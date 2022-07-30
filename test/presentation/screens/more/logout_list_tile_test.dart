@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/presentation.dart';
@@ -9,15 +7,14 @@ import '../../../utils.dart';
 
 void main() {
   group('LogoutListTile', () {
-    tearDown(() => mockRepositories.reset());
+    tearDown(() => mockUseCases.reset());
 
     testWidgets('should logout', (WidgetTester tester) async {
-      final StreamController<String?> controller = StreamController<String?>.broadcast();
-      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => controller.stream);
-      when(() => mockRepositories.auth.signOut()).thenAnswer((_) async => controller.add(null));
+      when(() => mockUseCases.signOutUseCase.call()).thenAnswer((_) async {});
 
       await tester.pumpWidget(
         createApp(
+          registry: createRegistry().withMockedUseCases(),
           home: const Material(child: LogoutListTile()),
         ),
       );
@@ -29,7 +26,7 @@ void main() {
 
       await tester.tap(logoutListTile);
 
-      verify(mockRepositories.auth.signOut).called(1);
+      verify(mockUseCases.signOutUseCase).called(1);
 
       expect(find.byType(OnboardingPage), findsNothing);
 

@@ -37,7 +37,7 @@ void main() {
       final DateTime now = clock.now();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
-        (_) => ItemViewModel.fromItem(ItemsMockImpl.generateNormalizedItem(tag: tag, date: now)),
+        (_) => ItemsMockImpl.generateNormalizedItem(tag: tag, date: now).asViewModel,
       );
 
       await tester.pumpWidget(createApp(
@@ -47,7 +47,7 @@ void main() {
             PreserveStateNotifier.withState<SelectedTagState>(
               AsyncData<SelectedTagState>(
                 SelectedTagState(
-                  tag: TagViewModel.fromTag(tag),
+                  tag: tag.asViewModel,
                   items: expectedItems,
                 ),
               ),

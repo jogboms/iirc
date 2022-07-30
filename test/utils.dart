@@ -186,3 +186,17 @@ extension NormalizedItemModelListExtensions on NormalizedItemModelList {
 extension NormalizedItemModelViewModelExtensions on NormalizedItemModel {
   ItemViewModel get asViewModel => ItemViewModel.fromItem(this);
 }
+
+extension TagModelCopyWith on TagModel {
+  TagModel copyWith({String? title, String? description}) {
+    return TagModel(
+      id: id,
+      path: path,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      color: color,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+}

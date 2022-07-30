@@ -76,5 +76,26 @@ Future<void> main() async {
 
       expect(listener.log.last.value, <ItemViewModel>[expectedItems.first]);
     });
+
+    test('should be searchable', () async {
+      final StateController<ItemViewModelList> controller = createProvider();
+
+      expect(listener.log, isEmpty);
+
+      final ItemViewModelList expectedItems = ItemViewModelList.generate(
+        3,
+        (int index) {
+          final TagModel tag = TagsMockImpl.generateTag();
+          return ItemsMockImpl.generateNormalizedItem(tag: tag.copyWith(title: 'Query-$index')).asViewModel;
+        },
+      );
+      controller.state = expectedItems;
+      container.read(searchTagQueryStateProvider.state).state = 'Query-2';
+
+      await container.pump();
+      await container.pump();
+
+      expect(listener.log.last.value, <ItemViewModel>[expectedItems.last]);
+    });
   });
 }

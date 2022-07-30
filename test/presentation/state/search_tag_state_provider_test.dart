@@ -172,17 +172,3 @@ Future<void> main() async {
     });
   });
 }
-
-extension on TagModel {
-  TagModel copyWith({String? title, String? description}) {
-    return TagModel(
-      id: id,
-      path: path,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      color: color,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    );
-  }
-}

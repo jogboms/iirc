@@ -8,22 +8,28 @@ import '../../../../utils.dart';
 Future<void> main() async {
   group('FilteredTagsStateProvider', () {
     final ProviderListener<AsyncValue<TagViewModelList>> listener = ProviderListener<AsyncValue<TagViewModelList>>();
+    late ProviderContainer container;
 
-    tearDown(() => listener.reset());
-
-    test('should show filtered tags', () async {
+    StateController<TagViewModelList> createProvider() {
       final StateController<TagViewModelList> controller = StateController<TagViewModelList>(TagViewModelList.empty());
       final AutoDisposeStreamProvider<TagViewModelList> provider =
           StreamProvider.autoDispose((AutoDisposeStreamProviderRef<Object?> ref) => controller.stream);
 
-      final ProviderContainer container = createProviderContainer(
+      container = createProviderContainer(
         overrides: <Override>[
           tagsProvider.overrideWithProvider(provider),
         ],
       );
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
+      addTearDown(listener.reset);
 
       container.listen<AsyncValue<TagViewModelList>>(filteredTagsStateProvider, listener);
+
+      return controller;
+    }
+
+    test('should show filtered tags', () async {
+      final StateController<TagViewModelList> controller = createProvider();
 
       expect(listener.log, isEmpty);
 
@@ -49,6 +55,24 @@ Future<void> main() async {
       await container.pump();
 
       expect(listener.log.last.value, expectedTags2);
+    });
+
+    test('should be searchable', () async {
+      final StateController<TagViewModelList> controller = createProvider();
+
+      expect(listener.log, isEmpty);
+
+      final TagViewModelList expectedTags = TagViewModelList.generate(
+        3,
+        (int index) => TagsMockImpl.generateTag().copyWith(title: 'Query-$index').asViewModel,
+      );
+      controller.state = expectedTags;
+      container.read(searchTagQueryStateProvider.state).state = 'Query-2';
+
+      await container.pump();
+      await container.pump();
+
+      expect(listener.log.last.value, <TagViewModel>[expectedTags.last]);
     });
   });
 }

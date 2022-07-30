@@ -4,6 +4,7 @@ export 'presentation/screens/calendar/calendar_page.dart';
 export 'presentation/screens/home/create_item_page.dart';
 export 'presentation/screens/home/home_page.dart';
 export 'presentation/screens/home/item_detail_page.dart';
+export 'presentation/screens/home/providers/filtered_items_state_provider.dart';
 export 'presentation/screens/home/providers/item_provider.dart';
 export 'presentation/screens/home/providers/selected_item_provider.dart';
 export 'presentation/screens/home/update_item_page.dart';

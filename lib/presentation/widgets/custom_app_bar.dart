@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/extensions.dart';
+import '../theme/app_style.dart';
+import '../theme/extensions.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({
@@ -25,7 +26,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     final DefaultTextStyle title = DefaultTextStyle(
       style: theme.textTheme.titleMedium!.copyWith(
         height: 1,
-        fontWeight: FontWeight.w600,
+        fontWeight: AppFontWeight.semibold,
       ),
       child: this.title,
     );

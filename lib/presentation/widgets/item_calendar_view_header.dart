@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../utils/extensions.dart';
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 import 'item_calendar_view.dart';
 
 class ItemCalendarViewHeader extends StatelessWidget {
@@ -31,12 +32,17 @@ class ItemCalendarViewHeader extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: <BoxShadow>[
               if (isCalendarHiddenFromView)
-                const BoxShadow(offset: Offset(0, 1), blurRadius: 5, spreadRadius: 2, color: Colors.black12),
+                BoxShadow(
+                  offset: const Offset(0, 1),
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                  color: context.theme.shadowColor,
+                ),
             ],
             gradient: LinearGradient(
               colors: isCalendarWeekHiddenFromView
                   ? List<Color>.filled(2, theme.colorScheme.inverseSurface)
-                  : theme.calendarViewHeaderGradient,
+                  : theme.appTheme.calendarViewHeaderGradient,
             ),
           ),
           child: ValueListenableBuilder<DateTime>(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../models/tag_view_model.dart';
+import '../theme/app_border_radius.dart';
+import '../theme/app_style.dart';
+import '../theme/extensions.dart';
 import '../utils/extensions.dart';
 
 enum TagColorLabelVariant { normal, large }
@@ -21,12 +24,12 @@ class TagColorLabel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: tag.backgroundColor,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: AppBorderRadius.c4,
       ),
       child: Text(
         tag.title.capitalize(),
         style: textStyle?.copyWith(
-          fontWeight: FontWeight.w400,
+          fontWeight: AppFontWeight.regular,
           color: tag.foregroundColor,
         ),
       ),

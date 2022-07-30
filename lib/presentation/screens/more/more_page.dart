@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../widgets/custom_app_bar.dart';
 import 'logout_list_tile.dart';

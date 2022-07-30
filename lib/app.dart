@@ -30,6 +30,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
       message: bannerMessage,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: themeBuilder(Theme.of(context)),
         onGenerateTitle: (BuildContext context) => context.l10n.appName,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           L10n.delegate,

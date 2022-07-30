@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/item_view_model.dart';
 import '../../state/calendar_state_provider.dart';
 import '../../state/items_provider.dart';
-import '../../utils/extensions.dart';
+import '../../theme/extensions.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/item_calendar_list_view.dart';
 import '../../widgets/item_calendar_view.dart';

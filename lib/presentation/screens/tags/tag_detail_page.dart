@@ -4,6 +4,8 @@ import 'package:iirc/domain.dart';
 
 import '../../models/item_view_model.dart';
 import '../../models/tag_view_model.dart';
+import '../../theme/app_border_radius.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../utils/show_error_choice_banner.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -68,7 +70,7 @@ class TagDetailPageState extends State<TagDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: context.theme.menuPageBackgroundColor,
       body: WillPopScope(
         onWillPop: () async {
           ScaffoldMessenger.of(context).removeCurrentMaterialBanner(reason: MaterialBannerClosedReason.dismiss);
@@ -158,7 +160,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: theme.canvasColor,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: AppBorderRadius.c4,
                     ),
                     margin: const EdgeInsets.all(16.0),
                     padding: const EdgeInsets.all(8.0),

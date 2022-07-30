@@ -6,6 +6,7 @@ import 'package:iirc/domain.dart';
 import 'package:intl/intl.dart';
 
 import '../../state/tags_provider.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../widgets/tag_color_box.dart';
 import '../tags/create_tag_page.dart';

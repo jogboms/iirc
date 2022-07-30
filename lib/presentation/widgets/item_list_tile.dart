@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/item_view_model.dart';
-import '../utils/extensions.dart';
+import '../theme/app_style.dart';
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 import 'app_list_tile.dart';
 import 'tag_color_label.dart';
 
@@ -37,7 +39,9 @@ class ItemListTile extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   item.description,
-                  style: theme.textTheme.labelLarge,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: AppFontWeight.medium,
+                  ),
                   maxLines: 2,
                 ),
               ],
@@ -47,13 +51,13 @@ class ItemListTile extends StatelessWidget {
           if (canShowDate)
             DefaultTextStyle(
               style: theme.textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-                color: Colors.grey.shade700,
+                fontWeight: AppFontWeight.semibold,
+                color: theme.appTheme.hintColor.shade700,
               ),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: theme.appTheme.hintColor.shade200,
                   borderRadius: AppListTile.borderRadius,
                 ),
                 child: Column(

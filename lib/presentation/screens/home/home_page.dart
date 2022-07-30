@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/item_view_model.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../utils/sliver_separator_builder_delegate.dart';
 import '../../widgets/custom_app_bar.dart';

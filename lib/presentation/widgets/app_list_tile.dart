@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/extensions.dart';
+import '../theme/app_border_radius.dart';
+import '../theme/extensions.dart';
 
 class AppListTile extends StatelessWidget {
   const AppListTile({
@@ -17,7 +18,7 @@ class AppListTile extends StatelessWidget {
   final VoidCallback? onPressed;
 
   static const double height = 84;
-  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(6));
+  static const BorderRadius borderRadius = AppBorderRadius.c6;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class AppListTile extends StatelessWidget {
                   child: Material(
                     color: tagBackgroundColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: AppBorderRadius.c2,
                       side: BorderSide(color: tagForegroundColor, width: .5),
                     ),
                   ),

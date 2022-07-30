@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../state/auth_state_provider.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../onboarding/onboarding_page.dart';
 
@@ -11,6 +12,7 @@ class LogoutListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = context.theme;
+    final Color color = theme.colorScheme.error;
 
     ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
       if (state == AuthState.complete) {
@@ -23,11 +25,13 @@ class LogoutListTile extends ConsumerWidget {
 
     return ListTile(
       tileColor: theme.canvasColor,
-      title: Text(context.l10n.logoutCaption),
-      textColor: theme.colorScheme.error,
+      title: Text(
+        context.l10n.logoutCaption,
+        style: context.theme.textTheme.button?.copyWith(color: color),
+      ),
       leading: Icon(
         Icons.power_settings_new_outlined,
-        color: theme.colorScheme.error,
+        color: color,
       ),
       horizontalTitleGap: 0,
       onTap: () => ref.read(authStateProvider.notifier).signOut(),

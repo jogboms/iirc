@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 
 import '../models/item_view_model.dart';
 import '../screens/home/item_detail_page.dart';
+import '../theme/app_style.dart';
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 import '../utils/extensions.dart';
 import '../utils/sliver_separator_builder_delegate.dart';
 import 'item_calendar_view.dart';
@@ -46,9 +49,9 @@ class ItemCalendarListView extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: DefaultTextStyle(
                   style: theme.textTheme.labelSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: AppFontWeight.bold,
                     letterSpacing: 1,
-                    color: Colors.grey.shade600,
+                    color: theme.appTheme.hintColor.shade600,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

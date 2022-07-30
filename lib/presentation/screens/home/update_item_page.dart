@@ -30,12 +30,10 @@ class UpdateItemPageState extends State<UpdateItemPage> {
         title: Text(context.l10n.updateItemCaption),
       ),
       body: ItemEntryForm(
-        initialValue: ItemEntryData(
-          description: widget.item.description,
-          date: widget.item.date,
-          tag: widget.item.tag,
-        ),
-        type: ItemEntryType.create,
+        description: widget.item.description,
+        date: widget.item.date,
+        tag: widget.item.tag,
+        type: ItemEntryType.update,
         onSaved: _onSubmit(context),
       ),
     );
@@ -48,7 +46,7 @@ class UpdateItemPageState extends State<UpdateItemPage> {
             path: widget.item.path,
             description: data.description,
             date: data.date,
-            tag: data.tag!.reference,
+            tag: data.tag.reference,
           ));
 
       // TODO: Handle loading state.

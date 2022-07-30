@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
@@ -35,11 +34,9 @@ class CreateItemPageState extends State<CreateItemPage> {
         title: Text(context.l10n.createItemCaption),
       ),
       body: ItemEntryForm(
-        initialValue: ItemEntryData(
-          description: '',
-          date: widget.date ?? clock.now(),
-          tag: widget.tag,
-        ),
+        description: '',
+        date: widget.date,
+        tag: widget.tag,
         type: ItemEntryType.create,
         onSaved: _onSubmit(context),
       ),
@@ -51,7 +48,7 @@ class CreateItemPageState extends State<CreateItemPage> {
       await ref.read(itemProvider).create(CreateItemData(
             description: data.description,
             date: data.date,
-            tag: data.tag!.reference,
+            tag: data.tag.reference,
           ));
 
       // TODO: Handle loading state.
@@ -62,7 +59,7 @@ class CreateItemPageState extends State<CreateItemPage> {
       }
 
       unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag!.id)),
+        Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag.id)),
       );
     };
   }

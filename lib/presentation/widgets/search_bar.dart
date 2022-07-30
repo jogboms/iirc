@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/search_tag_state_provider.dart';
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 import '../utils/extensions.dart';
 
 class SearchBar extends ConsumerStatefulWidget {
@@ -32,25 +34,32 @@ class _SearchBarState extends ConsumerState<SearchBar> {
         Expanded(
           child: CupertinoTextField(
             controller: controller,
+            decoration: BoxDecoration(
+              color: context.theme.inputDecorationTheme.fillColor,
+              borderRadius: context.theme.appTheme.textFieldBorderRadius,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            style: context.theme.appTheme.text.textfield,
             clearButtonMode: OverlayVisibilityMode.editing,
             placeholder: context.l10n.searchByTagCaption,
+            placeholderStyle: context.theme.inputDecorationTheme.hintStyle,
             onChanged: (String value) => queryProvider.state = value,
           ),
         ),
         const SizedBox(width: 8),
-        DropdownButtonHideUnderline(
-          child: DropdownButton<SearchTagMode>(
-            isDense: true,
-            value: ref.watch(searchTagModeStateProvider),
-            items: <DropdownMenuItem<SearchTagMode>>[
-              for (final SearchTagMode item in SearchTagMode.values)
-                DropdownMenuItem<SearchTagMode>(
-                  value: item,
-                  child: Text(item.name),
-                ),
-            ],
-            onChanged: (SearchTagMode? value) => ref.read(searchTagModeStateProvider.notifier).state = value!,
-          ),
+        DropdownButton<SearchTagMode>(
+          isDense: true,
+          value: ref.watch(searchTagModeStateProvider),
+          underline: const SizedBox.shrink(),
+          items: <DropdownMenuItem<SearchTagMode>>[
+            for (final SearchTagMode item in SearchTagMode.values)
+              DropdownMenuItem<SearchTagMode>(
+                key: Key(item.name),
+                value: item,
+                child: Text(item.name),
+              ),
+          ],
+          onChanged: (SearchTagMode? value) => ref.read(searchTagModeStateProvider.notifier).state = value!,
         ),
       ],
     );

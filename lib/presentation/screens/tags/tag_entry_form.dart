@@ -98,7 +98,7 @@ class TagEntryFormState extends State<TagEntryForm> {
               label: Text(context.l10n.titleLabel),
               alignLabelWithHint: true,
             ),
-            onChanged: (String value) => dataNotifier.update(title: value),
+            onChanged: (String value) => dataNotifier.update(title: value.trim()),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -108,7 +108,7 @@ class TagEntryFormState extends State<TagEntryForm> {
               alignLabelWithHint: true,
             ),
             maxLines: 4,
-            onChanged: (String value) => dataNotifier.update(description: value),
+            onChanged: (String value) => dataNotifier.update(description: value.trim()),
           ),
           const SizedBox(height: 16),
           ValueListenableBuilder<TagEntryData>(

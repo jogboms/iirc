@@ -193,7 +193,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
               alignLabelWithHint: true,
             ),
             maxLines: 4,
-            onChanged: (String value) => dataNotifier.update(description: value),
+            onChanged: (String value) => dataNotifier.update(description: value.trim()),
           ),
           const SizedBox(height: 24),
           ValueListenableBuilder<ItemEntryData>(

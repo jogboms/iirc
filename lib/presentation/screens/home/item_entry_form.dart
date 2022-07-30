@@ -64,6 +64,8 @@ class ItemEntryForm extends StatefulWidget {
 
 @visibleForTesting
 class ItemEntryFormState extends State<ItemEntryForm> {
+  late final FocusNode descriptionFocusNode = FocusNode(debugLabel: 'description');
+
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
       description: widget.initialValue?.description ?? '',
@@ -76,8 +78,22 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     text: dataNotifier.value.description,
   );
 
+  bool get hasInitialDate => widget.initialValue?.date != null;
+
+  bool get hasInitialTag => widget.initialValue?.tag != null;
+
+  @override
+  void initState() {
+    if (hasInitialDate && hasInitialTag) {
+      descriptionFocusNode.requestFocus();
+    }
+
+    super.initState();
+  }
+
   @override
   void dispose() {
+    descriptionFocusNode.dispose();
     descriptionTextEditingController.dispose();
     dataNotifier.dispose();
 
@@ -94,7 +110,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 12),
-          if (widget.initialValue?.date == null) ...<Widget>[
+          if (!hasInitialDate) ...<Widget>[
             FormField<DateTime>(
               initialValue: dataNotifier.value.date,
               builder: (FormFieldState<DateTime> fieldState) {
@@ -128,7 +144,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             ),
             const SizedBox(height: 12),
           ],
-          if (widget.initialValue?.tag == null) ...<Widget>[
+          if (!hasInitialTag) ...<Widget>[
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 final List<TagModel> tags = ref.watch(tagsProvider).value ?? <TagModel>[];
@@ -139,7 +155,10 @@ class ItemEntryFormState extends State<ItemEntryForm> {
 
                 return DropdownButtonFormField<TagModel>(
                   value: dataNotifier.value.tag,
-                  decoration: InputDecoration(hintText: context.l10n.selectItemTagCaption),
+                  decoration: InputDecoration(
+                    hintText: context.l10n.selectItemTagCaption,
+                    alignLabelWithHint: true,
+                  ),
                   items: <DropdownMenuItem<TagModel>>[
                     for (final TagModel tag in tags)
                       DropdownMenuItem<TagModel>(
@@ -167,8 +186,12 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             const SizedBox(height: 12),
           ],
           TextField(
+            focusNode: descriptionFocusNode,
             controller: descriptionTextEditingController,
-            decoration: InputDecoration(label: Text(context.l10n.descriptionLabel)),
+            decoration: InputDecoration(
+              label: Text(context.l10n.descriptionLabel),
+              alignLabelWithHint: true,
+            ),
             maxLines: 4,
             onChanged: (String value) => dataNotifier.update(description: value),
           ),

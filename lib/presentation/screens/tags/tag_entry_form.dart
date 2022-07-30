@@ -92,13 +92,21 @@ class TagEntryFormState extends State<TagEntryForm> {
           const SizedBox(height: 12),
           TextField(
             controller: titleTextEditingController,
-            decoration: InputDecoration(label: Text(context.l10n.titleLabel)),
+            autofocus: true,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              label: Text(context.l10n.titleLabel),
+              alignLabelWithHint: true,
+            ),
             onChanged: (String value) => dataNotifier.update(title: value),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: descriptionTextEditingController,
-            decoration: InputDecoration(label: Text(context.l10n.descriptionLabel)),
+            decoration: InputDecoration(
+              label: Text(context.l10n.descriptionLabel),
+              alignLabelWithHint: true,
+            ),
             maxLines: 4,
             onChanged: (String value) => dataNotifier.update(description: value),
           ),

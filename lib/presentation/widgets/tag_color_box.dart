@@ -16,12 +16,14 @@ class TagColorBox extends StatelessWidget {
 
     return Material(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: context.theme.appTheme.hintColor.shade700),
+        side: BorderSide(color: context.theme.appTheme.hintColor.shade200),
       ),
       color: tagColorScheme.backgroundColor,
-      child: SizedBox.square(
-        dimension: dimension,
-        child: Icon(Icons.tag, color: tagColorScheme.foregroundColor),
+      child: FittedBox(
+        child: SizedBox.square(
+          dimension: dimension,
+          child: Icon(Icons.tag, color: tagColorScheme.foregroundColor),
+        ),
       ),
     );
   }

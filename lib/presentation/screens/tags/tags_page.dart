@@ -21,6 +21,7 @@ class TagsPage extends StatefulWidget {
 @visibleForTesting
 class TagsPageState extends State<TagsPage> {
   static const Key dataViewKey = Key('dataViewKey');
+  static const Key emptyDataViewKey = Key('emptyDataViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +55,7 @@ class _TagsDataView extends StatelessWidget {
         ),
         if (tags.isEmpty)
           SliverFillRemaining(
+            key: TagsPageState.emptyDataViewKey,
             child: Center(
               child: Text(context.l10n.noTagsCreatedMessage),
             ),

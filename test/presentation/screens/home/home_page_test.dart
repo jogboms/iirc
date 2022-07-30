@@ -27,6 +27,22 @@ void main() {
       expect(find.byType(LoadingView).descendantOf(homePage), findsOneWidget);
     });
 
+    testWidgets('should show empty view', (WidgetTester tester) async {
+      await tester.pumpWidget(createApp(
+        home: const HomePage(),
+        overrides: <Override>[
+          itemsProvider.overrideWithValue(
+            AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
+          ),
+        ],
+      ));
+
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byKey(HomePageState.emptyDataViewKey).descendantOf(homePage), findsOneWidget);
+    });
+
     testWidgets('should show unique list of items', (WidgetTester tester) async {
       final TagModel tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(

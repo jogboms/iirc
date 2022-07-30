@@ -35,5 +35,12 @@ void main() {
 
       expect(() => useCase(), throwsException);
     });
+
+    test('should bubble auth change errors', () {
+      when(() => authRepository.signIn()).thenAnswer((_) async => '1');
+      when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String?>.error(Exception()));
+
+      expect(() => useCase(), throwsException);
+    });
   });
 }

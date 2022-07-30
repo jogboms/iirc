@@ -26,6 +26,22 @@ void main() {
       expect(find.byType(LoadingView).descendantOf(tagsPage), findsOneWidget);
     });
 
+    testWidgets('should show empty view', (WidgetTester tester) async {
+      await tester.pumpWidget(createApp(
+        home: const TagsPage(),
+        overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(TagViewModelList.empty()),
+          ),
+        ],
+      ));
+
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byKey(TagsPageState.emptyDataViewKey).descendantOf(tagsPage), findsOneWidget);
+    });
+
     testWidgets('should show list of tags', (WidgetTester tester) async {
       final TagViewModelList expectedItems = TagViewModelList.generate(
         3,

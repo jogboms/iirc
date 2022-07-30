@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 @visibleForTesting
 class HomePageState extends State<HomePage> {
   static const Key dataViewKey = Key('dataViewKey');
+  static const Key emptyDataViewKey = Key('emptyDataViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,7 @@ class _ItemsDataView extends StatelessWidget {
         ),
         if (items.isEmpty)
           SliverFillRemaining(
+            key: HomePageState.emptyDataViewKey,
             child: Center(
               child: Text(context.l10n.noItemsCreatedMessage),
             ),

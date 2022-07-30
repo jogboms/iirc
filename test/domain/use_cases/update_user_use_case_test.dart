@@ -21,7 +21,7 @@ void main() {
 
     tearDown(() => reset(usersRepository));
 
-    test('should updated a user', () {
+    test('should update a user', () {
       when(() => usersRepository.update(any())).thenAnswer((_) async => true);
 
       expect(useCase(dummyUpdateUserData), completion(true));

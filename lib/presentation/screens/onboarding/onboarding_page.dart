@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../state/auth_state_provider.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../widgets/loading_view.dart';
 import '../menu/menu_page.dart';

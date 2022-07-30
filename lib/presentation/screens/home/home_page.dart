@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/item_view_model.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../utils/sliver_separator_builder_delegate.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -22,6 +23,7 @@ class HomePage extends StatefulWidget {
 @visibleForTesting
 class HomePageState extends State<HomePage> {
   static const Key dataViewKey = Key('dataViewKey');
+  static const Key emptyDataViewKey = Key('emptyDataViewKey');
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class _ItemsDataView extends StatelessWidget {
         ),
         if (items.isEmpty)
           SliverFillRemaining(
+            key: HomePageState.emptyDataViewKey,
             child: Center(
               child: Text(context.l10n.noItemsCreatedMessage),
             ),

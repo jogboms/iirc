@@ -8,7 +8,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../models/item_view_model.dart';
 import '../models/tag_view_model.dart';
-import '../utils/extensions.dart';
+import '../theme/app_border_radius.dart';
+import '../theme/app_style.dart';
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 
 DateTime get _kToday => clock.now();
 
@@ -117,7 +120,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
 
     final TextStyle dayOfWeekTextStyle = theme.textTheme.labelSmall!.copyWith(
       color: theme.colorScheme.onBackground,
-      fontWeight: FontWeight.w600,
+      fontWeight: AppFontWeight.semibold,
     );
 
     return SliverPersistentHeader(
@@ -159,15 +162,15 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
                       : isSelected
                           ? theme.colorScheme.primary
                           : Colors.transparent,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: AppBorderRadius.c4,
                 ),
                 child: Center(
                   child: Text(
                     '${date.day}',
                     style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: isDisabled ? FontWeight.normal : FontWeight.w700,
+                      fontWeight: isDisabled ? AppFontWeight.regular : AppFontWeight.semibold,
                       color: isDisabled
-                          ? Colors.grey.shade400
+                          ? theme.appTheme.hintColor.shade400
                           : isToday
                               ? theme.colorScheme.onPrimary
                               : isSelected
@@ -230,7 +233,7 @@ class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
   Widget build(BuildContext context, _, __) => Material(
         color: color,
         elevation: 5,
-        shadowColor: Colors.black12,
+        shadowColor: context.theme.shadowColor,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: child,

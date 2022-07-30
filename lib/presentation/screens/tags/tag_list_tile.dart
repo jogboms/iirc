@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/tag_view_model.dart';
+import '../../theme/app_style.dart';
+import '../../theme/extensions.dart';
 import '../../utils/extensions.dart';
 import '../../widgets/app_list_tile.dart';
 import 'tag_detail_page.dart';
@@ -24,7 +26,7 @@ class TagListTile extends StatelessWidget {
           Text(
             tag.title.capitalize(),
             style: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+              fontWeight: AppFontWeight.medium,
             ),
           ),
           const SizedBox(height: 2),

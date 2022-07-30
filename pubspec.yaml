@@ -42,6 +42,20 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Metropolis
+      fonts:
+        - asset: assets/fonts/Metropolis-Thin.otf
+          weight: 100
+        - asset: assets/fonts/Metropolis-Light.otf
+          weight: 300
+        - asset: assets/fonts/Metropolis-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Metropolis-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Metropolis-SemiBold.otf
+          weight: 600
+
 flutter_icons:
   android: "ic_launcher"
   ios: true

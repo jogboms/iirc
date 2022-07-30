@@ -24,6 +24,7 @@ void main() {
       expect(find.byType(HomePage).descendantOf(menuPage), findsOneWidget);
       expect(find.byType(TagsPage).descendantOf(menuPage), findsOneWidget);
       expect(find.byType(CalendarPage).descendantOf(menuPage), findsOneWidget);
+      expect(find.byType(InsightsPage).descendantOf(menuPage), findsOneWidget);
       expect(find.byType(MorePage).descendantOf(menuPage), findsOneWidget);
     });
   });

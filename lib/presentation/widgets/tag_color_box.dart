@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+import '../theme/extensions.dart';
 import '../utils/tag_color_scheme.dart';
 
 class TagColorBox extends StatelessWidget {
@@ -13,7 +15,9 @@ class TagColorBox extends StatelessWidget {
     final TagColorScheme tagColorScheme = TagColorScheme.fromHex(code);
 
     return Material(
-      shape: const RoundedRectangleBorder(),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: context.theme.appTheme.hintColor.shade700),
+      ),
       color: tagColorScheme.backgroundColor,
       child: SizedBox.square(
         dimension: dimension,

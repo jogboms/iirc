@@ -13,8 +13,8 @@ import 'tag_entry_form.dart';
 class CreateTagPage extends StatelessWidget {
   const CreateTagPage({super.key, required this.asModal});
 
-  static PageRoute<void> route({bool asModal = false}) {
-    return MaterialPageRoute<void>(builder: (_) => CreateTagPage(asModal: asModal));
+  static PageRoute<String> route({bool asModal = false}) {
+    return MaterialPageRoute<String>(builder: (_) => CreateTagPage(asModal: asModal));
   }
 
   final bool asModal;
@@ -45,7 +45,7 @@ class CreateTagPage extends StatelessWidget {
       // TODO: Handle error state.
 
       if (asModal) {
-        return Navigator.pop(context);
+        return Navigator.of(context).pop(id);
       }
 
       unawaited(

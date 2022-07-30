@@ -104,7 +104,13 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     super.dispose();
   }
 
-  Future<void> onCreateTag(BuildContext context) => Navigator.of(context).push(CreateTagPage.route(asModal: true));
+  void onCreateTag(BuildContext context, Reader read) async {
+    final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
+    if (tagId != null) {
+      final TagModelList tags = read(tagsProvider).value ?? TagModelList.empty();
+      dataNotifier.update(tag: tags.firstWhere((TagModel element) => element.id == tagId));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +164,14 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                 final List<TagModel> tags = ref.watch(tagsProvider).value ?? <TagModel>[];
 
                 if (tags.isEmpty) {
-                  return child!;
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed: () => onCreateTag(context, ref.read),
+                      icon: const Icon(Icons.tag),
+                      label: Text(context.l10n.createNewTagCaption),
+                    ),
+                  );
                 }
 
                 return Row(
@@ -188,20 +201,12 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      onPressed: () => onCreateTag(context),
+                      onPressed: () => onCreateTag(context, ref.read),
                       icon: const Icon(Icons.add),
                     ),
                   ],
                 );
               },
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: () => onCreateTag(context),
-                  icon: const Icon(Icons.tag),
-                  label: Text(context.l10n.createNewTagCaption),
-                ),
-              ),
             ),
             const SizedBox(height: 12),
           ],

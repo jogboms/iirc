@@ -22,7 +22,7 @@ class ItemEntryData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModel? tag; // TODO: remove nullability
+  final TagModel tag;
 
   ItemEntryData copyWith({
     String? description,
@@ -36,9 +36,9 @@ class ItemEntryData with EquatableMixin {
       );
 
   @override
-  List<Object?> get props => <Object?>[description, date, tag];
+  List<Object> get props => <Object>[description, date, tag];
 
-  bool get isValid => description.isNotEmpty && tag != null;
+  bool get isValid => description.isNotEmpty && !tag.isEmptyTag;
 
   @override
   bool? get stringify => true;
@@ -49,12 +49,16 @@ typedef ItemEntryValueSaved = void Function(WidgetRef ref, ItemEntryData data);
 class ItemEntryForm extends StatefulWidget {
   const ItemEntryForm({
     super.key,
-    required this.initialValue,
+    required this.description,
+    required this.date,
+    required this.tag,
     required this.type,
     required this.onSaved,
   });
 
-  final ItemEntryData? initialValue;
+  final String? description;
+  final DateTime? date;
+  final TagModel? tag;
   final ItemEntryType type;
   final ItemEntryValueSaved onSaved;
 
@@ -68,9 +72,9 @@ class ItemEntryFormState extends State<ItemEntryForm> {
 
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
-      description: widget.initialValue?.description ?? '',
-      date: widget.initialValue?.date ?? clock.now(),
-      tag: widget.initialValue?.tag,
+      description: widget.description ?? '',
+      date: widget.date ?? clock.now(),
+      tag: widget.tag ?? _emptyTagModel,
     ),
   );
 
@@ -78,9 +82,9 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     text: dataNotifier.value.description,
   );
 
-  bool get hasInitialDate => widget.initialValue?.date != null;
+  bool get hasInitialDate => widget.date != null;
 
-  bool get hasInitialTag => widget.initialValue?.tag != null;
+  bool get hasInitialTag => widget.tag != null;
 
   @override
   void initState() {
@@ -112,7 +116,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 12),
-          if (!hasInitialDate) ...<Widget>[
+          if (!hasInitialDate || widget.type == ItemEntryType.update) ...<Widget>[
             FormField<DateTime>(
               initialValue: dataNotifier.value.date,
               builder: (FormFieldState<DateTime> fieldState) {
@@ -120,9 +124,11 @@ class ItemEntryFormState extends State<ItemEntryForm> {
 
                 return Row(
                   children: <Widget>[
-                    Text(
-                      DateFormat.yMMMEd().format(date),
-                      style: theme.textTheme.bodyLarge,
+                    Expanded(
+                      child: Text(
+                        DateFormat.yMMMEd().format(date),
+                        style: theme.textTheme.bodyLarge,
+                      ),
                     ),
                     const SizedBox(width: 4),
                     TextButton(
@@ -146,7 +152,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             ),
             const SizedBox(height: 12),
           ],
-          if (!hasInitialTag) ...<Widget>[
+          if (!hasInitialTag || widget.type == ItemEntryType.update) ...<Widget>[
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 final List<TagModel> tags = ref.watch(tagsProvider).value ?? <TagModel>[];
@@ -159,7 +165,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField<TagModel>(
-                        value: dataNotifier.value.tag,
+                        value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag,
                         decoration: InputDecoration(
                           hintText: context.l10n.selectItemTagCaption,
                         ),
@@ -224,6 +230,20 @@ class ItemEntryFormState extends State<ItemEntryForm> {
       ),
     );
   }
+}
+
+final TagModel _emptyTagModel = TagModel(
+  id: 'EMPTY',
+  color: 0xF,
+  description: '',
+  title: '',
+  path: '',
+  createdAt: DateTime(0),
+  updatedAt: null,
+);
+
+extension on TagModel {
+  bool get isEmptyTag => this == _emptyTagModel;
 }
 
 extension on ValueNotifier<ItemEntryData> {

@@ -1,9 +1,11 @@
 import 'package:iirc/domain.dart';
+import 'package:meta/meta.dart';
 
 import 'tag_view_model.dart';
 
 class ItemViewModel extends BaseItemModel<TagViewModel> {
-  const ItemViewModel._({
+  @visibleForTesting
+  const ItemViewModel({
     required super.id,
     required super.date,
     required super.description,
@@ -13,7 +15,7 @@ class ItemViewModel extends BaseItemModel<TagViewModel> {
     required super.updatedAt,
   });
 
-  static ItemViewModel fromItem(NormalizedItemModel item) => ItemViewModel._(
+  static ItemViewModel fromItem(NormalizedItemModel item) => ItemViewModel(
         id: item.id,
         path: item.path,
         description: item.description,

@@ -15,7 +15,7 @@ Future<void> main() async {
       final StateController<ItemViewModelList> controller =
           StateController<ItemViewModelList>(ItemViewModelList.empty());
       final AutoDisposeStreamProvider<ItemViewModelList> provider =
-          StreamProvider.autoDispose((AutoDisposeStreamProviderRef<Object?> ref) => controller.stream);
+          StreamProvider.autoDispose((_) => controller.stream);
 
       container = createProviderContainer(
         overrides: <Override>[

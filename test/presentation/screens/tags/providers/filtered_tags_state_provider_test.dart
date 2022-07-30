@@ -12,8 +12,7 @@ Future<void> main() async {
 
     StateController<TagViewModelList> createProvider() {
       final StateController<TagViewModelList> controller = StateController<TagViewModelList>(TagViewModelList.empty());
-      final AutoDisposeStreamProvider<TagViewModelList> provider =
-          StreamProvider.autoDispose((AutoDisposeStreamProviderRef<Object?> ref) => controller.stream);
+      final AutoDisposeStreamProvider<TagViewModelList> provider = StreamProvider.autoDispose((_) => controller.stream);
 
       container = createProviderContainer(
         overrides: <Override>[

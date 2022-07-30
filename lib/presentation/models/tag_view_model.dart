@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:iirc/domain.dart';
+import 'package:meta/meta.dart';
 
 import '../utils/tag_color_scheme.dart';
 
 class TagViewModel extends TagModel {
-  const TagViewModel._({
+  @visibleForTesting
+  const TagViewModel({
     required super.id,
     required super.path,
     required super.title,
@@ -21,7 +23,7 @@ class TagViewModel extends TagModel {
   static TagViewModel fromTag(TagModel tag) {
     final TagColorScheme tagColorScheme = TagColorScheme.fromHex(tag.color);
 
-    return TagViewModel._(
+    return TagViewModel(
       id: tag.id,
       path: tag.path,
       title: tag.title,

@@ -35,6 +35,8 @@ class AppTheme {
   final MaterialColor hintColor = _kHintColor;
   final Color errorColor = AppColors.danger;
 
+  final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
+
   final List<Color> calendarViewHeaderGradient = const <Color>[Colors.purpleAccent, Colors.blueAccent];
 }
 
@@ -43,9 +45,9 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
   final MaterialColor primaryColor = defaultTheme.appTheme.primaryColor;
   final ColorSwatch<int> primarySwatch = defaultTheme.appTheme.primarySwatch;
 
-  const OutlineInputBorder _textFieldBorder = OutlineInputBorder(
+  final OutlineInputBorder _textFieldBorder = OutlineInputBorder(
     borderSide: BorderSide.none,
-    borderRadius: AppBorderRadius.c8,
+    borderRadius: defaultTheme.appTheme.textFieldBorderRadius,
   );
   final OutlineInputBorder _textFieldErrorBorder = _textFieldBorder.copyWith(
     borderSide: const BorderSide(color: _kBorderSideErrorColor),

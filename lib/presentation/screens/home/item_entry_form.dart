@@ -100,6 +100,8 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     super.dispose();
   }
 
+  Future<void> onCreateTag(BuildContext context) => Navigator.of(context).push(CreateTagPage.route(asModal: true));
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
@@ -153,33 +155,45 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                   return child!;
                 }
 
-                return DropdownButtonFormField<TagModel>(
-                  value: dataNotifier.value.tag,
-                  decoration: InputDecoration(
-                    hintText: context.l10n.selectItemTagCaption,
-                    alignLabelWithHint: true,
-                  ),
-                  items: <DropdownMenuItem<TagModel>>[
-                    for (final TagModel tag in tags)
-                      DropdownMenuItem<TagModel>(
-                        value: tag,
-                        child: Row(
-                          children: <Widget>[
-                            TagColorBox(code: tag.color),
-                            const SizedBox(width: 8),
-                            Text(tag.title),
-                          ],
+                return Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField<TagModel>(
+                        value: dataNotifier.value.tag,
+                        decoration: InputDecoration(
+                          hintText: context.l10n.selectItemTagCaption,
                         ),
+                        items: <DropdownMenuItem<TagModel>>[
+                          for (final TagModel tag in tags)
+                            DropdownMenuItem<TagModel>(
+                              key: Key(tag.id),
+                              value: tag,
+                              child: Row(
+                                children: <Widget>[
+                                  TagColorBox(code: tag.color),
+                                  const SizedBox(width: 8),
+                                  Text(tag.title),
+                                ],
+                              ),
+                            ),
+                        ],
+                        onChanged: (TagModel? tag) => dataNotifier.update(tag: tag),
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: () => onCreateTag(context),
+                      icon: const Icon(Icons.add),
+                    ),
                   ],
-                  onChanged: (TagModel? tag) => dataNotifier.update(tag: tag),
                 );
               },
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).push(CreateTagPage.route(asModal: true)),
-                  child: Text(context.l10n.createNewTagCaption),
+                child: TextButton.icon(
+                  onPressed: () => onCreateTag(context),
+                  icon: const Icon(Icons.tag),
+                  label: Text(context.l10n.createNewTagCaption),
                 ),
               ),
             ),

@@ -73,7 +73,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
       description: widget.description ?? '',
-      date: widget.date ?? clock.now(),
+      date: DateUtils.dateOnly(widget.date ?? clock.now()),
       tag: widget.tag ?? _emptyTagModel,
     ),
   );
@@ -146,7 +146,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                           lastDate: DateTime(clock.now().year + 1),
                         );
                         if (value != null) {
-                          dataNotifier.update(date: value);
+                          dataNotifier.update(date: DateUtils.dateOnly(value));
                           fieldState.didChange(value);
                         }
                       },

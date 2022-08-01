@@ -102,6 +102,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
+afterEvaluate {
+    android.productFlavors.each { flavor ->
+        tasks.matching {
+            (it.name.contains('GoogleServices') || it.name.contains('Crashlytics')) && it.name.contains("Mock")
+        }*.enabled = false
+    }
+}
+
 private static Integer generateVersionCode(String versionName, Integer minimumSdkVersion) {
     def (major, minor, patch) = versionName.split('\\.').collect { it.toInteger() }
     return minimumSdkVersion * 10000000 + major * 10000 + minor * 100 + patch

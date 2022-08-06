@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../models/item_view_model.dart';
@@ -41,18 +42,21 @@ class UpdateItemPageState extends State<UpdateItemPage> {
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, ItemEntryData data) async {
-      await ref.read(itemProvider).update(UpdateItemData(
-            id: widget.item.id,
-            path: widget.item.path,
-            description: data.description,
-            date: data.date,
-            tag: data.tag.reference,
-          ));
+      try {
+        // TODO: Handle loading state.
+        await ref.read(itemProvider).update(UpdateItemData(
+              id: widget.item.id,
+              path: widget.item.path,
+              description: data.description,
+              date: data.date,
+              tag: data.tag.reference,
+            ));
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
-
-      return Navigator.pop(context);
+        return Navigator.pop(context);
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        // TODO: Handle error state.
+      }
     };
   }
 }

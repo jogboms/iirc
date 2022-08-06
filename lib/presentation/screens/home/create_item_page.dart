@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../utils/extensions.dart';
@@ -45,22 +46,25 @@ class CreateItemPageState extends State<CreateItemPage> {
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, ItemEntryData data) async {
-      await ref.read(itemProvider).create(CreateItemData(
-            description: data.description,
-            date: data.date,
-            tag: data.tag.reference,
-          ));
+      try {
+        // TODO: Handle loading state.
+        await ref.read(itemProvider).create(CreateItemData(
+              description: data.description,
+              date: data.date,
+              tag: data.tag.reference,
+            ));
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
+        if (widget.asModal) {
+          return Navigator.pop(context);
+        }
 
-      if (widget.asModal) {
-        return Navigator.pop(context);
+        unawaited(
+          Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag.id)),
+        );
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        // TODO: Handle error state.
       }
-
-      unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag.id)),
-      );
     };
   }
 }

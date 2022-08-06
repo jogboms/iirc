@@ -1,3 +1,5 @@
+import 'package:iirc/core.dart';
+
 import '../models/user.dart';
 import '../repositories/users.dart';
 
@@ -9,8 +11,8 @@ class FetchUserUseCase {
   Future<UserModel?> call(String uid) async {
     try {
       return _users.fetch(uid);
-    } catch (e) {
-      // TODO: log this
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
       return null;
     }
   }

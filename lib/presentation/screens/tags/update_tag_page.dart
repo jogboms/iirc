@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../utils/extensions.dart';
@@ -36,17 +37,21 @@ class UpdateTagPage extends StatelessWidget {
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, TagEntryData data) async {
-      await ref.read(tagProvider).update(UpdateTagData(
-            id: tag.id,
-            path: tag.path,
-            title: data.title,
-            description: data.description,
-            color: data.color,
-          ));
+      try {
+        // TODO: Handle loading state.
+        await ref.read(tagProvider).update(UpdateTagData(
+              id: tag.id,
+              path: tag.path,
+              title: data.title,
+              description: data.description,
+              color: data.color,
+            ));
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
-      return Navigator.pop(context);
+        return Navigator.pop(context);
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        // TODO: Handle error state.
+      }
     };
   }
 }

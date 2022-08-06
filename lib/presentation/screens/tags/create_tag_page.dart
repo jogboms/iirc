@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../utils/extensions.dart';
@@ -35,22 +36,25 @@ class CreateTagPage extends StatelessWidget {
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
     return (WidgetRef ref, TagEntryData data) async {
-      final String id = await ref.read(tagProvider).create(CreateTagData(
-            title: data.title,
-            description: data.description,
-            color: data.color,
-          ));
+      try {
+        // TODO: Handle loading state.
+        final String id = await ref.read(tagProvider).create(CreateTagData(
+              title: data.title,
+              description: data.description,
+              color: data.color,
+            ));
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
+        if (asModal) {
+          return Navigator.of(context).pop(id);
+        }
 
-      if (asModal) {
-        return Navigator.of(context).pop(id);
+        unawaited(
+          Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
+        );
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        // TODO: Handle error state.
       }
-
-      unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
-      );
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/item_view_model.dart';
@@ -129,11 +130,14 @@ class _SelectedItemDataView extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
-    await ref.read(itemProvider).delete(item.path);
+    try {
+      // TODO: Handle loading state.
+      await ref.read(itemProvider).delete(item.path);
 
-    // TODO: Handle loading state.
-    // TODO: Handle error state.
-
-    return Navigator.pop(context);
+      return Navigator.pop(context);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      // TODO: Handle error state.
+    }
   }
 }

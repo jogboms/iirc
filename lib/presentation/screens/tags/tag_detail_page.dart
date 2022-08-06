@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../models/item_view_model.dart';
@@ -214,11 +215,14 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
-    await ref.read(tagProvider).delete(widget.tag);
+    try {
+      // TODO: Handle loading state.
+      await ref.read(tagProvider).delete(widget.tag);
 
-    // TODO: Handle loading state.
-    // TODO: Handle error state.
-
-    return Navigator.pop(context);
+      return Navigator.pop(context);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      // TODO: Handle error state.
+    }
   }
 }

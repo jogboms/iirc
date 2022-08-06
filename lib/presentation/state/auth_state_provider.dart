@@ -1,6 +1,7 @@
 // ignore_for_file: always_specify_types
 
 import 'package:clock/clock.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
@@ -55,10 +56,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       if (mounted) {
         state = AuthState.complete;
       }
-    } catch (e) {
-      final String message = e.toString();
+    } catch (error, stackTrace) {
+      final String message = error.toString();
       if (message.isNotEmpty) {
-        // TODO: log this
+        AppLog.e(error, stackTrace);
       }
 
       await signOutUseCase();
@@ -76,10 +77,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       if (mounted) {
         state = AuthState.complete;
       }
-    } catch (e) {
-      final String message = e.toString();
+    } catch (error, stackTrace) {
+      final String message = error.toString();
       if (message.isNotEmpty) {
-        // TODO: log this
+        AppLog.e(error, stackTrace);
       }
 
       if (mounted) {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../../models/item_view_model.dart';
-import '../../utils/extensions.dart';
-import '../../widgets/custom_app_bar.dart';
+import '../../models.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import 'item_entry_form.dart';
 import 'providers/item_provider.dart';
 
@@ -40,19 +41,28 @@ class UpdateItemPageState extends State<UpdateItemPage> {
   }
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, ItemEntryData data) async {
-      await ref.read(itemProvider).update(UpdateItemData(
-            id: widget.item.id,
-            path: widget.item.path,
-            description: data.description,
-            date: data.date,
-            tag: data.tag.reference,
-          ));
+      try {
+        snackBar.loading();
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
+        await ref.read(itemProvider).update(UpdateItemData(
+              id: widget.item.id,
+              path: widget.item.path,
+              description: data.description,
+              date: data.date,
+              tag: data.tag.reference,
+            ));
 
-      return Navigator.pop(context);
+        snackBar.success(l10n.successfulMessage);
+        return Navigator.pop(context);
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
+      }
     };
   }
 }

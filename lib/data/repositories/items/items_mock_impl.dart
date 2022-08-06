@@ -37,7 +37,7 @@ class ItemsMockImpl extends ItemsRepository {
       path: '/items/$userId/$id',
       description: item.description,
       date: item.date,
-      tag: item.tag!,
+      tag: item.tag,
       createdAt: clock.now(),
       updatedAt: null,
     );

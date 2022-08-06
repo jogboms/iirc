@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state/search_tag_state_provider.dart';
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
-import '../utils/extensions.dart';
+import '../state.dart';
+import '../theme.dart';
+import '../utils.dart';
 
 class SearchBar extends ConsumerStatefulWidget {
   const SearchBar({super.key});

@@ -11,10 +11,10 @@ class CreateItemData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModelReference? tag; // TODO: remove nullability
+  final TagModelReference tag;
 
   @override
-  List<Object?> get props => <Object?>[description, date, tag];
+  List<Object> get props => <Object>[description, date, tag];
 
   @override
   bool? get stringify => true;

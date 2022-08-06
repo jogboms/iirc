@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../state/auth_state_provider.dart';
-import '../../theme/extensions.dart';
-import '../../utils/extensions.dart';
+import '../../state.dart';
+import '../../theme.dart';
+import '../../utils.dart';
 import '../onboarding/onboarding_page.dart';
 
 class LogoutListTile extends ConsumerWidget {

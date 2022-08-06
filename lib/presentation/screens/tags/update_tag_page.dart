@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../../utils/extensions.dart';
-import '../../widgets/custom_app_bar.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import 'providers/tag_provider.dart';
 import 'tag_entry_form.dart';
 
@@ -35,18 +36,28 @@ class UpdateTagPage extends StatelessWidget {
   }
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, TagEntryData data) async {
-      await ref.read(tagProvider).update(UpdateTagData(
-            id: tag.id,
-            path: tag.path,
-            title: data.title,
-            description: data.description,
-            color: data.color,
-          ));
+      try {
+        snackBar.loading();
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
-      return Navigator.pop(context);
+        await ref.read(tagProvider).update(UpdateTagData(
+              id: tag.id,
+              path: tag.path,
+              title: data.title,
+              description: data.description,
+              color: data.color,
+            ));
+
+        snackBar.success(l10n.successfulMessage);
+        return Navigator.pop(context);
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
+      }
     };
   }
 }

@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../../models/item_view_model.dart';
-import '../../models/tag_view_model.dart';
-import '../../theme/app_border_radius.dart';
-import '../../theme/extensions.dart';
-import '../../utils/extensions.dart';
-import '../../utils/show_error_choice_banner.dart';
-import '../../widgets/custom_app_bar.dart';
-import '../../widgets/error_view.dart';
-import '../../widgets/item_calendar_list_view.dart';
-import '../../widgets/item_calendar_view.dart';
-import '../../widgets/item_calendar_view_header.dart';
-import '../../widgets/loading_view.dart';
+import '../../models.dart';
+import '../../theme.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import '../home/create_item_page.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
@@ -214,11 +207,20 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
-    await ref.read(tagProvider).delete(widget.tag);
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
+    try {
+      snackBar.loading();
 
-    // TODO: Handle loading state.
-    // TODO: Handle error state.
+      await ref.read(tagProvider).delete(widget.tag);
 
-    return Navigator.pop(context);
+      snackBar.success(l10n.successfulMessage);
+      return Navigator.pop(context);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      snackBar.error(l10n.genericErrorMessage);
+    } finally {
+      snackBar.hide();
+    }
   }
 }

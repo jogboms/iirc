@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
+import '../theme.dart';
 import 'item_calendar_view.dart';
 
 class ItemCalendarViewHeader extends StatelessWidget {

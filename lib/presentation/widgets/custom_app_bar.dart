@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_style.dart';
-import '../theme/extensions.dart';
+import '../theme.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({
@@ -11,6 +10,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.asSliver = false,
     this.centerTitle,
   });
+
+  static const CustomAppBar empty = CustomAppBar(title: Text(''));
 
   final Widget title;
   final List<Widget> actions;

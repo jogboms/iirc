@@ -4,8 +4,7 @@ import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../../state/registry_provider.dart';
-import '../../../state/user_provider.dart';
+import '../../../state.dart';
 
 final itemProvider = Provider.autoDispose<ItemProvider>((ref) {
   final di = ref.read(registryProvider).get;

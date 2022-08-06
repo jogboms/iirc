@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import 'loading_spinner.dart';
 
 class LoadingView extends StatelessWidget {
   const LoadingView({super.key});
@@ -6,8 +8,8 @@ class LoadingView extends StatelessWidget {
   static const Key loadingViewKey = Key('loadingViewKey');
 
   @override
-  Widget build(BuildContext context) => const Center(
+  Widget build(BuildContext context) => Center(
         key: loadingViewKey,
-        child: CircularProgressIndicator(),
+        child: LoadingSpinner.circle(),
       );
 }

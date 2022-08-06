@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../../utils/extensions.dart';
-import '../../widgets/custom_app_bar.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import 'providers/tag_provider.dart';
 import 'tag_detail_page.dart';
 import 'tag_entry_form.dart';
@@ -34,23 +35,32 @@ class CreateTagPage extends StatelessWidget {
   }
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, TagEntryData data) async {
-      final String id = await ref.read(tagProvider).create(CreateTagData(
-            title: data.title,
-            description: data.description,
-            color: data.color,
-          ));
+      try {
+        snackBar.loading();
 
-      // TODO: Handle loading state.
-      // TODO: Handle error state.
+        final String id = await ref.read(tagProvider).create(CreateTagData(
+              title: data.title,
+              description: data.description,
+              color: data.color,
+            ));
 
-      if (asModal) {
-        return Navigator.of(context).pop(id);
+        snackBar.success(l10n.successfulMessage);
+        if (asModal) {
+          return Navigator.of(context).pop(id);
+        }
+
+        unawaited(
+          Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
+        );
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
       }
-
-      unawaited(
-        Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
-      );
     };
   }
 }

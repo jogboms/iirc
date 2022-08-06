@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:o_color_picker/o_color_picker.dart';
 
-import '../utils/extensions.dart';
+import '../utils.dart';
 import 'tag_color_box.dart';
 
 class ColorPickerField extends StatefulWidget {

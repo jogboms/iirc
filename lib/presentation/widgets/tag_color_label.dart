@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/tag_view_model.dart';
-import '../theme/app_border_radius.dart';
-import '../theme/app_style.dart';
-import '../theme/extensions.dart';
-import '../utils/extensions.dart';
+import '../models.dart';
+import '../theme.dart';
+import '../utils.dart';
 
 enum TagColorLabelVariant { normal, large }
 

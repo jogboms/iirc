@@ -13,7 +13,6 @@ final userProvider = FutureProvider.autoDispose<UserModel>((ref) async {
 
   final user = await registry.get<FetchUserUseCase>().call(account.id);
   if (user == null) {
-    // TODO: improve error message
     throw const AppException('Failed to retrieve user details');
   }
 

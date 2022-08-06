@@ -20,6 +20,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with SingleTickerProviderStateMixin {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   late final Environment environment = widget.registry.get();
   late final String bannerMessage = environment.name.toUpperCase();
 
@@ -31,6 +33,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
       message: bannerMessage,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         theme: themeBuilder(Theme.of(context)),
         onGenerateTitle: (BuildContext context) => context.l10n.appName,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
@@ -41,6 +44,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: L10n.delegate.supportedLocales,
+        builder: (_, Widget? child) => SnackBarProvider(navigatorKey: navigatorKey, child: child!),
         home: widget.home ?? const OnboardingPage(isColdStart: true),
       ),
     );

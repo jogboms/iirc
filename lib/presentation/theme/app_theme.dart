@@ -35,6 +35,7 @@ class AppTheme {
   final MaterialColor hintColor = _kHintColor;
   final Color errorColor = AppColors.danger;
 
+  final Color splashBackgroundColor = const Color(0xFF100F1E);
   final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
 
   final List<Color> calendarViewHeaderGradient = const <Color>[Colors.purpleAccent, Colors.blueAccent];

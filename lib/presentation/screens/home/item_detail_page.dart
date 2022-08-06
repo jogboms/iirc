@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/item_view_model.dart';
-import '../../theme/extensions.dart';
-import '../../utils/extensions.dart';
-import '../../utils/show_error_choice_banner.dart';
-import '../../widgets/custom_app_bar.dart';
-import '../../widgets/error_view.dart';
-import '../../widgets/loading_view.dart';
-import '../../widgets/tag_color_label.dart';
+import '../../models.dart';
+import '../../theme.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import 'providers/item_provider.dart';
 import 'providers/selected_item_provider.dart';
 import 'update_item_page.dart';
@@ -129,11 +126,20 @@ class _SelectedItemDataView extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
-    await ref.read(itemProvider).delete(item.path);
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
+    try {
+      snackBar.loading();
 
-    // TODO: Handle loading state.
-    // TODO: Handle error state.
+      await ref.read(itemProvider).delete(item.path);
 
-    return Navigator.pop(context);
+      snackBar.success(l10n.successfulMessage);
+      return Navigator.pop(context);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      snackBar.error(l10n.genericErrorMessage);
+    } finally {
+      snackBar.hide();
+    }
   }
 }

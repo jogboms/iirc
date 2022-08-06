@@ -25,7 +25,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
     await stores.instance.doc(stores.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
       'date': Timestamp.fromDate(item.date),
-      'tag': stores.instance.doc(item.tag!.path),
+      'tag': stores.instance.doc(item.tag.path),
       'createdAt': FieldValue.serverTimestamp(),
     });
     return id;

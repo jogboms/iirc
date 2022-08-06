@@ -16,10 +16,12 @@ extension ListExtensions<T> on Iterable<T> {
 
 extension RandomGeneratorExtensions on RandomGenerator {
   DateTime get dateTime {
-    final int year = clock.now().year;
+    final DateTime now = clock.now();
+    final int year = now.year;
+    final int month = now.month;
     return DateTime(
-      integer(year, min: year - 5),
-      integer(12, min: 1),
+      integer(year, min: year),
+      integer(min(month + 1, 12), min: max(month - 1, 0)),
       integer(29, min: 1),
       integer(23, min: 0),
       integer(59, min: 0),

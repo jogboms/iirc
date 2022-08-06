@@ -43,6 +43,7 @@ export 'presentation/widgets/app_list_tile.dart';
 export 'presentation/widgets/color_picker_field.dart';
 export 'presentation/widgets/custom_app_bar.dart';
 export 'presentation/widgets/error_view.dart';
+export 'presentation/widgets/loading_spinner.dart';
 export 'presentation/widgets/loading_view.dart';
 export 'presentation/widgets/tag_color_box.dart';
 export 'presentation/widgets/tag_color_label.dart';

@@ -37,6 +37,8 @@ export 'presentation/utils/extensions.dart';
 export 'presentation/utils/show_error_choice_banner.dart';
 export 'presentation/utils/sliver_separator_builder_delegate.dart';
 export 'presentation/utils/tag_color_scheme.dart';
+export 'presentation/widgets/app_crash_error_view.dart';
+export 'presentation/widgets/app_icon.dart';
 export 'presentation/widgets/app_list_tile.dart';
 export 'presentation/widgets/color_picker_field.dart';
 export 'presentation/widgets/custom_app_bar.dart';

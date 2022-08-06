@@ -12,6 +12,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.centerTitle,
   });
 
+  static const CustomAppBar empty = CustomAppBar(title: Text(''));
+
   final Widget title;
   final List<Widget> actions;
   final bool asSliver;

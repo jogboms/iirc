@@ -24,5 +24,10 @@
   "areYouSureAboutThisMessage": "Are you sure about this?",
   "continueWithGoogle": "Continue with Google",
   "logoutCaption": "Logout",
-  "searchByTagCaption": "Search by Tag"
+  "searchByTagCaption": "Search by Tag",
+  "crashViewTitleMessage": "Oh :(",
+  "crashViewQuoteMessage": "\"Houston, we have a problem\"",
+  "crashViewQuoteAuthor": "R & D",
+  "crashViewBugMessage1": "You just found a bug, no need to panic, we have logged the issue and would provide a resolution as soon as possible.",
+  "crashViewBugMessage2": "If there's more to it, you could also file a personal complaint with our customer service representative."
 }

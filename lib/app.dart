@@ -27,6 +27,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return _Banner(
       key: Key(bannerMessage),
+      visible: !environment.isProduction,
       message: bannerMessage,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -47,13 +48,18 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 }
 
 class _Banner extends StatelessWidget {
-  const _Banner({super.key, required this.message, required this.child});
+  const _Banner({super.key, required this.visible, required this.message, required this.child});
 
+  final bool visible;
   final String message;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    if (!visible) {
+      return child;
+    }
+
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.topCenter,

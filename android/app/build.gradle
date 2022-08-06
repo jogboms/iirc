@@ -36,7 +36,7 @@ if (keystorePropertiesFile.exists()) {
 ext.minimumSdkVersion = 21
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 31
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -100,6 +100,14 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+afterEvaluate {
+    android.productFlavors.each { flavor ->
+        tasks.matching {
+            (it.name.contains('GoogleServices') || it.name.contains('Crashlytics')) && it.name.contains("Mock")
+        }*.enabled = false
+    }
 }
 
 private static Integer generateVersionCode(String versionName, Integer minimumSdkVersion) {

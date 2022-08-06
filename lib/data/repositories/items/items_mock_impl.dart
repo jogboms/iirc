@@ -25,7 +25,7 @@ class ItemsMockImpl extends ItemsRepository {
   }
 
   static final Map<String, ItemModel> items =
-      faker.randomGenerator.amount((_) => generateItem(), 5, min: 5).foldToMap((ItemModel element) => element.id);
+      faker.randomGenerator.amount((_) => generateItem(), 250, min: 50).foldToMap((ItemModel element) => element.id);
 
   final BehaviorSubject<Map<String, ItemModel>> _items$ = BehaviorSubject<Map<String, ItemModel>>.seeded(items);
 

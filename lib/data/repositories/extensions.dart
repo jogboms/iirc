@@ -41,6 +41,7 @@ extension FetchEntriesExtensions on FireStoreDb {
 
   Stream<List<T>> fetchEntries<T>({
     required String userId,
+    String orderBy = 'createdAt',
     required Future<T> Function(MapDocumentSnapshot) mapper,
     required bool isDev,
   }) =>

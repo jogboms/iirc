@@ -6,6 +6,7 @@ import 'package:iirc/domain.dart';
 import '../../models/item_view_model.dart';
 import '../../utils/extensions.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/snackbar/app_snack_bar.dart';
 import 'item_entry_form.dart';
 import 'providers/item_provider.dart';
 
@@ -41,9 +42,12 @@ class UpdateItemPageState extends State<UpdateItemPage> {
   }
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, ItemEntryData data) async {
       try {
-        // TODO: Handle loading state.
+        snackBar.loading();
+
         await ref.read(itemProvider).update(UpdateItemData(
               id: widget.item.id,
               path: widget.item.path,
@@ -52,10 +56,13 @@ class UpdateItemPageState extends State<UpdateItemPage> {
               tag: data.tag.reference,
             ));
 
+        snackBar.success(l10n.successfulMessage);
         return Navigator.pop(context);
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
-        // TODO: Handle error state.
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
       }
     };
   }

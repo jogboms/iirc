@@ -7,6 +7,7 @@ import 'package:iirc/domain.dart';
 
 import '../../utils/extensions.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/snackbar/app_snack_bar.dart';
 import 'providers/tag_provider.dart';
 import 'tag_detail_page.dart';
 import 'tag_entry_form.dart';
@@ -35,15 +36,19 @@ class CreateTagPage extends StatelessWidget {
   }
 
   TagEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, TagEntryData data) async {
       try {
-        // TODO: Handle loading state.
+        snackBar.loading();
+
         final String id = await ref.read(tagProvider).create(CreateTagData(
               title: data.title,
               description: data.description,
               color: data.color,
             ));
 
+        snackBar.success(l10n.successfulMessage);
         if (asModal) {
           return Navigator.of(context).pop(id);
         }
@@ -53,7 +58,9 @@ class CreateTagPage extends StatelessWidget {
         );
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
-        // TODO: Handle error state.
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
       }
     };
   }

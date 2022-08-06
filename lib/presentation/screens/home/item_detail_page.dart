@@ -10,6 +10,7 @@ import '../../utils/show_error_choice_banner.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/loading_view.dart';
+import '../../widgets/snackbar/app_snack_bar.dart';
 import '../../widgets/tag_color_label.dart';
 import 'providers/item_provider.dart';
 import 'providers/selected_item_provider.dart';
@@ -130,14 +131,20 @@ class _SelectedItemDataView extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     try {
-      // TODO: Handle loading state.
+      snackBar.loading();
+
       await ref.read(itemProvider).delete(item.path);
 
+      snackBar.success(l10n.successfulMessage);
       return Navigator.pop(context);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
-      // TODO: Handle error state.
+      snackBar.error(l10n.genericErrorMessage);
+    } finally {
+      snackBar.hide();
     }
   }
 }

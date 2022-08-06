@@ -7,6 +7,7 @@ import 'package:iirc/domain.dart';
 
 import '../../utils/extensions.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/snackbar/app_snack_bar.dart';
 import '../tags/tag_detail_page.dart';
 import 'item_entry_form.dart';
 import 'providers/item_provider.dart';
@@ -45,15 +46,19 @@ class CreateItemPageState extends State<CreateItemPage> {
   }
 
   ItemEntryValueSaved _onSubmit(BuildContext context) {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     return (WidgetRef ref, ItemEntryData data) async {
       try {
-        // TODO: Handle loading state.
+        snackBar.loading();
+
         await ref.read(itemProvider).create(CreateItemData(
               description: data.description,
               date: data.date,
               tag: data.tag.reference,
             ));
 
+        snackBar.success(l10n.successfulMessage);
         if (widget.asModal) {
           return Navigator.pop(context);
         }
@@ -63,7 +68,9 @@ class CreateItemPageState extends State<CreateItemPage> {
         );
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
-        // TODO: Handle error state.
+        snackBar.error(l10n.genericErrorMessage);
+      } finally {
+        snackBar.hide();
       }
     };
   }

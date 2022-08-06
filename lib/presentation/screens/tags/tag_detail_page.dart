@@ -15,6 +15,7 @@ import '../../widgets/item_calendar_list_view.dart';
 import '../../widgets/item_calendar_view.dart';
 import '../../widgets/item_calendar_view_header.dart';
 import '../../widgets/loading_view.dart';
+import '../../widgets/snackbar/app_snack_bar.dart';
 import '../home/create_item_page.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
@@ -215,14 +216,20 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
   }
 
   void _onDelete(BuildContext context, WidgetRef ref) async {
+    final AppSnackBar snackBar = context.snackBar;
+    final L10n l10n = context.l10n;
     try {
-      // TODO: Handle loading state.
+      snackBar.loading();
+
       await ref.read(tagProvider).delete(widget.tag);
 
+      snackBar.success(l10n.successfulMessage);
       return Navigator.pop(context);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
-      // TODO: Handle error state.
+      snackBar.error(l10n.genericErrorMessage);
+    } finally {
+      snackBar.hide();
     }
   }
 }

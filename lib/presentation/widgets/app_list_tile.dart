@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_border_radius.dart';
-import '../theme/extensions.dart';
+import '../theme.dart';
 
 class AppListTile extends StatelessWidget {
   const AppListTile({

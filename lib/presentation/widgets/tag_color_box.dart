@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
-import '../utils/tag_color_scheme.dart';
+import '../theme.dart';
+import '../utils.dart';
 
 class TagColorBox extends StatelessWidget {
   const TagColorBox({super.key, required this.code}) : dimension = 32;

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_images.dart';
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
+import '../theme.dart';
 
 class AppIcon extends StatelessWidget {
   const AppIcon({super.key, this.heroTag, this.size = const Size.square(56), this.backgroundColor});

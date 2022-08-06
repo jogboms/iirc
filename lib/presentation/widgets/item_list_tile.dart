@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../models/item_view_model.dart';
-import '../theme/app_style.dart';
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
+import '../models.dart';
+import '../theme.dart';
 import 'app_list_tile.dart';
 import 'tag_color_label.dart';
 

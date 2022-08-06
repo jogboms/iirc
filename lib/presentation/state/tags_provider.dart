@@ -3,7 +3,7 @@
 import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../models/tag_view_model.dart';
+import '../models.dart';
 import 'registry_provider.dart';
 import 'user_provider.dart';
 

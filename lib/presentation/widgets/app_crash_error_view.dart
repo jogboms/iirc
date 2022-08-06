@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 
-import '../theme/app_style.dart';
-import '../theme/extensions.dart';
-import '../utils/extensions.dart';
+import '../theme.dart';
+import '../utils.dart';
 import 'app_icon.dart';
 import 'custom_app_bar.dart';
 

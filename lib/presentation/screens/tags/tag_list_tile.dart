@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../models/tag_view_model.dart';
-import '../../theme/app_style.dart';
-import '../../theme/extensions.dart';
-import '../../utils/extensions.dart';
-import '../../widgets/app_list_tile.dart';
+import '../../models.dart';
+import '../../theme.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import 'tag_detail_page.dart';
 
 class TagListTile extends StatelessWidget {

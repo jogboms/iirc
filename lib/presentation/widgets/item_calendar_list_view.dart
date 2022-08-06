@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../models/item_view_model.dart';
+import '../models.dart';
 import '../screens/home/item_detail_page.dart';
-import '../theme/app_style.dart';
-import '../theme/app_theme.dart';
-import '../theme/extensions.dart';
-import '../utils/extensions.dart';
-import '../utils/sliver_separator_builder_delegate.dart';
+import '../theme.dart';
+import '../utils.dart';
 import 'item_calendar_view.dart';
 import 'item_list_tile.dart';
 

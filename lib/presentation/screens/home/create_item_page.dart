@@ -5,9 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
-import '../../utils/extensions.dart';
-import '../../widgets/custom_app_bar.dart';
-import '../../widgets/snackbar/app_snack_bar.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
 import '../tags/tag_detail_page.dart';
 import 'item_entry_form.dart';
 import 'providers/item_provider.dart';

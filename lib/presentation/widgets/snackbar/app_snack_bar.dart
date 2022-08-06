@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 
-import '../../theme/app_border_radius.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_style.dart';
-import '../../theme/extensions.dart';
+import '../../theme.dart';
 import '../loading_spinner.dart';
 import 'snack_bar_provider.dart';
 

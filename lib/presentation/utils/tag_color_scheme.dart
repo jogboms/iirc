@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show ThemeData, Color, Brightness, Colors;
 
 class TagColorScheme {
   const TagColorScheme({

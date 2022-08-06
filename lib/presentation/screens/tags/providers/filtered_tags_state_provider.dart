@@ -2,10 +2,8 @@
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../../models/tag_view_model.dart';
-import '../../../state/preserve_state_notifier.dart';
-import '../../../state/search_tag_state_provider.dart';
-import '../../../state/tags_provider.dart';
+import '../../../models.dart';
+import '../../../state.dart';
 
 final _filteredTagsProvider = FutureProvider.autoDispose<TagViewModelList>(
   (ref) async => filterBySearchTagQuery(

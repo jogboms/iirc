@@ -4,11 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../../models/item_view_model.dart';
-import '../../../models/tag_view_model.dart';
-import '../../../state/items_provider.dart';
-import '../../../state/preserve_state_notifier.dart';
-import '../../../state/tags_provider.dart';
+import '../../../models.dart';
+import '../../../state.dart';
 
 final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState, String>((ref, id) async {
   final TagViewModelList tags = await ref.watch(tagsProvider.future);

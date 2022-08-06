@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 
-import '../../state/calendar_state_provider.dart';
+import '../../state.dart';
 import '../calendar/calendar_page.dart';
 import '../home/create_item_page.dart';
 import '../home/home_page.dart';

@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/item_view_model.dart';
-import '../../state/calendar_state_provider.dart';
-import '../../state/items_provider.dart';
-import '../../theme/extensions.dart';
-import '../../widgets/error_view.dart';
-import '../../widgets/item_calendar_list_view.dart';
-import '../../widgets/item_calendar_view.dart';
-import '../../widgets/item_calendar_view_header.dart';
-import '../../widgets/loading_view.dart';
+import '../../models.dart';
+import '../../state.dart';
+import '../../theme.dart';
+import '../../widgets.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});

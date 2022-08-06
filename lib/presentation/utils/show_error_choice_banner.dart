@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/extensions.dart';
+import '../theme.dart';
 import 'extensions.dart';
 
 Future<bool> showErrorChoiceBanner(

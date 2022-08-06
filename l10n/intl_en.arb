@@ -21,6 +21,7 @@
   "updateTagCaption": "Update Tag",
   "updateItemCaption": "Update Item",
   "informationCaption": "Information",
+  "loadingMessage": "Loading...",
   "areYouSureAboutThisMessage": "Are you sure about this?",
   "continueWithGoogle": "Continue with Google",
   "logoutCaption": "Logout",

@@ -45,5 +45,7 @@ export 'presentation/widgets/custom_app_bar.dart';
 export 'presentation/widgets/error_view.dart';
 export 'presentation/widgets/loading_spinner.dart';
 export 'presentation/widgets/loading_view.dart';
+export 'presentation/widgets/snackbar/app_snack_bar.dart';
+export 'presentation/widgets/snackbar/snack_bar_provider.dart';
 export 'presentation/widgets/tag_color_box.dart';
 export 'presentation/widgets/tag_color_label.dart';

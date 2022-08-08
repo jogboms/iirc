@@ -52,7 +52,7 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
     super.initState();
 
     itemCalendarViewController.addListener(() {
-      ref.read(calendarStateProvider.notifier).state = itemCalendarViewController.value;
+      ref.read(calendarStateProvider.notifier).state = itemCalendarViewController.selectedDate;
     });
   }
 
@@ -67,16 +67,10 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        ItemCalendarViewHeader(
-          controller: itemCalendarViewController,
+        ItemCalendarViewGroup(
           primary: true,
-        ),
-        ItemCalendarView(
           controller: itemCalendarViewController,
           items: widget.items,
-        ),
-        ItemCalendarListView(
-          controller: itemCalendarViewController,
         ),
       ],
     );

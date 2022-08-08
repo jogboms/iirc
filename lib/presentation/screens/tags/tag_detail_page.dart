@@ -117,7 +117,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
     super.initState();
 
     itemCalendarViewController.addListener(() {
-      widget.controller.date = itemCalendarViewController.value;
+      widget.controller.date = itemCalendarViewController.selectedDate;
     });
 
     widget.controller.tag = widget.tag;
@@ -192,15 +192,9 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           ],
           asSliver: true,
         ),
-        ItemCalendarViewHeader(
-          controller: itemCalendarViewController,
-        ),
-        ItemCalendarView(
+        ItemCalendarViewGroup(
           controller: itemCalendarViewController,
           items: widget.items,
-        ),
-        ItemCalendarListView(
-          controller: itemCalendarViewController,
         ),
       ],
     );

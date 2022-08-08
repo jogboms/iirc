@@ -44,11 +44,11 @@ class ItemCalendarViewHeader extends StatelessWidget {
                   : theme.appTheme.calendarViewHeaderGradient,
             ),
           ),
-          child: ValueListenableBuilder<DateTime>(
-            valueListenable: controller,
-            builder: (BuildContext context, DateTime value, _) => _CalendarHeader(
-              key: ObjectKey(value),
-              focusedDay: value,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (BuildContext context, _) => _CalendarHeader(
+              key: ObjectKey(controller.focusedDay),
+              focusedDay: controller.focusedDay,
               onPressedToday: controller.today,
               onPressedScrollToTop: isCalendarHiddenFromView
                   ? () => scrollPosition.animateTo(0, duration: kThemeAnimationDuration, curve: Curves.easeInOut)

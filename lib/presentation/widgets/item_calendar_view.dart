@@ -106,8 +106,12 @@ class ItemCalendarViewController with ChangeNotifier {
   List<ItemViewModel> getItemsForDay(DateTime day) => _items[day] ?? <ItemViewModel>[];
 
   @visibleForTesting
-  List<ItemViewModel> getItemsForMonth(DateTime month) =>
-      _itemsByMonth[month]?.expand(getItemsForDay).toList() ?? <ItemViewModel>[];
+  List<ItemViewModel> getItemsForMonth(DateTime month) {
+    final List<DateTime> dates = _itemsByMonth[month] ?? <DateTime>[];
+    return <ItemViewModel>{
+      for (final DateTime date in dates) ...getItemsForDay(date),
+    }.toList(growable: false);
+  }
 }
 
 class ItemCalendarView extends StatefulWidget {

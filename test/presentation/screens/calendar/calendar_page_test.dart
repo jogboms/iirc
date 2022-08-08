@@ -51,7 +51,6 @@ void main() {
       ));
 
       await tester.pump();
-      await tester.pump();
 
       for (final ItemViewModel item in expectedItems) {
         final Finder itemWidget = find.byKey(Key(item.id));

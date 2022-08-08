@@ -15,9 +15,9 @@ final DateTime _kEmptyDate = DateTime(0);
 class ItemCalendarViewController with ChangeNotifier {
   ItemCalendarViewController({
     @visibleForTesting this.height = 324,
-    @visibleForTesting DateTime? date,
+    DateTime? date,
   })  : _selectedDate = date ?? _kEmptyDate,
-        _focusedDay = _kToday;
+        _focusedDay = date ?? _kToday;
 
   final double height;
   final double weekDayHeight = kToolbarHeight * .75;

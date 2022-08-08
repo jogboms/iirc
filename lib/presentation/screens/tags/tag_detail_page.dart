@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
@@ -110,7 +111,9 @@ class _SelectedTagDataView extends StatefulWidget {
 }
 
 class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
-  final ItemCalendarViewController itemCalendarViewController = ItemCalendarViewController();
+  late final ItemCalendarViewController itemCalendarViewController = ItemCalendarViewController(
+    date: widget.items.firstOrNull?.date,
+  );
 
   @override
   void initState() {

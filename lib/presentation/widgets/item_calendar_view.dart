@@ -10,12 +10,13 @@ import '../models.dart';
 import '../theme.dart';
 
 DateTime get _kToday => clock.now();
+final DateTime _kEmptyDate = DateTime(0);
 
 class ItemCalendarViewController with ChangeNotifier {
   ItemCalendarViewController({
     @visibleForTesting this.height = 324,
     @visibleForTesting DateTime? date,
-  })  : _selectedDate = date ?? DateTime(0),
+  })  : _selectedDate = date ?? _kEmptyDate,
         _focusedDay = _kToday;
 
   final double height;
@@ -82,7 +83,7 @@ class ItemCalendarViewController with ChangeNotifier {
 
   void clearSelection() {
     onFocusDayChanged(DateTime(focusedDay.year, focusedDay.month));
-    forceUpdate(DateTime(0));
+    forceUpdate(_kEmptyDate);
   }
 
   @visibleForTesting
@@ -184,7 +185,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
             dowTextFormatter: (DateTime day, dynamic locale) => DateFormat.E(locale).format(day).toUpperCase(),
           ),
           shouldFillViewport: true,
-          firstDay: DateTime(0),
+          firstDay: _kEmptyDate,
           lastDay: DateTime(_kToday.year + 2),
           selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.selectedDate, day),
           onPageChanged: widget.controller.onFocusDayChanged,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../theme.dart';
 import 'item_calendar_view.dart';
@@ -64,36 +65,12 @@ class ItemCalendarViewHeader extends StatelessWidget {
           );
         }
 
-        return SliverPersistentHeader(
-          pinned: true,
-          delegate: _CustomSliverPersistentHeader(
-            height: height,
-            child: widget,
-          ),
+        return SliverPinnedHeader(
+          child: widget,
         );
       },
     );
   }
-}
-
-class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
-  _CustomSliverPersistentHeader({required this.height, required this.child});
-
-  final double height;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context, _, __) => child;
-
-  @override
-  double get maxExtent => minExtent;
-
-  @override
-  double get minExtent => height;
-
-  @override
-  bool shouldRebuild(covariant _CustomSliverPersistentHeader oldDelegate) =>
-      height != oldDelegate.height || child != oldDelegate.child;
 }
 
 class _CalendarHeader extends StatelessWidget {

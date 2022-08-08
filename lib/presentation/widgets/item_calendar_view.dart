@@ -10,36 +10,80 @@ import '../models.dart';
 import '../theme.dart';
 
 DateTime get _kToday => clock.now();
+final DateTime _kEmptyDate = DateTime(0);
 
-class ItemCalendarViewController extends ValueNotifier<DateTime> {
+class ItemCalendarViewController with ChangeNotifier {
   ItemCalendarViewController({
     @visibleForTesting this.height = 324,
-    @visibleForTesting DateTime? date,
-  }) : super(date ?? _kToday);
+    DateTime? date,
+  })  : _selectedDate = date ?? _kEmptyDate,
+        _focusedDay = date ?? _kToday;
 
   final double height;
   final double weekDayHeight = kToolbarHeight * .75;
 
-  List<ItemViewModel> get items => getItemsForDay(value);
-
-  final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
-    equals: isSameDay,
-    hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
-  );
-
-  void today() => forceUpdate(_kToday);
+  DateTime get selectedDate => _selectedDate;
+  DateTime _selectedDate;
 
   @visibleForTesting
-  void update(DateTime focusedDay) => value = focusedDay;
+  set selectedDate(DateTime date) {
+    if (_selectedDate == date) {
+      return;
+    }
+    _selectedDate = date;
+    notifyListeners();
+  }
+
+  DateTime get focusedDay => _focusedDay;
+  DateTime _focusedDay;
+
+  @visibleForTesting
+  set focusedDay(DateTime date) {
+    if (_focusedDay == date) {
+      return;
+    }
+    _focusedDay = date;
+    notifyListeners();
+  }
 
   @visibleForTesting
   bool get forcedUpdate => _forcedUpdate;
   bool _forcedUpdate = false;
 
   @visibleForTesting
-  void forceUpdate(DateTime focusedDay) {
+  void forceUpdate(DateTime date) {
     _forcedUpdate = true;
-    update(focusedDay);
+    selectedDate = date;
+  }
+
+  bool get hasSelectedDate => _isSameMonth(selectedDate, focusedDay);
+
+  List<ItemViewModel> get items => hasSelectedDate ? getItemsForDay(selectedDate) : getItemsForMonth(focusedDay);
+
+  final LinkedHashMap<DateTime, List<ItemViewModel>> _items = LinkedHashMap<DateTime, List<ItemViewModel>>(
+    equals: isSameDay,
+    hashCode: (DateTime key) => key.day * 1000000 + key.month * 10000 + key.year,
+  );
+
+  final LinkedHashMap<DateTime, List<DateTime>> _itemsByMonth = LinkedHashMap<DateTime, List<DateTime>>(
+    equals: _isSameMonth,
+    hashCode: (DateTime key) => 1000000 + key.month * 10000 + key.year,
+  );
+
+  @visibleForTesting
+  void onFocusDayChanged(DateTime date) => focusedDay = date;
+
+  @visibleForTesting
+  void onSelectedDayChanged(DateTime date) {
+    onFocusDayChanged(date);
+    forceUpdate(date);
+  }
+
+  void today() => onSelectedDayChanged(_kToday);
+
+  void clearSelection() {
+    onFocusDayChanged(DateTime(focusedDay.year, focusedDay.month));
+    forceUpdate(_kEmptyDate);
   }
 
   @visibleForTesting
@@ -50,13 +94,24 @@ class ItemCalendarViewController extends ValueNotifier<DateTime> {
   @visibleForTesting
   void populate(ItemViewModelList items) {
     _items.clear();
+    _itemsByMonth.clear();
     for (final ItemViewModel item in items) {
-      _items[item.date] = <ItemViewModel>[...?_items[item.date], item];
+      final DateTime date = item.date;
+      _items[date] = <ItemViewModel>[...?_items[date], item];
+      _itemsByMonth[date] = <DateTime>[...?_itemsByMonth[date], date];
     }
   }
 
   @visibleForTesting
   List<ItemViewModel> getItemsForDay(DateTime day) => _items[day] ?? <ItemViewModel>[];
+
+  @visibleForTesting
+  List<ItemViewModel> getItemsForMonth(DateTime month) {
+    final List<DateTime> dates = _itemsByMonth[month] ?? <DateTime>[];
+    return <ItemViewModel>{
+      for (final DateTime date in dates) ...getItemsForDay(date),
+    }.toList(growable: false);
+  }
 }
 
 class ItemCalendarView extends StatefulWidget {
@@ -78,8 +133,9 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
   void initState() {
     super.initState();
 
-    widget.controller.populate(widget.items);
-    widget.controller.addListener(_forceUpdate);
+    widget.controller
+      ..populate(widget.items)
+      ..addListener(_forceUpdate);
   }
 
   @override
@@ -101,12 +157,6 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
   void _forceUpdate() {
     if (widget.controller.forcedUpdate) {
       setState(() => widget.controller.reset());
-    }
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(widget.controller.value, selectedDay)) {
-      widget.controller.forceUpdate(focusedDay);
     }
   }
 
@@ -139,10 +189,10 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
             dowTextFormatter: (DateTime day, dynamic locale) => DateFormat.E(locale).format(day).toUpperCase(),
           ),
           shouldFillViewport: true,
-          firstDay: DateTime(0),
+          firstDay: _kEmptyDate,
           lastDay: DateTime(_kToday.year + 2),
-          selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.value, day),
-          onPageChanged: widget.controller.update,
+          selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.selectedDate, day),
+          onPageChanged: widget.controller.onFocusDayChanged,
           calendarBuilders: CalendarBuilders<ItemViewModel>(
             prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
               final bool isSelected = isSameDay(date, focusedDay);
@@ -180,12 +230,12 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
             singleMarkerBuilder: (BuildContext context, DateTime day, ItemViewModel item) => _ItemMarker(
               key: ObjectKey(item.tag),
               tag: item.tag,
-              isSelected: isSameDay(day, widget.controller.value),
+              isSelected: isSameDay(day, widget.controller.selectedDate),
             ),
           ),
-          focusedDay: widget.controller.value,
+          focusedDay: widget.controller.focusedDay,
           eventLoader: widget.controller.getItemsForDay,
-          onDaySelected: _onDaySelected,
+          onDaySelected: (DateTime selectedDay, _) => widget.controller.onSelectedDayChanged(selectedDay),
         ),
       ),
     );
@@ -246,3 +296,5 @@ class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant _CustomSliverPersistentHeader oldDelegate) =>
       height != oldDelegate.height || color != oldDelegate.color || child != oldDelegate.child;
 }
+
+bool _isSameMonth(DateTime? a, DateTime? b) => a?.year == b?.year && a?.month == b?.month;

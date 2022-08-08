@@ -50,7 +50,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
 
   @override
   Stream<ItemModelList> fetch(String userId) =>
-      stores.fetchEntries(userId: userId, mapper: _deriveItemFromDocument, isDev: isDev);
+      stores.fetchEntries(userId: userId, orderBy: 'date', mapper: _deriveItemFromDocument, isDev: isDev);
 }
 
 Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {

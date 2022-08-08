@@ -6,6 +6,7 @@ export 'widgets/custom_app_bar.dart';
 export 'widgets/error_view.dart';
 export 'widgets/item_calendar_list_view.dart';
 export 'widgets/item_calendar_view.dart';
+export 'widgets/item_calendar_view_group.dart';
 export 'widgets/item_calendar_view_header.dart';
 export 'widgets/item_list_tile.dart';
 export 'widgets/loading_spinner.dart';

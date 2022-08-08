@@ -57,7 +57,6 @@ void main() {
       ));
 
       await tester.pump();
-      await tester.pump();
 
       for (final ItemViewModel item in expectedItems) {
         expect(find.byKey(Key(item.id)).descendantOf(tagDetailPage), findsOneWidget);

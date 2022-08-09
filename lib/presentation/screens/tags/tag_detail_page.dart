@@ -64,7 +64,6 @@ class TagDetailPageState extends State<TagDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.menuPageBackgroundColor,
       body: WillPopScope(
         onWillPop: () async {
           ScaffoldMessenger.of(context).removeCurrentMaterialBanner(reason: MaterialBannerClosedReason.dismiss);

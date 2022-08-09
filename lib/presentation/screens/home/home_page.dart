@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models.dart';
-import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import '../tags/tag_detail_page.dart';
@@ -22,16 +21,13 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.menuPageBackgroundColor,
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
-              data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
-              error: ErrorView.new,
-              loading: () => child!,
-            ),
-        child: const LoadingView(),
-      ),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
+            data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const LoadingView(),
     );
   }
 }

@@ -17,13 +17,10 @@ class AppIcon extends StatelessWidget {
           constraints: BoxConstraints.tight(size),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: backgroundColor ?? _deriveBackgroundColor(context.theme),
+            color: backgroundColor ?? context.theme.colorScheme.inverseBackground,
             borderRadius: BorderRadius.circular(size.shortestSide / 4),
           ),
           child: const Image(image: AppImages.iconTransparent, fit: BoxFit.contain),
         ),
       );
-
-  Color _deriveBackgroundColor(ThemeData theme) =>
-      theme.brightness != Brightness.light ? theme.colorScheme.secondary : theme.appTheme.splashBackgroundColor;
 }

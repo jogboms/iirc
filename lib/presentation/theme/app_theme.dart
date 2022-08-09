@@ -6,9 +6,17 @@ import 'app_style.dart';
 
 const MaterialColor _kHintColor = Colors.grey;
 const Color _kLightHintColor = Color(0xFFF5F5F5);
+const Color _kDarkHintColor = Color(0xFF616161);
 const Color _kBorderSideColor = Color(0x66D1D1D1);
 const Color _kBorderSideErrorColor = AppColors.danger;
-const double _kButtonHeight = 48.0;
+const MaterialColor _kWhiteColor = MaterialColor(
+  0xFFFFFFFF,
+  <int, Color>{
+    100: Color(0xFFFFFFFF),
+    500: Color(0xFFe5e5e5),
+    900: Color(0xFFa0a0a0),
+  },
+);
 const double _kIconSize = 28.0;
 const String _kFontFamily = 'Metropolis';
 
@@ -20,115 +28,116 @@ class _AppTextTheme {
 
   final TextStyle textfield = const TextStyle(fontSize: 14.0);
   final TextStyle textfieldLabel = const TextStyle(fontSize: 14.0, color: _kHintColor);
-  final TextStyle textfieldHint = const TextStyle(fontSize: 14.0, color: Color(0x666F6F6F));
+  final TextStyle textfieldHint = const TextStyle(fontSize: 14.0, color: _kHintColor);
   final TextStyle error = const TextStyle(fontSize: 12.0, color: _kBorderSideErrorColor);
 }
 
 class AppTheme {
-  AppTheme._();
+  const AppTheme._();
 
   final _AppTextTheme text = const _AppTextTheme._();
 
-  final Color accentColor = Colors.white;
-  final MaterialColor primaryColor = AppColors.primaryMaterialColor;
-  final ColorSwatch<int> primarySwatch = AppColors.primarySwatch;
+  final MaterialColor primaryColor = Colors.indigo;
   final MaterialColor hintColor = _kHintColor;
   final Color errorColor = AppColors.danger;
 
   final Color splashBackgroundColor = const Color(0xFF100F1E);
   final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
-
-  final List<Color> calendarViewHeaderGradient = const <Color>[Colors.purpleAccent, Colors.blueAccent];
 }
 
 ThemeData themeBuilder(ThemeData defaultTheme) {
-  final Color accentColor = defaultTheme.appTheme.accentColor;
-  final MaterialColor primaryColor = defaultTheme.appTheme.primaryColor;
-  final ColorSwatch<int> primarySwatch = defaultTheme.appTheme.primarySwatch;
+  final Brightness brightness = defaultTheme.brightness;
+  final bool isDark = brightness == Brightness.dark;
+  final Color backgroundColor = isDark ? _appTheme.splashBackgroundColor : _kWhiteColor;
+  final MaterialColor primaryColor = _appTheme.primaryColor;
 
-  final OutlineInputBorder _textFieldBorder = OutlineInputBorder(
+  final OutlineInputBorder textFieldBorder = OutlineInputBorder(
     borderSide: BorderSide.none,
-    borderRadius: defaultTheme.appTheme.textFieldBorderRadius,
+    borderRadius: _appTheme.textFieldBorderRadius,
   );
-  final OutlineInputBorder _textFieldErrorBorder = _textFieldBorder.copyWith(
+  final OutlineInputBorder textFieldErrorBorder = textFieldBorder.copyWith(
     borderSide: const BorderSide(color: _kBorderSideErrorColor),
   );
-  final RoundedRectangleBorder _buttonShape = RoundedRectangleBorder(
-    borderRadius: _textFieldBorder.borderRadius,
-    side: const BorderSide(color: AppColors.primaryMaterialColor, width: 1.5),
+
+  final TextTheme textTheme = defaultTheme.textTheme.merge(
+    TextTheme(button: _appTheme.text.button),
   );
-  final TextTheme textTheme = defaultTheme.typography.black
-      .merge(TextTheme(
-        button: defaultTheme.appTheme.text.button,
-      ))
-      .apply(fontFamily: _kFontFamily);
+
+  final RoundedRectangleBorder buttonShape = RoundedRectangleBorder(
+    borderRadius: textFieldBorder.borderRadius,
+    side: BorderSide.none,
+  );
+  final ButtonStyle buttonStyle = ButtonStyle(
+    shape: MaterialStateProperty.all(buttonShape),
+    textStyle: MaterialStateProperty.all(textTheme.button),
+    elevation: MaterialStateProperty.all(0),
+  );
+
+  final ColorScheme colorScheme = ColorScheme.fromSeed(
+    brightness: brightness,
+    seedColor: primaryColor,
+    surface: backgroundColor,
+    primary: primaryColor,
+    background: backgroundColor,
+    error: _appTheme.errorColor,
+  );
 
   return ThemeData(
-    primaryColor: primarySwatch,
-    primaryColorDark: primarySwatch[700],
-    primaryColorLight: primarySwatch[100],
+    brightness: brightness,
+    primaryColor: primaryColor,
+    primaryColorDark: primaryColor.shade700,
+    primaryColorLight: primaryColor.shade100,
     iconTheme: defaultTheme.iconTheme.copyWith(size: _kIconSize),
     primaryIconTheme: defaultTheme.primaryIconTheme.copyWith(size: _kIconSize),
     textTheme: defaultTheme.textTheme.merge(textTheme),
     primaryTextTheme: defaultTheme.primaryTextTheme.merge(textTheme),
-    canvasColor: accentColor,
-    cardColor: accentColor,
+    canvasColor: colorScheme.surface,
+    cardColor: colorScheme.surface,
+    scaffoldBackgroundColor: colorScheme.mutedBackground,
     shadowColor: Colors.black12,
-    textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        textStyle: MaterialStateProperty.all<TextStyle?>(textTheme.button),
-        foregroundColor: MaterialStateProperty.all<Color>(primaryColor),
-      ),
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<OutlinedBorder>(_buttonShape),
-        textStyle: MaterialStateProperty.all<TextStyle?>(textTheme.button),
-        side: MaterialStateProperty.all<BorderSide?>(_buttonShape.side),
-        foregroundColor: MaterialStateProperty.all<Color>(primaryColor),
-      ),
-    ),
-    buttonTheme: defaultTheme.buttonTheme.copyWith(
-      height: _kButtonHeight,
-      highlightColor: primaryColor.withOpacity(.25),
-      splashColor: primaryColor.withOpacity(.25),
-      shape: _buttonShape,
-    ),
-    colorScheme: ColorScheme.fromSwatch(
-      backgroundColor: accentColor,
-      primarySwatch: primaryColor,
-      cardColor: accentColor,
-      accentColor: accentColor,
-      errorColor: defaultTheme.appTheme.errorColor,
-    ),
+    textButtonTheme: TextButtonThemeData(style: buttonStyle),
+    elevatedButtonTheme: ElevatedButtonThemeData(style: buttonStyle),
+    colorScheme: colorScheme,
     inputDecorationTheme: InputDecorationTheme(
       isDense: false,
-      border: _textFieldBorder,
-      focusedBorder: _textFieldBorder,
-      enabledBorder: _textFieldBorder,
-      errorBorder: _textFieldErrorBorder,
-      focusedErrorBorder: _textFieldErrorBorder,
-      hintStyle: defaultTheme.appTheme.text.textfieldHint,
-      labelStyle: defaultTheme.appTheme.text.textfieldLabel,
+      border: textFieldBorder,
+      focusedBorder: textFieldBorder,
+      enabledBorder: textFieldBorder,
+      errorBorder: textFieldErrorBorder,
+      focusedErrorBorder: textFieldErrorBorder,
+      hintStyle: _appTheme.text.textfieldHint,
+      labelStyle: _appTheme.text.textfieldLabel,
       contentPadding: const EdgeInsets.all(12),
-      fillColor: _kLightHintColor,
+      fillColor: isDark ? backgroundColor : _kLightHintColor,
       filled: true,
-      errorStyle: defaultTheme.appTheme.text.error,
+      errorStyle: _appTheme.text.error,
     ),
     textSelectionTheme: defaultTheme.textSelectionTheme.copyWith(
-      cursorColor: primarySwatch,
-      selectionColor: primarySwatch[100]!.withOpacity(.25),
-      selectionHandleColor: primarySwatch,
+      cursorColor: primaryColor,
+      selectionColor: primaryColor.shade100.withOpacity(.25),
+      selectionHandleColor: primaryColor,
     ),
     fontFamily: _kFontFamily,
-    hintColor: defaultTheme.appTheme.hintColor,
-    disabledColor: defaultTheme.appTheme.hintColor,
+    hintColor: _appTheme.hintColor,
+    disabledColor: _appTheme.hintColor,
     dividerColor: _kBorderSideColor,
   );
 }
 
-final AppTheme _appTheme = AppTheme._();
+const AppTheme _appTheme = AppTheme._();
 
 extension AppThemeThemeDataExtensions on ThemeData {
   AppTheme get appTheme => _appTheme;
+}
+
+extension BuildContextThemeExtensions on BuildContext {
+  ThemeData get theme => Theme.of(this);
+}
+
+extension ColorSchemeExtensions on ColorScheme {
+  Color get inverseBackground => onBackground;
+
+  Color get mutedBackground => Color.lerp(_kDarkHintColor, background, .85)!;
+
+  Color get onMutedBackground => Color.lerp(_kDarkHintColor, onBackground, .15)!;
 }

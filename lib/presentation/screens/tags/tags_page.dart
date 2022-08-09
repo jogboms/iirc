@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models.dart';
-import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'providers/filtered_tags_state_provider.dart';
@@ -22,16 +21,13 @@ class TagsPageState extends State<TagsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.menuPageBackgroundColor,
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
-              data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
-              error: ErrorView.new,
-              loading: () => child!,
-            ),
-        child: const LoadingView(),
-      ),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredTagsStateProvider).when(
+            data: (TagViewModelList data) => _TagsDataView(key: dataViewKey, tags: data),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const LoadingView(),
     );
   }
 }

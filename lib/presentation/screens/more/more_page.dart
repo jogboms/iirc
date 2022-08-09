@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'logout_list_tile.dart';
@@ -15,25 +14,22 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.menuPageBackgroundColor,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          CustomAppBar(
-            title: Text(context.l10n.moreCaption.capitalize()),
-            asSliver: true,
-            centerTitle: true,
+    return CustomScrollView(
+      slivers: <Widget>[
+        CustomAppBar(
+          title: Text(context.l10n.moreCaption.capitalize()),
+          asSliver: true,
+          centerTitle: true,
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(<Widget>[
+              const LogoutListTile(),
+            ]),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(<Widget>[
-                const LogoutListTile(),
-              ]),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

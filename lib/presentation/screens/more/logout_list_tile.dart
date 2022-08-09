@@ -34,7 +34,7 @@ class LogoutListTile extends ConsumerWidget {
         color: color,
       ),
       horizontalTitleGap: 0,
-      onTap: () => ref.read(authStateProvider.notifier).signOut(),
+      onTap: ref.read(authStateProvider.notifier).signOut,
     );
   }
 }

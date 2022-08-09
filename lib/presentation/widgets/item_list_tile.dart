@@ -50,12 +50,12 @@ class ItemListTile extends StatelessWidget {
             DefaultTextStyle(
               style: theme.textTheme.titleMedium!.copyWith(
                 fontWeight: AppFontWeight.semibold,
-                color: theme.appTheme.hintColor.shade700,
+                color: theme.colorScheme.onMutedBackground,
               ),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 decoration: BoxDecoration(
-                  color: theme.appTheme.hintColor.shade200,
+                  color: theme.colorScheme.mutedBackground,
                   borderRadius: AppListTile.borderRadius,
                 ),
                 child: Column(

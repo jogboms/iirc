@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models.dart';
 import '../../state.dart';
-import '../../theme.dart';
 import '../../widgets.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -18,19 +17,16 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.theme.menuPageBackgroundColor,
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
-              data: (ItemViewModelList items) => _ItemsDataView(
-                key: dataViewKey,
-                items: items,
-              ),
-              error: ErrorView.new,
-              loading: () => child!,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(itemsProvider).when(
+            data: (ItemViewModelList items) => _ItemsDataView(
+              key: dataViewKey,
+              items: items,
             ),
-        child: const LoadingView(),
-      ),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const LoadingView(),
     );
   }
 }

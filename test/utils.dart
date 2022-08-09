@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/app.dart';
@@ -105,6 +105,7 @@ Widget createApp({
   Widget? home,
   Registry? registry,
   List<Override>? overrides,
+  bool includeMaterial = true,
 }) {
   registry ??= createRegistry();
 
@@ -115,7 +116,7 @@ Widget createApp({
     ],
     child: App(
       registry: registry,
-      home: home,
+      home: includeMaterial ? Material(child: home) : home,
     ),
   );
 }

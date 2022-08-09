@@ -30,6 +30,7 @@ void main() {
     await tester.pumpWidget(
       createApp(
         registry: createRegistry().withMockedUseCases(),
+        includeMaterial: false,
       ),
     );
 

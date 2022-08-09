@@ -41,8 +41,8 @@ class ItemCalendarViewHeader extends StatelessWidget {
             ],
             gradient: LinearGradient(
               colors: isCalendarWeekHiddenFromView
-                  ? List<Color>.filled(2, theme.colorScheme.inverseSurface)
-                  : theme.appTheme.calendarViewHeaderGradient,
+                  ? List<Color>.filled(2, theme.colorScheme.calenderViewHeaderContainer)
+                  : theme.colorScheme.calendarViewHeaderGradient,
             ),
           ),
           child: AnimatedBuilder(
@@ -88,6 +88,7 @@ class _CalendarHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
+    final Color color = theme.colorScheme.calenderViewColor;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -96,19 +97,19 @@ class _CalendarHeader extends StatelessWidget {
           Expanded(
             child: Text(
               DateFormat.yMMMM().format(focusedDay).toUpperCase(),
-              style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground),
+              style: theme.textTheme.titleSmall?.copyWith(color: color),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.calendar_today_outlined, size: 20.0),
-            color: theme.colorScheme.onBackground,
+            color: color,
             visualDensity: VisualDensity.compact,
             onPressed: onPressedToday,
           ),
           if (onPressedScrollToTop != null)
             IconButton(
               icon: const Icon(Icons.vertical_align_top_outlined, size: 20.0),
-              color: theme.colorScheme.onBackground,
+              color: color,
               visualDensity: VisualDensity.compact,
               onPressed: onPressedScrollToTop,
             ),

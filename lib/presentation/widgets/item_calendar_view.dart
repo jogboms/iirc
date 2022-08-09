@@ -165,7 +165,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
     final ThemeData theme = context.theme;
 
     final TextStyle dayOfWeekTextStyle = theme.textTheme.labelSmall!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: theme.colorScheme.calenderViewColor,
       fontWeight: AppFontWeight.semibold,
     );
 
@@ -182,7 +182,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
           sixWeekMonthsEnforced: true,
           daysOfWeekStyle: DaysOfWeekStyle(
             decoration: BoxDecoration(
-              color: theme.colorScheme.inverseSurface,
+              color: theme.colorScheme.calenderViewHeaderContainer,
             ),
             weekdayStyle: dayOfWeekTextStyle,
             weekendStyle: dayOfWeekTextStyle,
@@ -218,9 +218,9 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
                       color: isDisabled
                           ? theme.appTheme.hintColor.shade400
                           : isToday
-                              ? theme.colorScheme.onPrimary
+                              ? theme.colorScheme.onInverseSurface
                               : isSelected
-                                  ? theme.colorScheme.onInverseSurface
+                                  ? theme.colorScheme.onPrimary
                                   : theme.colorScheme.inverseSurface,
                     ),
                   ),
@@ -252,7 +252,8 @@ class _ItemMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
 
-    return Container(
+    return AnimatedContainer(
+      duration: kThemeAnimationDuration,
       margin: const EdgeInsets.only(right: 2.0),
       constraints: BoxConstraints.tight(const Size.square(6)),
       decoration: BoxDecoration(
@@ -262,6 +263,16 @@ class _ItemMarker extends StatelessWidget {
       ),
     );
   }
+}
+
+extension CalendarViewColorSchemeExtensions on ColorScheme {
+  Color get calenderViewHeaderContainer => brightness == Brightness.dark ? secondaryContainer : inverseSurface;
+
+  List<Color> get calendarViewHeaderGradient => brightness == Brightness.dark
+      ? List<Color>.filled(2, mutedBackground)
+      : const <Color>[Colors.purpleAccent, Colors.blueAccent];
+
+  Color get calenderViewColor => Colors.white;
 }
 
 class _CustomSliverPersistentHeader extends SliverPersistentHeaderDelegate {

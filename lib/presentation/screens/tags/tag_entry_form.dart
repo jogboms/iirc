@@ -32,7 +32,7 @@ class TagEntryData with EquatableMixin {
   @override
   List<Object> get props => <Object>[title, description, color];
 
-  bool get isValid => title.isNotEmpty && description.isNotEmpty && color != 0;
+  bool get isValid => title.length > 3 && description.isNotEmpty && color != 0;
 
   @override
   bool? get stringify => true;
@@ -122,9 +122,9 @@ class TagEntryFormState extends State<TagEntryForm> {
           ValueListenableBuilder<TagEntryData>(
             valueListenable: dataNotifier,
             builder: (BuildContext context, TagEntryData value, Widget? child) => Consumer(
-              builder: (BuildContext context, WidgetRef ref, _) => OutlinedButton(
+              builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
                 onPressed: value.isValid ? () => widget.onSaved(ref, value) : null,
-                child: child!,
+                child: child,
               ),
             ),
             child: Text(context.l10n.submitCaption),

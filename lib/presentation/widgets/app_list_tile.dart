@@ -21,10 +21,7 @@ class AppListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = context.theme;
-
     return Material(
-      color: theme.colorScheme.surface,
       borderRadius: borderRadius,
       child: InkWell(
         onTap: () => onPressed?.call(),

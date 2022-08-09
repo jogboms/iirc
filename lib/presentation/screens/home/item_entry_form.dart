@@ -38,7 +38,7 @@ class ItemEntryData with EquatableMixin {
   @override
   List<Object> get props => <Object>[description, date, tag];
 
-  bool get isValid => description.isNotEmpty && !tag.isEmptyTag;
+  bool get isValid => description.length > 2 && !tag.isEmptyTag;
 
   @override
   bool? get stringify => true;
@@ -224,9 +224,9 @@ class ItemEntryFormState extends State<ItemEntryForm> {
           ValueListenableBuilder<ItemEntryData>(
             valueListenable: dataNotifier,
             builder: (BuildContext context, ItemEntryData value, Widget? child) => Consumer(
-              builder: (BuildContext context, WidgetRef ref, _) => OutlinedButton(
+              builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
                 onPressed: value.isValid ? () => widget.onSaved(ref, value) : null,
-                child: child!,
+                child: child,
               ),
             ),
             child: Text(context.l10n.submitCaption),

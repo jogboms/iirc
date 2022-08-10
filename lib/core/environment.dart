@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart' as io;
 
 enum Environment {
   mock,
@@ -9,7 +9,7 @@ enum Environment {
   static const String _envMode = String.fromEnvironment('env.mode', defaultValue: 'mock');
 
   static Environment _derive() {
-    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+    if (io.Platform.environment.containsKey('FLUTTER_TEST')) {
       return testing;
     }
 

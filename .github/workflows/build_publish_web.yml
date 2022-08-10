@@ -1,0 +1,55 @@
+name: Build and Publish Web
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  java_version: "12.x"
+  flutter_version: "3.0.2"
+  flutter_path: /opt/hostedtoolcache/flutter
+
+jobs:
+  build:
+    name: Build and Publish Web
+    env:
+      my_secret: ${{secrets.REPO_TOKEN}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.flutter_path }}
+          key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - run: flutter doctor
+      - run: flutter config --enable-web
+      - run: flutter pub get
+      - run: flutter packages pub run intl_utils:generate
+      - run: flutter build web --release --dart-define=env.mode=mock
+      - run: |
+          cd build/web
+          
+          git init
+          
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name jogboms
+          
+          git status
+          
+          git remote add origin https://${{secrets.REPO_TOKEN}}@github.com/jogboms/iirc.git
+          
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "Update"
+          git push origin gh-pages -f

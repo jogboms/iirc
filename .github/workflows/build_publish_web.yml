@@ -15,7 +15,7 @@ jobs:
   build:
     name: Build and Publish Web
     env:
-      my_secret: ${{secrets.REPO_TOKEN}}
+      REPO_TOKEN: ${{secrets.REPO_TOKEN}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -36,20 +36,20 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter packages pub run intl_utils:generate
-      - run: flutter build web --release --dart-define=env.mode=mock
+      - run: dart run ./.github/scripts/replace_client_id.dart ${{ secrets.PROD_CLIENT_ID }}
+      - run: flutter build web --release --dart-define=env.mode=prod
       - run: |
           cd build/web
-          
+
           git init
-          
+
           git config --global user.email "github-actions@github.com"
-          git config --global user.name jogboms
-          
+          git config --global user.name $GITHUB_ACTOR
+
           git status
-          
-          git remote add origin https://${{secrets.REPO_TOKEN}}@github.com/jogboms/iirc.git
-          
-          git checkout -b gh-pages
+
+          git remote add origin https://${{secrets.REPO_TOKEN}}@github.com/jogboms/iirc-deploy.git
+
           git add --all
           git commit -m "Update"
-          git push origin gh-pages -f
+          git push origin master -f

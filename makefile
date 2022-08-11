@@ -50,3 +50,7 @@ prod_android:
 
 prod_android_bundle:
 	fvm flutter build appbundle --flavor prod --dart-define=env.mode=prod
+
+# Web
+mock_web:
+	fvm flutter build web --release --dart-define=env.mode=mock

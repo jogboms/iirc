@@ -3,6 +3,7 @@ export 'widgets/app_icon.dart';
 export 'widgets/app_list_tile.dart';
 export 'widgets/color_picker_field.dart';
 export 'widgets/custom_app_bar.dart';
+export 'widgets/date_picker_field.dart';
 export 'widgets/error_view.dart';
 export 'widgets/item_calendar_list_view.dart';
 export 'widgets/item_calendar_view.dart';

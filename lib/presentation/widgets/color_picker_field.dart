@@ -2,64 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:o_color_picker/o_color_picker.dart';
 
 import '../utils.dart';
+import 'common_form_field_state.dart';
 import 'tag_color_box.dart';
 
-class ColorPickerField extends StatefulWidget {
-  const ColorPickerField({
+class ColorPickerField extends FormField<Color> {
+  ColorPickerField({
     super.key,
-    required this.initialValue,
-    required this.onChanged,
-  });
+    super.initialValue,
+    required ValueChanged<Color> onChanged,
+  }) : super(
+          builder: (FormFieldState<Color> fieldState) {
+            final ColorPickerState state = fieldState as ColorPickerState;
+            final Color? color = state.value;
 
-  final Color initialValue;
-  final ValueChanged<Color> onChanged;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    if (color != null) ...<Widget>[
+                      TagColorBox(code: color.value),
+                      const SizedBox(width: 4),
+                    ],
+                    TextButton(
+                      onPressed: state.toggle,
+                      child: Text(fieldState.context.l10n.selectTagColorCaption),
+                    ),
+                  ],
+                ),
+                if (state.isSelecting) ...<Widget>[
+                  const SizedBox(height: 4),
+                  OColorPicker(
+                    selectedColor: color,
+                    colors: primaryColorsPalette,
+                    onColorChange: (Color color) {
+                      fieldState.didChange(color);
+                      onChanged(color);
+                      state.toggle();
+                    },
+                  ),
+                ]
+              ],
+            );
+          },
+        );
 
   @override
-  State<ColorPickerField> createState() => ColorPickerState();
+  FormFieldState<Color> createState() => ColorPickerState();
 }
 
 @visibleForTesting
-class ColorPickerState extends State<ColorPickerField> {
+class ColorPickerState extends CommonFormFieldState<Color> {
   bool isSelecting = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return FormField<Color>(
-      initialValue: widget.initialValue,
-      builder: (FormFieldState<Color> fieldState) {
-        final Color? color = fieldState.value;
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                if (color != null) ...<Widget>[
-                  TagColorBox(code: color.value),
-                  const SizedBox(width: 4),
-                ],
-                TextButton(
-                  onPressed: () => setState(() => isSelecting = true),
-                  child: Text(context.l10n.selectTagColorCaption),
-                ),
-              ],
-            ),
-            if (isSelecting) ...<Widget>[
-              const SizedBox(height: 4),
-              OColorPicker(
-                selectedColor: fieldState.value,
-                colors: primaryColorsPalette,
-                onColorChange: (Color color) {
-                  fieldState.didChange(color);
-                  widget.onChanged(color);
-                  setState(() => isSelecting = false);
-                },
-              ),
-            ]
-          ],
-        );
-      },
-    );
-  }
+  void toggle() => setState(() => isSelecting = !isSelecting);
 }

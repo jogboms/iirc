@@ -3,10 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
-import 'package:intl/intl.dart';
 
 import '../../state.dart';
-import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import '../tags/create_tag_page.dart';
@@ -114,8 +112,6 @@ class ItemEntryFormState extends State<ItemEntryForm> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = context.theme;
-
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -123,38 +119,9 @@ class ItemEntryFormState extends State<ItemEntryForm> {
         children: <Widget>[
           const SizedBox(height: 12),
           if (!hasInitialDate || widget.type == ItemEntryType.update) ...<Widget>[
-            FormField<DateTime>(
+            DatePickerField(
               initialValue: dataNotifier.value.date,
-              builder: (FormFieldState<DateTime> fieldState) {
-                final DateTime date = fieldState.value!;
-
-                return Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        DateFormat.yMMMEd().format(date),
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    TextButton(
-                      onPressed: () async {
-                        final DateTime? value = await showDatePicker(
-                          context: context,
-                          initialDate: date,
-                          firstDate: DateTime(0),
-                          lastDate: DateTime(clock.now().year + 1),
-                        );
-                        if (value != null) {
-                          dataNotifier.update(date: DateUtils.dateOnly(value));
-                          fieldState.didChange(value);
-                        }
-                      },
-                      child: Text(context.l10n.selectItemDateCaption),
-                    ),
-                  ],
-                );
-              },
+              onChanged: (DateTime value) => dataNotifier.update(date: value),
             ),
             const SizedBox(height: 12),
           ],

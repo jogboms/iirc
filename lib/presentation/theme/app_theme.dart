@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_border_radius.dart';
 import 'app_colors.dart';
+import 'app_font.dart' if (dart.library.html) 'app_font_web.dart';
 import 'app_style.dart';
 
 const MaterialColor _kHintColor = Colors.grey;
@@ -18,7 +19,6 @@ const MaterialColor _kWhiteColor = MaterialColor(
   },
 );
 const double _kIconSize = 28.0;
-const String _kFontFamily = 'Metropolis';
 
 class _AppTextTheme {
   const _AppTextTheme._();
@@ -59,9 +59,11 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
     borderSide: const BorderSide(color: _kBorderSideErrorColor),
   );
 
-  final TextTheme textTheme = defaultTheme.textTheme.merge(
-    TextTheme(button: _appTheme.text.button),
-  );
+  final TextTheme textTheme = defaultTheme.textTheme
+      .merge(
+        TextTheme(button: _appTheme.text.button),
+      )
+      .apply(fontFamily: kAppFontFamily);
 
   final RoundedRectangleBorder buttonShape = RoundedRectangleBorder(
     borderRadius: textFieldBorder.borderRadius,
@@ -78,6 +80,7 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
     seedColor: primaryColor,
     surface: backgroundColor,
     primary: primaryColor,
+    onPrimary: _kWhiteColor,
     background: backgroundColor,
     error: _appTheme.errorColor,
   );
@@ -112,12 +115,13 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
       filled: true,
       errorStyle: _appTheme.text.error,
     ),
+    dialogBackgroundColor: colorScheme.surface,
     textSelectionTheme: defaultTheme.textSelectionTheme.copyWith(
       cursorColor: primaryColor,
       selectionColor: primaryColor.shade100.withOpacity(.25),
       selectionHandleColor: primaryColor,
     ),
-    fontFamily: _kFontFamily,
+    fontFamily: kAppFontFamily,
     hintColor: _appTheme.hintColor,
     disabledColor: _appTheme.hintColor,
     dividerColor: _kBorderSideColor,

@@ -9,7 +9,6 @@ final menuPageItemProvider = Provider.autoDispose<TabController>((_) => throw Un
 
 enum MenuPageItem {
   tags,
-  items,
   calendar,
   insights,
   more;

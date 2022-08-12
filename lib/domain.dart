@@ -1,3 +1,5 @@
+export 'domain/analytics/analytics.dart';
+export 'domain/analytics/analytics_event.dart';
 export 'domain/entities/auth_exception.dart';
 export 'domain/entities/create_item_data.dart';
 export 'domain/entities/create_tag_data.dart';

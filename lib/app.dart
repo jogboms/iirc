@@ -10,10 +10,12 @@ class App extends StatefulWidget {
     super.key,
     required this.registry,
     this.home,
+    this.navigatorObservers,
   });
 
   final Registry registry;
   final Widget? home;
+  final List<NavigatorObserver>? navigatorObservers;
 
   @override
   State<App> createState() => _AppState();
@@ -47,6 +49,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
         supportedLocales: L10n.delegate.supportedLocales,
         builder: (_, Widget? child) => SnackBarProvider(navigatorKey: navigatorKey, child: child!),
         home: widget.home ?? const OnboardingPage(isColdStart: true),
+        navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
       ),
     );
   }

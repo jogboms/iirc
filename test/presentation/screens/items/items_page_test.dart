@@ -8,28 +8,28 @@ import 'package:riverpod/riverpod.dart';
 import '../../../utils.dart';
 
 void main() {
-  group('HomePage', () {
-    final Finder homePage = find.byType(HomePage);
+  group('ItemsPage', () {
+    final Finder itemsPage = find.byType(ItemsPage);
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const ItemsPage()));
 
       await tester.pump();
 
-      expect(homePage, findsOneWidget);
+      expect(itemsPage, findsOneWidget);
     });
 
     testWidgets('should show loading view on load', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(home: const HomePage()));
+      await tester.pumpWidget(createApp(home: const ItemsPage()));
 
       await tester.pump();
 
-      expect(find.byType(LoadingView).descendantOf(homePage), findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(itemsPage), findsOneWidget);
     });
 
     testWidgets('should show empty view', (WidgetTester tester) async {
       await tester.pumpWidget(createApp(
-        home: const HomePage(),
+        home: const ItemsPage(),
         overrides: <Override>[
           itemsProvider.overrideWithValue(
             AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
@@ -40,7 +40,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byKey(HomePageState.emptyDataViewKey).descendantOf(homePage), findsOneWidget);
+      expect(find.byKey(ItemsPageState.emptyDataViewKey).descendantOf(itemsPage), findsOneWidget);
     });
 
     testWidgets('should show unique list of items', (WidgetTester tester) async {
@@ -52,7 +52,7 @@ void main() {
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
       await tester.pumpWidget(createApp(
-        home: const HomePage(),
+        home: const ItemsPage(),
         overrides: <Override>[
           itemsProvider.overrideWithValue(
             AsyncData<ItemViewModelList>(expectedItems),
@@ -65,14 +65,14 @@ void main() {
 
       // Find all tags
       for (final TagViewModel tag in expectedItems.map((ItemViewModel e) => e.tag)) {
-        expect(find.byKey(Key(tag.id)).descendantOf(homePage), findsOneWidget);
+        expect(find.byKey(Key(tag.id)).descendantOf(itemsPage), findsOneWidget);
         expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
       }
 
       // Find all items
       for (final TagModel tag in uniqueTags) {
         final ItemViewModel item = expectedItems.firstWhere((ItemViewModel element) => element.tag.id == tag.id);
-        expect(find.byKey(Key(item.id)).descendantOf(homePage), findsOneWidget);
+        expect(find.byKey(Key(item.id)).descendantOf(itemsPage), findsOneWidget);
         expect(find.text(item.description), findsOneWidget);
         expect(find.text(item.tag.title.capitalize()), findsOneWidget);
       }
@@ -82,7 +82,7 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       await tester.pumpWidget(createApp(
-        home: const HomePage(),
+        home: const ItemsPage(),
         overrides: <Override>[
           itemsProvider.overrideWithValue(
             AsyncError<ItemViewModelList>(expectedError),
@@ -93,7 +93,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byType(ErrorView).descendantOf(homePage), findsOneWidget);
+      expect(find.byType(ErrorView).descendantOf(itemsPage), findsOneWidget);
       expect(find.text(expectedError.toString()).descendantOf(find.byType(ErrorView)), findsOneWidget);
     });
   });

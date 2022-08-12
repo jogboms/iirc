@@ -8,7 +8,7 @@ import '../../models.dart';
 import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
-import '../home/create_item_page.dart';
+import '../items/create_item_page.dart';
 import 'providers/selected_tag_provider.dart';
 import 'providers/tag_provider.dart';
 import 'update_tag_page.dart';

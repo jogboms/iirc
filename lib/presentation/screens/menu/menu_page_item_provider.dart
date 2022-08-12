@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 final menuPageItemProvider = Provider.autoDispose<TabController>((_) => throw UnimplementedError());
 
 enum MenuPageItem {
-  tags,
+  items,
   calendar,
   insights,
   more;

@@ -8,15 +8,15 @@ import '../tags/tag_detail_page.dart';
 import 'items_tags_list_view.dart';
 import 'providers/filtered_items_state_provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ItemsPage extends StatefulWidget {
+  const ItemsPage({super.key});
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<ItemsPage> createState() => ItemsPageState();
 }
 
 @visibleForTesting
-class HomePageState extends State<HomePage> {
+class ItemsPageState extends State<ItemsPage> {
   static const Key dataViewKey = Key('dataViewKey');
   static const Key emptyDataViewKey = Key('emptyDataViewKey');
 
@@ -49,7 +49,7 @@ class _ItemsDataView extends StatelessWidget {
         ),
         if (items.isEmpty)
           SliverFillRemaining(
-            key: HomePageState.emptyDataViewKey,
+            key: ItemsPageState.emptyDataViewKey,
             child: Center(
               child: Text(context.l10n.noItemsCreatedMessage),
             ),

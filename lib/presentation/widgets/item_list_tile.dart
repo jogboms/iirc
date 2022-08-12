@@ -33,8 +33,6 @@ class ItemListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TagColorLabel(tag: item.tag),
-                const SizedBox(height: 6),
                 Text(
                   item.description,
                   style: theme.textTheme.labelLarge?.copyWith(
@@ -42,6 +40,8 @@ class ItemListTile extends StatelessWidget {
                   ),
                   maxLines: 2,
                 ),
+                const SizedBox(height: 6),
+                TagColorLabel(tag: item.tag),
               ],
             ),
           ),

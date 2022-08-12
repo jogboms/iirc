@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../models.dart';
-import '../screens/home/item_detail_page.dart';
+import '../screens/items/item_detail_page.dart';
 import '../theme.dart';
 import '../utils.dart';
 import 'item_calendar_view.dart';

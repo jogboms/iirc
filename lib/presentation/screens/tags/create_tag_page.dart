@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
+import '../../constants/app_routes.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'providers/tag_provider.dart';
@@ -15,7 +16,10 @@ class CreateTagPage extends StatelessWidget {
   const CreateTagPage({super.key, required this.asModal});
 
   static PageRoute<String> route({bool asModal = false}) {
-    return MaterialPageRoute<String>(builder: (_) => CreateTagPage(asModal: asModal));
+    return MaterialPageRoute<String>(
+      builder: (_) => CreateTagPage(asModal: asModal),
+      settings: const RouteSettings(name: AppRoutes.createTag),
+    );
   }
 
   final bool asModal;

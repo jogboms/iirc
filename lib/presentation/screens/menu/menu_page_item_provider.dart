@@ -14,16 +14,11 @@ enum MenuPageItem {
   more;
 
   static const MenuPageItem defaultPage = calendar;
+
+  @override
+  String toString() => name;
 }
 
 extension MenuPageTabControllerExtension on TabController {
-  void navigateToItem(MenuPageItem item) {
-    final int itemIndex = item.index;
-    final int previousIndex = index;
-    if ((previousIndex - itemIndex).abs() > 1) {
-      index = itemIndex + (itemIndex > previousIndex ? -1 : 1);
-    }
-
-    animateTo(itemIndex);
-  }
+  void navigateToItem(MenuPageItem item) => index = item.index;
 }

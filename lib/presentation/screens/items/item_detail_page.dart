@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:intl/intl.dart';
 
+import '../../constants/app_routes.dart';
 import '../../models.dart';
 import '../../theme.dart';
 import '../../utils.dart';
@@ -17,7 +18,10 @@ class ItemDetailPage extends StatefulWidget {
   final String id;
 
   static PageRoute<void> route({required String id}) {
-    return MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id));
+    return MaterialPageRoute<void>(
+      builder: (_) => ItemDetailPage(id: id),
+      settings: const RouteSettings(name: AppRoutes.itemDetail),
+    );
   }
 
   @override

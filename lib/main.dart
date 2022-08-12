@@ -157,6 +157,15 @@ class _Analytics implements Analytics {
   }
 
   @override
+  Future<void> setCurrentScreen(String name) async {
+    if (kDebugMode) {
+      AppLog.i('screen_view: $name');
+      return;
+    }
+    return analytics.setCurrentScreen(name);
+  }
+
+  @override
   Future<void> setUserId(String id) async => analytics.setUserId(id);
 
   @override

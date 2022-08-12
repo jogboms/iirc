@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
+import '../../constants/app_routes.dart';
 import '../../models.dart';
 import '../../theme.dart';
 import '../../utils.dart';
@@ -42,7 +43,10 @@ class TagDetailPage extends StatefulWidget {
   final String id;
 
   static PageRoute<void> route({required String id}) {
-    return MaterialPageRoute<void>(builder: (_) => TagDetailPage(id: id));
+    return MaterialPageRoute<void>(
+      builder: (_) => TagDetailPage(id: id),
+      settings: const RouteSettings(name: AppRoutes.tagDetail),
+    );
   }
 
   @override

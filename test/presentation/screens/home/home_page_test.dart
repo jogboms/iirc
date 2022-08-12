@@ -63,6 +63,13 @@ void main() {
       await tester.pump();
       await tester.pump();
 
+      // Find all tags
+      for (final TagViewModel tag in expectedItems.map((ItemViewModel e) => e.tag)) {
+        expect(find.byKey(Key(tag.id)).descendantOf(homePage), findsOneWidget);
+        expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
+      }
+
+      // Find all items
       for (final TagModel tag in uniqueTags) {
         final ItemViewModel item = expectedItems.firstWhere((ItemViewModel element) => element.tag.id == tag.id);
         expect(find.byKey(Key(item.id)).descendantOf(homePage), findsOneWidget);

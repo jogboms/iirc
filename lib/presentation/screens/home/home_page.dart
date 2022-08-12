@@ -5,6 +5,7 @@ import '../../models.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import '../tags/tag_detail_page.dart';
+import 'items_tags_list_view.dart';
 import 'providers/filtered_items_state_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -53,9 +54,12 @@ class _ItemsDataView extends StatelessWidget {
               child: Text(context.l10n.noItemsCreatedMessage),
             ),
           )
-        else
+        else ...<Widget>[
+          SliverToBoxAdapter(
+            child: ItemsTagsListView(tags: items.map((ItemViewModel e) => e.tag)),
+          ),
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
             sliver: SliverList(
               delegate: SliverSeparatorBuilderDelegate(
                 builder: (BuildContext context, int index) {
@@ -72,6 +76,7 @@ class _ItemsDataView extends StatelessWidget {
               ),
             ),
           )
+        ]
       ],
     );
   }

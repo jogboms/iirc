@@ -29,7 +29,7 @@ class UsersFirebaseImpl implements UsersRepository {
   @override
   Future<bool> update(UpdateUserData user) async {
     await db.fetchOne(user.id).update(<String, Object>{
-      'lastSeenAt': Timestamp.fromDate(user.lastSeenAt),
+      'lastSeenAt': Timestamp.fromDate(user.lastSeenAt.toUtc()),
     });
     return true;
   }

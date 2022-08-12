@@ -4,12 +4,10 @@ import 'package:iirc/core.dart';
 
 import '../../state.dart';
 import '../calendar/calendar_page.dart';
-import '../home/create_item_page.dart';
-import '../home/home_page.dart';
 import '../insights/insights_page.dart';
+import '../items/create_item_page.dart';
+import '../items/items_page.dart';
 import '../more/more_page.dart';
-import '../tags/create_tag_page.dart';
-import '../tags/tags_page.dart';
 import 'menu_page_item_provider.dart';
 
 class MenuPage extends StatefulWidget {
@@ -56,15 +54,10 @@ class _MenuPageDataView extends StatefulWidget {
 
 class _MenuPageDataViewState extends State<_MenuPageDataView> {
   Map<MenuPageItem, _TabRouteView> get _tabRouteViews => <MenuPageItem, _TabRouteView>{
-        MenuPageItem.tags: _TabRouteView(
-          L10n.current.tagsCaption,
-          const Icon(Icons.tag),
-          const TagsPage(key: PageStorageKey<String>('tags')),
-        ),
         MenuPageItem.items: _TabRouteView(
           L10n.current.itemsCaption,
-          const Icon(Icons.all_inclusive),
-          const HomePage(key: PageStorageKey<String>('items')),
+          const Icon(Icons.list_outlined),
+          const ItemsPage(key: PageStorageKey<String>('items')),
         ),
         MenuPageItem.calendar: _TabRouteView(
           L10n.current.calendarCaption,
@@ -140,7 +133,7 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
                 onPressed: () => Navigator.of(context).push<void>(
                   routeBuilder!(ref.read(calendarStateProvider)),
                 ),
-                child: _tabRouteViews[menuItem]!.icon,
+                child: const Icon(Icons.add_outlined),
               ),
             ),
           );
@@ -161,8 +154,6 @@ class _TabRouteView {
 extension on MenuPageItem {
   Route<void> Function(Object? param)? get floatingActionButtonRouteBuilder {
     switch (this) {
-      case MenuPageItem.items:
-        return (_) => CreateItemPage.route();
       case MenuPageItem.calendar:
         return (Object? date) {
           if (date is! DateTime) {
@@ -170,8 +161,8 @@ extension on MenuPageItem {
           }
           return CreateItemPage.route(asModal: true, date: date);
         };
-      case MenuPageItem.tags:
-        return (_) => CreateTagPage.route();
+      case MenuPageItem.items:
+        return (_) => CreateItemPage.route();
       case MenuPageItem.insights:
       case MenuPageItem.more:
       default:

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue, Timestamp;
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
@@ -24,7 +25,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
     final String id = const Uuid().v4();
     await stores.instance.doc(stores.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date),
+      'date': Timestamp.fromDate(item.date.toUtc()),
       'tag': stores.instance.doc(item.tag.path),
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -41,7 +42,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
   Future<bool> update(UpdateItemData item) async {
     await stores.instance.doc(item.path).update(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date),
+      'date': Timestamp.fromDate(item.date.toUtc()),
       'tag': stores.instance.doc(item.tag.path),
       'updatedAt': FieldValue.serverTimestamp(),
     });
@@ -63,7 +64,7 @@ Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
     description: data['description'] as String,
     date: deriveDateFromTimestamp(data['date'] as Timestamp),
     tag: TagModelReference(id: tag.id, path: tag.path),
-    createdAt: deriveDateFromTimestamp(data['createdAt'] as Timestamp),
+    createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as Timestamp) : clock.now(),
     updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as Timestamp) : null,
   );
 }

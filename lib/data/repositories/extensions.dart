@@ -47,7 +47,7 @@ extension FetchEntriesExtensions on FireStoreDb {
   }) =>
       instance
           .collection(deriveEntriesPath(userId))
-          .orderBy('createdAt', descending: true)
+          .orderBy(orderBy, descending: true)
           .snapshots()
           .asyncMap(
             (MapQuerySnapshot item) async => <T>[

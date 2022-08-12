@@ -25,7 +25,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
     final String id = const Uuid().v4();
     await stores.instance.doc(stores.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date),
+      'date': Timestamp.fromDate(item.date.toUtc()),
       'tag': stores.instance.doc(item.tag.path),
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -42,7 +42,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
   Future<bool> update(UpdateItemData item) async {
     await stores.instance.doc(item.path).update(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date),
+      'date': Timestamp.fromDate(item.date.toUtc()),
       'tag': stores.instance.doc(item.tag.path),
       'updatedAt': FieldValue.serverTimestamp(),
     });

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue, Timestamp;
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
@@ -63,7 +64,7 @@ Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
     description: data['description'] as String,
     date: deriveDateFromTimestamp(data['date'] as Timestamp),
     tag: TagModelReference(id: tag.id, path: tag.path),
-    createdAt: deriveDateFromTimestamp(data['createdAt'] as Timestamp),
+    createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as Timestamp) : clock.now(),
     updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as Timestamp) : null,
   );
 }

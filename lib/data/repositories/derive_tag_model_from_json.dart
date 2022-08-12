@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 
 import '../../domain/models/tag.dart';
@@ -10,6 +11,6 @@ Future<TagModel> deriveTagModelFromJson(String id, String path, DynamicMap data)
       title: data['title'] as String,
       description: data['description'] as String,
       color: data['color'] as int,
-      createdAt: deriveDateFromTimestamp(data['createdAt'] as Timestamp),
+      createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as Timestamp) : clock.now(),
       updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as Timestamp) : null,
     );

@@ -27,13 +27,13 @@ class AuthFirebaseImpl extends AuthRepository {
     } on AppFirebaseAuthException catch (e, stackTrace) {
       switch (e.type) {
         case AppFirebaseAuthExceptionType.invalidEmail:
-          Error.throwWithStackTrace(const AuthException.invalidEmail(), stackTrace);
+          Error.throwWithStackTrace(AuthException.invalidEmail(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.userNotFound:
-          Error.throwWithStackTrace(const AuthException.userNotFound(), stackTrace);
+          Error.throwWithStackTrace(AuthException.userNotFound(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.tooManyRequests:
-          Error.throwWithStackTrace(const AuthException.tooManyRequests(), stackTrace);
+          Error.throwWithStackTrace(AuthException.tooManyRequests(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.userDisabled:
-          Error.throwWithStackTrace(const AuthException.userDisabled(), stackTrace);
+          Error.throwWithStackTrace(AuthException.userDisabled(email: e.email), stackTrace);
         default:
           Error.throwWithStackTrace(AuthException.unknown(e), stackTrace);
       }

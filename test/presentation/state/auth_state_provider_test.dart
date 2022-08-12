@@ -22,6 +22,7 @@ Future<void> main() async {
 
     AuthStateNotifier createProvider() {
       final AuthStateNotifier provider = AuthStateNotifier(
+        analytics: const NoopAnalytics(),
         signInUseCase: mockUseCases.signInUseCase,
         createUserUseCase: mockUseCases.createUserUseCase,
         fetchUserUseCase: mockUseCases.fetchUserUseCase,

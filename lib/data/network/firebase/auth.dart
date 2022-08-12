@@ -38,27 +38,27 @@ class Auth {
       switch (e.code) {
         case GoogleSignIn.kSignInCanceledError:
           Error.throwWithStackTrace(
-            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled),
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled, email: e.email),
             stackTrace,
           );
         case 'invalid-email':
           Error.throwWithStackTrace(
-            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail),
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail, email: e.email),
             stackTrace,
           );
         case 'user-disabled':
           Error.throwWithStackTrace(
-            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.userDisabled),
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.userDisabled, email: e.email),
             stackTrace,
           );
         case 'user-not-found':
           Error.throwWithStackTrace(
-            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.userNotFound),
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.userNotFound, email: e.email),
             stackTrace,
           );
         case 'too-many-requests':
           Error.throwWithStackTrace(
-            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.tooManyRequests),
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.tooManyRequests, email: e.email),
             stackTrace,
           );
       }

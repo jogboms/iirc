@@ -1,17 +1,13 @@
 abstract class AuthException {
   const factory AuthException.unknown(Exception exception) = AuthExceptionUnknown;
 
-  const factory AuthException.invalidEmail() = AuthExceptionInvalidEmail;
+  const factory AuthException.invalidEmail({String? email}) = AuthExceptionInvalidEmail;
 
-  const factory AuthException.userDisabled() = AuthExceptionUserDisabled;
+  const factory AuthException.userDisabled({String? email}) = AuthExceptionUserDisabled;
 
-  const factory AuthException.userNotFound() = AuthExceptionUserNotFound;
+  const factory AuthException.userNotFound({String? email}) = AuthExceptionUserNotFound;
 
-  const factory AuthException.tooManyRequests() = AuthExceptionTooManyRequests;
-
-  const factory AuthException.emailAlreadyInUse() = AuthExceptionEmailAlreadyInUse;
-
-  const factory AuthException.requiresRecentLogin() = AuthExceptionRequiresRecentLogin;
+  const factory AuthException.tooManyRequests({String? email}) = AuthExceptionTooManyRequests;
 }
 
 class AuthExceptionUnknown implements AuthException {
@@ -21,25 +17,25 @@ class AuthExceptionUnknown implements AuthException {
 }
 
 class AuthExceptionInvalidEmail implements AuthException {
-  const AuthExceptionInvalidEmail();
+  const AuthExceptionInvalidEmail({this.email});
+
+  final String? email;
 }
 
 class AuthExceptionUserDisabled implements AuthException {
-  const AuthExceptionUserDisabled();
+  const AuthExceptionUserDisabled({this.email});
+
+  final String? email;
 }
 
 class AuthExceptionUserNotFound implements AuthException {
-  const AuthExceptionUserNotFound();
+  const AuthExceptionUserNotFound({this.email});
+
+  final String? email;
 }
 
 class AuthExceptionTooManyRequests implements AuthException {
-  const AuthExceptionTooManyRequests();
-}
+  const AuthExceptionTooManyRequests({this.email});
 
-class AuthExceptionEmailAlreadyInUse implements AuthException {
-  const AuthExceptionEmailAlreadyInUse();
-}
-
-class AuthExceptionRequiresRecentLogin implements AuthException {
-  const AuthExceptionRequiresRecentLogin();
+  final String? email;
 }

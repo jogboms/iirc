@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
 import '../../models.dart';
+import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import '../tags/tag_detail_page.dart';
@@ -24,7 +26,11 @@ class ItemsPageState extends State<ItemsPage> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
-            data: (ItemViewModelList data) => _ItemsDataView(key: dataViewKey, items: data),
+            data: (ItemViewModelList data) => _ItemsDataView(
+              key: dataViewKey,
+              items: data,
+              analytics: ref.read(analyticsProvider),
+            ),
             error: ErrorView.new,
             loading: () => child!,
           ),
@@ -34,9 +40,10 @@ class ItemsPageState extends State<ItemsPage> {
 }
 
 class _ItemsDataView extends StatelessWidget {
-  const _ItemsDataView({super.key, required this.items});
+  const _ItemsDataView({super.key, required this.items, required this.analytics});
 
   final ItemViewModelList items;
+  final Analytics analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +63,10 @@ class _ItemsDataView extends StatelessWidget {
           )
         else ...<Widget>[
           SliverToBoxAdapter(
-            child: ItemsTagsListView(tags: items.map((ItemViewModel e) => e.tag)),
+            child: ItemsTagsListView(
+              tags: items.map((ItemViewModel e) => e.tag),
+              analytics: analytics,
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
@@ -68,7 +78,10 @@ class _ItemsDataView extends StatelessWidget {
                   return ItemListTile(
                     key: Key(item.id),
                     item: item,
-                    onPressed: () => Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id)),
+                    onPressed: () {
+                      analytics.log(AnalyticsEvent.itemClick('view tag: ${item.tag.id}'));
+                      Navigator.of(context).push<void>(TagDetailPage.route(id: item.tag.id));
+                    },
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),

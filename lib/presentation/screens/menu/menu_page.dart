@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/domain.dart';
 
+import '../../constants/app_routes.dart';
 import '../../state.dart';
 import '../calendar/calendar_page.dart';
 import '../insights/insights_page.dart';
@@ -14,7 +16,10 @@ class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
   static PageRoute<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const MenuPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const MenuPage(),
+      settings: const RouteSettings(name: AppRoutes.menu),
+    );
   }
 
   @override
@@ -37,6 +42,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, _) => _MenuPageDataView(
             key: dataViewKey,
+            analytics: ref.read(analyticsProvider),
             controller: ref.read(menuPageItemProvider),
           ),
         ),
@@ -44,8 +50,9 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
 }
 
 class _MenuPageDataView extends StatefulWidget {
-  const _MenuPageDataView({super.key, required this.controller});
+  const _MenuPageDataView({super.key, required this.analytics, required this.controller});
 
+  final Analytics analytics;
   final TabController controller;
 
   @override
@@ -81,6 +88,26 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
       item.key: GlobalKey(debugLabel: item.key.toString()),
   };
 
+  int get currentIndex => widget.controller.index;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.controller.addListener(_tabAnalyticLogger);
+    _tabAnalyticLogger();
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_tabAnalyticLogger);
+
+    super.dispose();
+  }
+
+  void _tabAnalyticLogger() =>
+      widget.analytics.setCurrentScreen('${AppRoutes.menu}/${MenuPageItem.values[currentIndex]}');
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -111,7 +138,7 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
         animation: widget.controller,
         builder: (BuildContext context, _) => BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          currentIndex: widget.controller.index,
+          currentIndex: currentIndex,
           onTap: (int index) => widget.controller.navigateToItem(MenuPageItem.values[index]),
           items: <BottomNavigationBarItem>[
             for (final _TabRouteView item in _tabRouteViews.values)
@@ -122,7 +149,7 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
       floatingActionButton: AnimatedBuilder(
         animation: widget.controller,
         builder: (BuildContext context, _) {
-          final MenuPageItem menuItem = MenuPageItem.values[widget.controller.index];
+          final MenuPageItem menuItem = MenuPageItem.values[currentIndex];
           final Route<void> Function(Object?)? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
 
           return AnimatedScale(
@@ -130,9 +157,12 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
             duration: const Duration(milliseconds: 250),
             child: Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
-                onPressed: () => Navigator.of(context).push<void>(
-                  routeBuilder!(ref.read(calendarStateProvider)),
-                ),
+                onPressed: () {
+                  widget.analytics.log(AnalyticsEvent.buttonClick('create item: $menuItem'));
+                  Navigator.of(context).push<void>(
+                    routeBuilder!(ref.read(calendarStateProvider)),
+                  );
+                },
                 child: const Icon(Icons.add_outlined),
               ),
             ),

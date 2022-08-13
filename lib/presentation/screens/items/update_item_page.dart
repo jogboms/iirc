@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
+import '../../constants/app_routes.dart';
 import '../../models.dart';
+import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'item_entry_form.dart';
@@ -13,7 +15,10 @@ class UpdateItemPage extends StatefulWidget {
   const UpdateItemPage({super.key, required this.item});
 
   static PageRoute<void> route({required ItemViewModel item}) {
-    return MaterialPageRoute<void>(builder: (_) => UpdateItemPage(item: item));
+    return MaterialPageRoute<void>(
+      builder: (_) => UpdateItemPage(item: item),
+      settings: const RouteSettings(name: AppRoutes.updateItem),
+    );
   }
 
   final ItemViewModel item;
@@ -30,12 +35,15 @@ class UpdateItemPageState extends State<UpdateItemPage> {
       appBar: CustomAppBar(
         title: Text(context.l10n.updateItemCaption),
       ),
-      body: ItemEntryForm(
-        description: widget.item.description,
-        date: widget.item.date,
-        tag: widget.item.tag,
-        type: ItemEntryType.update,
-        onSaved: _onSubmit(context),
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => ItemEntryForm(
+          analytics: ref.read(analyticsProvider),
+          description: widget.item.description,
+          date: widget.item.date,
+          tag: widget.item.tag,
+          type: ItemEntryType.update,
+          onSaved: _onSubmit(context),
+        ),
       ),
     );
   }

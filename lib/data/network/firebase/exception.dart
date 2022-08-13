@@ -3,21 +3,25 @@ import 'package:firebase_core/firebase_core.dart';
 typedef AppFirebaseException = FirebaseException;
 
 class AppFirebaseAuthException implements Exception {
-  const AppFirebaseAuthException(this.type);
+  const AppFirebaseAuthException(this.type, {required this.email});
 
   final AppFirebaseAuthExceptionType type;
+  final String? email;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppFirebaseAuthException && runtimeType == other.runtimeType && type == other.type;
+      other is AppFirebaseAuthException &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          email == other.email;
 
   @override
-  int get hashCode => type.hashCode;
+  int get hashCode => type.hashCode ^ email.hashCode;
 
   @override
   String toString() {
-    return 'AppFirebaseException{type: $type}';
+    return 'AppFirebaseException{type: $type, email: $email}';
   }
 }
 
@@ -27,6 +31,4 @@ enum AppFirebaseAuthExceptionType {
   userDisabled,
   userNotFound,
   tooManyRequests,
-  emailAlreadyInUse,
-  requiresRecentLogin,
 }

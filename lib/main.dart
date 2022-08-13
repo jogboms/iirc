@@ -22,6 +22,8 @@ void main() async {
 
   final _Repository repository;
   final ReporterClient reporterClient;
+  final NavigatorObserver navigationObserver;
+  final Analytics analytics;
   switch (environment) {
     case Environment.dev:
     case Environment.prod:
@@ -32,11 +34,15 @@ void main() async {
       );
       reporterClient = _ReporterClient(firebase.crashlytics);
       repository = _Repository.firebase(firebase, isDev);
+      navigationObserver = firebase.analytics.navigatorObserver;
+      analytics = _Analytics(firebase.analytics);
       break;
     case Environment.mock:
     default:
       reporterClient = const NoopReporterClient();
       repository = _Repository.mock();
+      navigationObserver = NavigatorObserver();
+      analytics = const _PrintAnalytics();
       break;
   }
 
@@ -56,6 +62,9 @@ void main() async {
   );
 
   final Registry registry = Registry()
+
+    /// Analytics.
+    ..set(analytics)
 
     /// Repositories.
     /// Do not use directly within the app.
@@ -92,6 +101,7 @@ void main() async {
       ],
       child: App(
         registry: registry,
+        navigatorObservers: <NavigatorObserver>[navigationObserver],
       ),
     ),
     isReleaseMode: !environment.isDebugging,
@@ -130,4 +140,44 @@ class _ReporterClient implements ReporterClient {
 
   @override
   void log(Object object) => AppLog.i(object);
+}
+
+class _Analytics implements Analytics {
+  const _Analytics(this.analytics);
+
+  final CloudAnalytics analytics;
+
+  @override
+  Future<void> log(AnalyticsEvent event) async {
+    if (kDebugMode) {
+      AppLog.i(event);
+      return;
+    }
+    return analytics.log(event.name, event.parameters);
+  }
+
+  @override
+  Future<void> setCurrentScreen(String name) async {
+    if (kDebugMode) {
+      AppLog.i('screen_view: $name');
+      return;
+    }
+    return analytics.setCurrentScreen(name);
+  }
+
+  @override
+  Future<void> setUserId(String id) async => analytics.setUserId(id);
+
+  @override
+  Future<void> removeUserId() async => analytics.removeUserId();
+}
+
+class _PrintAnalytics extends NoopAnalytics {
+  const _PrintAnalytics();
+
+  @override
+  Future<void> log(AnalyticsEvent event) async => AppLog.i(event);
+
+  @override
+  Future<void> setCurrentScreen(String name) async => AppLog.i('screen_view: $name');
 }

@@ -12,6 +12,7 @@ final authStateProvider = StateNotifierProvider.autoDispose<AuthStateNotifier, A
   final di = ref.read(registryProvider).get;
 
   return AuthStateNotifier(
+    analytics: di(),
     signInUseCase: di(),
     signOutUseCase: di(),
     fetchUserUseCase: di(),
@@ -23,6 +24,7 @@ final authStateProvider = StateNotifierProvider.autoDispose<AuthStateNotifier, A
 class AuthStateNotifier extends StateNotifier<AuthState> {
   @visibleForTesting
   AuthStateNotifier({
+    required this.analytics,
     required this.signInUseCase,
     required this.signOutUseCase,
     required this.fetchUserUseCase,
@@ -30,6 +32,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     required this.updateUserUseCase,
   }) : super(AuthState.idle);
 
+  @visibleForTesting
+  final Analytics analytics;
   @visibleForTesting
   final SignInUseCase signInUseCase;
   @visibleForTesting
@@ -53,8 +57,19 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         await updateUserUseCase(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
       }
 
+      await analytics.setUserId(account.id);
+      await analytics.log(AnalyticsEvent.login(account.email, account.id));
+
       if (mounted) {
         state = AuthState.complete;
+      }
+    } on AuthException catch (e, stackTrace) {
+      if (e is AuthExceptionTooManyRequests) {
+        await analytics.log(AnalyticsEvent.tooManyRequests(e.email));
+      } else if (e is AuthExceptionUserDisabled) {
+        await analytics.log(AnalyticsEvent.userDisabled(e.email));
+      } else {
+        Error.throwWithStackTrace(e, stackTrace);
       }
     } catch (error, stackTrace) {
       final String message = error.toString();
@@ -74,6 +89,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
     try {
       await signOutUseCase();
+      await analytics.log(AnalyticsEvent.logout);
+      await analytics.removeUserId();
+
       if (mounted) {
         state = AuthState.complete;
       }

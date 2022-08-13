@@ -1,4 +1,5 @@
 export 'state/account_provider.dart';
+export 'state/analytics_provider.dart';
 export 'state/auth_state_provider.dart';
 export 'state/calendar_state_provider.dart';
 export 'state/items_provider.dart';

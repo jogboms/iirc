@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
+import '../../constants/app_routes.dart';
 import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -10,7 +12,10 @@ class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key, required this.isColdStart});
 
   static PageRoute<void> route({required bool isColdStart}) {
-    return MaterialPageRoute<void>(builder: (_) => OnboardingPage(isColdStart: isColdStart));
+    return MaterialPageRoute<void>(
+      builder: (_) => OnboardingPage(isColdStart: isColdStart),
+      settings: const RouteSettings(name: AppRoutes.onboarding),
+    );
   }
 
   final bool isColdStart;
@@ -79,7 +84,10 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
           ? const LoadingView()
           : ElevatedButton(
               key: signInButtonKey,
-              onPressed: auth.signIn,
+              onPressed: () {
+                ref.read(analyticsProvider).log(AnalyticsEvent.buttonClick('login'));
+                auth.signIn();
+              },
               child: Text(context.l10n.continueWithGoogle),
             ),
     );

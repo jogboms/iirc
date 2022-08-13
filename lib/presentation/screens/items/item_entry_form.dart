@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clock/clock.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,7 @@ typedef ItemEntryValueSaved = void Function(WidgetRef ref, ItemEntryData data);
 class ItemEntryForm extends StatefulWidget {
   const ItemEntryForm({
     super.key,
+    required this.analytics,
     required this.description,
     required this.date,
     required this.tag,
@@ -54,6 +57,7 @@ class ItemEntryForm extends StatefulWidget {
     required this.onSaved,
   });
 
+  final Analytics analytics;
   final String? description;
   final DateTime? date;
   final TagModel? tag;
@@ -103,6 +107,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   }
 
   void onCreateTag(BuildContext context, Reader read) async {
+    unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('create tag: form')));
     final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
     if (tagId != null) {
       final TagModelList tags = read(tagsProvider).value ?? TagModelList.empty();
@@ -192,7 +197,11 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             valueListenable: dataNotifier,
             builder: (BuildContext context, ItemEntryData value, Widget? child) => Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
-                onPressed: value.isValid ? () => widget.onSaved(ref, value) : null,
+                onPressed: value.isValid
+                    ? () => widget
+                      ..analytics.log(AnalyticsEvent.buttonClick('submit item'))
+                      ..onSaved(ref, value)
+                    : null,
                 child: child,
               ),
             ),

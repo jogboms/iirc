@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/domain.dart';
 import 'package:intl/intl.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -10,9 +11,10 @@ import 'item_calendar_view.dart';
 import 'item_list_tile.dart';
 
 class ItemCalendarListView extends StatelessWidget {
-  const ItemCalendarListView({super.key, required this.controller});
+  const ItemCalendarListView({super.key, required this.controller, required this.analytics});
 
   final ItemCalendarViewController controller;
+  final Analytics analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,10 @@ class ItemCalendarListView extends StatelessWidget {
                             if (controller.hasSelectedDate) ...<Widget>[
                               Text(DateFormat.EEEE().add_d().format(controller.selectedDate).toUpperCase()),
                               IconButton(
-                                onPressed: controller.clearSelection,
+                                onPressed: () {
+                                  analytics.log(AnalyticsEvent.buttonClick('clear date selection'));
+                                  controller.clearSelection();
+                                },
                                 icon: const Icon(Icons.clear, size: 16),
                               ),
                             ] else
@@ -76,7 +81,10 @@ class ItemCalendarListView extends StatelessWidget {
                           key: Key(item.id),
                           item: item,
                           canShowDate: false,
-                          onPressed: () => Navigator.of(context).push<void>(ItemDetailPage.route(id: item.id)),
+                          onPressed: () {
+                            analytics.log(AnalyticsEvent.itemClick('view item: ${item.id}'));
+                            Navigator.of(context).push<void>(ItemDetailPage.route(id: item.id));
+                          },
                         );
                       },
                       separatorBuilder: (BuildContext context, __) => const SizedBox(height: 8),

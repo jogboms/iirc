@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
 import '../../models.dart';
 import '../../state.dart';
@@ -22,6 +23,7 @@ class _CalendarPageState extends State<CalendarPage> {
             data: (ItemViewModelList items) => _ItemsDataView(
               key: dataViewKey,
               items: items,
+              analytics: ref.read(analyticsProvider),
             ),
             error: ErrorView.new,
             loading: () => child!,
@@ -32,9 +34,10 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class _ItemsDataView extends ConsumerStatefulWidget {
-  const _ItemsDataView({super.key, required this.items});
+  const _ItemsDataView({super.key, required this.items, required this.analytics});
 
   final ItemViewModelList items;
+  final Analytics analytics;
 
   @override
   ConsumerState<_ItemsDataView> createState() => _ItemsDataViewState();
@@ -67,6 +70,7 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
           primary: true,
           controller: itemCalendarViewController,
           items: widget.items,
+          analytics: widget.analytics,
         ),
       ],
     );

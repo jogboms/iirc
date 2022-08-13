@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:iirc/domain.dart';
 
 import '../../models.dart';
 import '../../theme.dart';
 import '../../utils.dart';
 import '../tags/create_tag_page.dart';
+import '../tags/tag_detail_page.dart';
 
 class ItemsTagsListView extends StatelessWidget {
-  const ItemsTagsListView({super.key, required this.tags});
+  const ItemsTagsListView({super.key, required this.tags, required this.analytics});
 
   final Iterable<TagViewModel> tags;
+  final Analytics analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class ItemsTagsListView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 final TagViewModel tag = tags.elementAt(index);
-                return Chip(
+                return ActionChip(
                   key: Key(tag.id),
                   label: Text('#' + tag.title.capitalize()),
                   elevation: 0,
@@ -35,6 +38,10 @@ class ItemsTagsListView extends StatelessWidget {
                   visualDensity: VisualDensity.compact,
                   labelStyle: theme.textTheme.bodyText1?.copyWith(color: tag.foregroundColor),
                   backgroundColor: tag.backgroundColor,
+                  onPressed: () {
+                    analytics.log(AnalyticsEvent.itemClick('view tag: ${tag.id}'));
+                    Navigator.of(context).push<void>(TagDetailPage.route(id: tag.id));
+                  },
                 );
               },
               separatorBuilder: (BuildContext context, _) => const SizedBox(width: 8),
@@ -42,7 +49,10 @@ class ItemsTagsListView extends StatelessWidget {
             ),
           ),
           FloatingActionButton.small(
-            onPressed: () => Navigator.of(context).push(CreateTagPage.route()),
+            onPressed: () {
+              analytics.log(AnalyticsEvent.buttonClick('create tag: items'));
+              Navigator.of(context).push(CreateTagPage.route());
+            },
             elevation: 0,
             tooltip: context.l10n.createTagCaption,
             heroTag: 'CreateTagHeroTag',

@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/core.dart';
+import 'package:iirc/domain.dart';
 import 'package:intl/intl.dart';
 
+import '../../constants/app_routes.dart';
 import '../../models.dart';
+import '../../state.dart';
 import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -17,7 +22,10 @@ class ItemDetailPage extends StatefulWidget {
   final String id;
 
   static PageRoute<void> route({required String id}) {
-    return MaterialPageRoute<void>(builder: (_) => ItemDetailPage(id: id));
+    return MaterialPageRoute<void>(
+      builder: (_) => ItemDetailPage(id: id),
+      settings: const RouteSettings(name: AppRoutes.itemDetail),
+    );
   }
 
   @override
@@ -42,6 +50,7 @@ class ItemDetailPageState extends State<ItemDetailPage> {
                     data: (ItemViewModel item) => _SelectedItemDataView(
                       key: dataViewKey,
                       item: item,
+                      analytics: ref.read(analyticsProvider),
                     ),
                     error: ErrorView.new,
                     loading: () => child!,
@@ -54,9 +63,10 @@ class ItemDetailPageState extends State<ItemDetailPage> {
 }
 
 class _SelectedItemDataView extends StatelessWidget {
-  const _SelectedItemDataView({super.key, required this.item});
+  const _SelectedItemDataView({super.key, required this.item, required this.analytics});
 
   final ItemViewModel item;
+  final Analytics analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +78,10 @@ class _SelectedItemDataView extends StatelessWidget {
           title: Text(context.l10n.informationCaption),
           actions: <Widget>[
             IconButton(
-              onPressed: () => Navigator.of(context).push(UpdateItemPage.route(item: item)),
+              onPressed: () {
+                analytics.log(AnalyticsEvent.buttonClick('edit item: ${item.id}'));
+                Navigator.of(context).push(UpdateItemPage.route(item: item));
+              },
               icon: const Icon(Icons.edit_outlined),
               color: theme.colorScheme.onSurface,
             ),
@@ -76,6 +89,7 @@ class _SelectedItemDataView extends StatelessWidget {
             Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => IconButton(
                 onPressed: () async {
+                  unawaited(analytics.log(AnalyticsEvent.buttonClick('delete item: ${item.id}')));
                   final bool isOk = await showErrorChoiceBanner(
                     context,
                     message: context.l10n.areYouSureAboutThisMessage,

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -43,11 +44,13 @@ typedef TagEntryValueSaved = void Function(WidgetRef ref, TagEntryData data);
 class TagEntryForm extends StatefulWidget {
   const TagEntryForm({
     super.key,
+    required this.analytics,
     required this.initialValue,
     required this.type,
     required this.onSaved,
   });
 
+  final Analytics analytics;
   final TagEntryData? initialValue;
   final TagEntryType type;
   final TagEntryValueSaved onSaved;
@@ -123,7 +126,11 @@ class TagEntryFormState extends State<TagEntryForm> {
             valueListenable: dataNotifier,
             builder: (BuildContext context, TagEntryData value, Widget? child) => Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
-                onPressed: value.isValid ? () => widget.onSaved(ref, value) : null,
+                onPressed: value.isValid
+                    ? () => widget
+                      ..analytics.log(AnalyticsEvent.buttonClick('submit tag'))
+                      ..onSaved(ref, value)
+                    : null,
                 child: child,
               ),
             ),

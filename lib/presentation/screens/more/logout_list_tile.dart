@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
 import '../../state.dart';
 import '../../theme.dart';
@@ -34,7 +35,9 @@ class LogoutListTile extends ConsumerWidget {
         color: color,
       ),
       horizontalTitleGap: 0,
-      onTap: ref.read(authStateProvider.notifier).signOut,
+      onTap: () => ref
+        ..read(analyticsProvider).log(AnalyticsEvent.itemClick('logout'))
+        ..read(authStateProvider.notifier).signOut(),
     );
   }
 }

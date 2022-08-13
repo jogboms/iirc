@@ -61,6 +61,7 @@ Registry createRegistry({
   Environment environment = Environment.testing,
 }) =>
     Registry()
+      ..set<Analytics>(const NoopAnalytics())
       ..set(mockRepositories.auth)
       ..set(mockRepositories.users)
       ..set(mockRepositories.items)

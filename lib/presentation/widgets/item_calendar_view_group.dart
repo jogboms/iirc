@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:iirc/domain.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../models.dart';
@@ -12,11 +13,13 @@ class ItemCalendarViewGroup extends StatelessWidget {
     this.primary = false,
     required this.controller,
     required this.items,
+    required this.analytics,
   });
 
   final bool primary;
   final ItemViewModelList items;
   final ItemCalendarViewController controller;
+  final Analytics analytics;
 
   @override
   Widget build(BuildContext context) => MultiSliver(
@@ -32,6 +35,7 @@ class ItemCalendarViewGroup extends StatelessWidget {
           ),
           ItemCalendarListView(
             controller: controller,
+            analytics: analytics,
           ),
         ],
       );

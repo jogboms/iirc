@@ -4,6 +4,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
+import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'providers/tag_provider.dart';
@@ -27,14 +28,17 @@ class UpdateTagPage extends StatelessWidget {
       appBar: CustomAppBar(
         title: Text(context.l10n.updateTagCaption),
       ),
-      body: TagEntryForm(
-        initialValue: TagEntryData(
-          title: tag.title,
-          description: tag.description,
-          color: tag.color,
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => TagEntryForm(
+          analytics: ref.read(analyticsProvider),
+          initialValue: TagEntryData(
+            title: tag.title,
+            description: tag.description,
+            color: tag.color,
+          ),
+          type: TagEntryType.update,
+          onSaved: _onSubmit(context),
         ),
-        type: TagEntryType.update,
-        onSaved: _onSubmit(context),
       ),
     );
   }

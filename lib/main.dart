@@ -42,7 +42,7 @@ void main() async {
       reporterClient = const NoopReporterClient();
       repository = _Repository.mock();
       navigationObserver = NavigatorObserver();
-      analytics = const NoopAnalytics();
+      analytics = const _PrintAnalytics();
       break;
   }
 
@@ -170,4 +170,14 @@ class _Analytics implements Analytics {
 
   @override
   Future<void> removeUserId() async => analytics.removeUserId();
+}
+
+class _PrintAnalytics extends NoopAnalytics {
+  const _PrintAnalytics();
+
+  @override
+  Future<void> log(AnalyticsEvent event) async => AppLog.i(event);
+
+  @override
+  Future<void> setCurrentScreen(String name) async => AppLog.i('screen_view: $name');
 }

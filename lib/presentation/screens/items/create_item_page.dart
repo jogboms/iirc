@@ -6,6 +6,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
+import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import '../tags/tag_detail_page.dart';
@@ -38,12 +39,15 @@ class CreateItemPageState extends State<CreateItemPage> {
       appBar: CustomAppBar(
         title: Text(context.l10n.createItemCaption),
       ),
-      body: ItemEntryForm(
-        description: '',
-        date: widget.date,
-        tag: widget.tag,
-        type: ItemEntryType.create,
-        onSaved: _onSubmit(context),
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => ItemEntryForm(
+          analytics: ref.read(analyticsProvider),
+          description: '',
+          date: widget.date,
+          tag: widget.tag,
+          type: ItemEntryType.create,
+          onSaved: _onSubmit(context),
+        ),
       ),
     );
   }

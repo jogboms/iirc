@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
 import '../../state.dart';
@@ -83,7 +84,10 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
           ? const LoadingView()
           : ElevatedButton(
               key: signInButtonKey,
-              onPressed: auth.signIn,
+              onPressed: () {
+                ref.read(analyticsProvider).log(AnalyticsEvent.buttonClick('login'));
+                auth.signIn();
+              },
               child: Text(context.l10n.continueWithGoogle),
             ),
     );

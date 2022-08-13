@@ -5,6 +5,7 @@ import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
 import '../../models.dart';
+import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
 import 'item_entry_form.dart';
@@ -34,12 +35,15 @@ class UpdateItemPageState extends State<UpdateItemPage> {
       appBar: CustomAppBar(
         title: Text(context.l10n.updateItemCaption),
       ),
-      body: ItemEntryForm(
-        description: widget.item.description,
-        date: widget.item.date,
-        tag: widget.item.tag,
-        type: ItemEntryType.update,
-        onSaved: _onSubmit(context),
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => ItemEntryForm(
+          analytics: ref.read(analyticsProvider),
+          description: widget.item.description,
+          date: widget.item.date,
+          tag: widget.item.tag,
+          type: ItemEntryType.update,
+          onSaved: _onSubmit(context),
+        ),
       ),
     );
   }

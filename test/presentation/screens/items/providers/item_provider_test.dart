@@ -24,6 +24,7 @@ Future<void> main() async {
     });
 
     ItemProvider createProvider() => ItemProvider(
+          analytics: const NoopAnalytics(),
           fetchUser: mockFetchUser,
           createItemUseCase: mockUseCases.createItemUseCase,
           updateItemUseCase: mockUseCases.updateItemUseCase,

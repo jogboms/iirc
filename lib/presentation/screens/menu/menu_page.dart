@@ -42,7 +42,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, _) => _MenuPageDataView(
             key: dataViewKey,
-            analytics: ref.read(registryProvider).get(),
+            analytics: ref.read(analyticsProvider),
             controller: ref.read(menuPageItemProvider),
           ),
         ),
@@ -157,9 +157,12 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
             duration: const Duration(milliseconds: 250),
             child: Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
-                onPressed: () => Navigator.of(context).push<void>(
-                  routeBuilder!(ref.read(calendarStateProvider)),
-                ),
+                onPressed: () {
+                  widget.analytics.log(AnalyticsEvent.buttonClick('create item: $menuItem'));
+                  Navigator.of(context).push<void>(
+                    routeBuilder!(ref.read(calendarStateProvider)),
+                  );
+                },
                 child: const Icon(Icons.add_outlined),
               ),
             ),

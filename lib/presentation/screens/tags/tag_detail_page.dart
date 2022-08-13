@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
 import '../../models.dart';
+import '../../state.dart';
 import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -78,6 +81,7 @@ class TagDetailPageState extends State<TagDetailPage> {
               ref.watch(selectedTagStateProvider(widget.id)).when(
                     data: (SelectedTagState state) => _SelectedTagDataView(
                       key: dataViewKey,
+                      analytics: ref.read(analyticsProvider),
                       controller: controller,
                       tag: state.tag,
                       items: state.items,
@@ -88,23 +92,35 @@ class TagDetailPageState extends State<TagDetailPage> {
           child: const LoadingView(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push<void>(
-          CreateItemPage.route(
-            asModal: true,
-            date: controller.date,
-            tag: controller.tag,
-          ),
+      floatingActionButton: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
+          onPressed: () {
+            ref.read(analyticsProvider).log(AnalyticsEvent.buttonClick('create item'));
+            Navigator.of(context).push<void>(
+              CreateItemPage.route(
+                asModal: true,
+                date: controller.date,
+                tag: controller.tag,
+              ),
+            );
+          },
+          child: const Icon(Icons.add),
         ),
-        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
 class _SelectedTagDataView extends StatefulWidget {
-  const _SelectedTagDataView({super.key, required this.controller, required this.tag, required this.items});
+  const _SelectedTagDataView({
+    super.key,
+    required this.analytics,
+    required this.controller,
+    required this.tag,
+    required this.items,
+  });
 
+  final Analytics analytics;
   final TagDetailPageController controller;
   final TagViewModel tag;
   final ItemViewModelList items;
@@ -146,33 +162,42 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
           title: Text(widget.tag.title.capitalize()),
           actions: <Widget>[
             IconButton(
-              onPressed: () {}, // TODO: route to insights details
+              onPressed: () {
+                widget.analytics.log(AnalyticsEvent.buttonClick('view tag insights: ${widget.tag.id}'));
+                // TODO: route to insights details
+              },
               icon: const Icon(Icons.insights_outlined),
               color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 4),
             IconButton(
-              onPressed: () => showDialog<void>(
-                context: context,
-                builder: (BuildContext context) => Center(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: theme.canvasColor,
-                      borderRadius: AppBorderRadius.c4,
+              onPressed: () {
+                widget.analytics.log(AnalyticsEvent.buttonClick('view tag info: ${widget.tag.id}'));
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => Center(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: theme.canvasColor,
+                        borderRadius: AppBorderRadius.c4,
+                      ),
+                      margin: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.tag.description),
                     ),
-                    margin: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(widget.tag.description),
                   ),
-                ),
-              ),
+                );
+              },
               icon: const Icon(Icons.info_outline),
               color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 4),
             IconButton(
-              onPressed: () => Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag)),
+              onPressed: () {
+                widget.analytics.log(AnalyticsEvent.buttonClick('edit tag: ${widget.tag.id}'));
+                Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag));
+              },
               icon: const Icon(Icons.edit_outlined),
               color: theme.colorScheme.onSurface,
             ),
@@ -181,6 +206,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
               Consumer(
                 builder: (BuildContext context, WidgetRef ref, _) => IconButton(
                   onPressed: () async {
+                    unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('delete tag: ${widget.tag.id}')));
                     final bool isOk = await showErrorChoiceBanner(
                       context,
                       message: context.l10n.areYouSureAboutThisMessage,
@@ -201,6 +227,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
         ItemCalendarViewGroup(
           controller: itemCalendarViewController,
           items: widget.items,
+          analytics: widget.analytics,
         ),
       ],
     );

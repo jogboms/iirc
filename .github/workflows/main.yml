@@ -12,7 +12,7 @@ on:
 
 env:
   java_version: "12.x"
-  flutter_version: "3.0.2"
+  flutter_version: "3.0.5"
   flutter_path: /opt/hostedtoolcache/flutter
 
 jobs:

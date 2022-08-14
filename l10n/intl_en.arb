@@ -33,5 +33,7 @@
   "crashViewBugMessage2": "If there's more to it, you could also file a personal complaint with our customer service representative.",
   "successfulMessage": "Successful",
   "genericErrorMessage": "An error occurred",
-  "entireMonth": "Entire Month"
+  "entireMonth": "Entire Month",
+  "bannedUserMessage": "This account has been disabled by administration.",
+  "tryAgainMessage": "Please try again after some time."
 }

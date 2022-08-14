@@ -119,7 +119,7 @@ Future<void> main() async {
             expect(log, <AuthState>[
               AuthState.idle,
               AuthState.loading,
-              AuthState.idle,
+              AuthState.error('${Exception()}'),
             ]);
             verify(() => mockUseCases.signInUseCase.call()).called(1);
             verify(() => mockUseCases.signOutUseCase.call()).called(1);
@@ -136,7 +136,7 @@ Future<void> main() async {
             expect(log, <AuthState>[
               AuthState.idle,
               AuthState.loading,
-              AuthState.idle,
+              AuthState.error('${Exception()}'),
             ]);
             verify(() => mockUseCases.signInUseCase.call()).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
@@ -155,7 +155,7 @@ Future<void> main() async {
             expect(log, <AuthState>[
               AuthState.idle,
               AuthState.loading,
-              AuthState.idle,
+              AuthState.error('${Exception()}'),
             ]);
             verify(() => mockUseCases.signInUseCase.call()).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
@@ -175,7 +175,7 @@ Future<void> main() async {
             expect(log, <AuthState>[
               AuthState.idle,
               AuthState.loading,
-              AuthState.idle,
+              AuthState.error('${Exception()}'),
             ]);
             verify(() => mockUseCases.signInUseCase.call()).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
@@ -211,7 +211,7 @@ Future<void> main() async {
           expect(log, <AuthState>[
             AuthState.idle,
             AuthState.loading,
-            AuthState.idle,
+            AuthState.error('${Exception()}'),
           ]);
           verify(() => mockUseCases.signOutUseCase.call()).called(1);
         });

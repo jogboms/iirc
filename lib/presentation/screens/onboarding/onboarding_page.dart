@@ -73,7 +73,21 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
     final AuthState authState = ref.watch(authStateProvider);
 
     ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
-      if (state == AuthState.complete) {
+      if (state is AuthErrorState) {
+        final String message;
+        switch (state.reason) {
+          case AuthErrorStateReason.message:
+            message = state.error;
+            break;
+          case AuthErrorStateReason.tooManyRequests:
+            message = context.l10n.tryAgainMessage;
+            break;
+          case AuthErrorStateReason.userDisabled:
+            message = context.l10n.bannedUserMessage;
+            break;
+        }
+        AppSnackBar.of(context).error(message);
+      } else if (state == AuthState.complete) {
         Navigator.of(context).pushReplacement(MenuPage.route());
       }
     });

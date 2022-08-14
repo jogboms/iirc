@@ -1,6 +1,7 @@
 // ignore_for_file: always_specify_types
 
 import 'package:clock/clock.dart';
+import 'package:equatable/equatable.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
@@ -63,24 +64,19 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       if (mounted) {
         state = AuthState.complete;
       }
-    } on AuthException catch (e, stackTrace) {
-      if (e is AuthExceptionTooManyRequests) {
-        await analytics.log(AnalyticsEvent.tooManyRequests(e.email));
-      } else if (e is AuthExceptionUserDisabled) {
-        await analytics.log(AnalyticsEvent.userDisabled(e.email));
+    } on AuthException catch (error, stackTrace) {
+      if (error is AuthExceptionTooManyRequests) {
+        await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
+        state = AuthState.error('', AuthErrorStateReason.tooManyRequests);
+      } else if (error is AuthExceptionUserDisabled) {
+        await analytics.log(AnalyticsEvent.userDisabled(error.email));
+        state = AuthState.error('', AuthErrorStateReason.userDisabled);
       } else {
-        Error.throwWithStackTrace(e, stackTrace);
+        _handleError(error, stackTrace);
       }
     } catch (error, stackTrace) {
-      final String message = error.toString();
-      if (message.isNotEmpty) {
-        AppLog.e(error, stackTrace);
-      }
-
       await signOutUseCase();
-      if (mounted) {
-        state = AuthState.idle;
-      }
+      _handleError(error, stackTrace);
     }
   }
 
@@ -96,16 +92,48 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         state = AuthState.complete;
       }
     } catch (error, stackTrace) {
+      _handleError(error, stackTrace);
+    }
+  }
+
+  void _handleError(Object error, StackTrace stackTrace) {
+    if (mounted) {
       final String message = error.toString();
       if (message.isNotEmpty) {
         AppLog.e(error, stackTrace);
-      }
-
-      if (mounted) {
+        state = AuthState.error(message);
+      } else {
         state = AuthState.idle;
       }
     }
   }
 }
 
-enum AuthState { idle, loading, complete }
+enum _AuthStateType { idle, loading, error, complete }
+
+class AuthState with EquatableMixin {
+  const AuthState(this._type);
+
+  factory AuthState.error(String error, [AuthErrorStateReason reason]) = AuthErrorState;
+
+  static const AuthState idle = AuthState(_AuthStateType.idle);
+  static const AuthState loading = AuthState(_AuthStateType.loading);
+  static const AuthState complete = AuthState(_AuthStateType.complete);
+
+  final _AuthStateType _type;
+
+  @override
+  List<Object> get props => [_type];
+}
+
+enum AuthErrorStateReason { message, tooManyRequests, userDisabled }
+
+class AuthErrorState extends AuthState {
+  const AuthErrorState(this.error, [this.reason = AuthErrorStateReason.message]) : super(_AuthStateType.error);
+
+  final String error;
+  final AuthErrorStateReason reason;
+
+  @override
+  List<Object> get props => <Object>[...super.props, error];
+}

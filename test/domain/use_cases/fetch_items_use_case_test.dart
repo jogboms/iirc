@@ -38,6 +38,9 @@ void main() {
       when(() => itemsRepository.fetch(any())).thenAnswer(
         (_) => Stream<ItemModelList>.error(expectedError),
       );
+      when(() => tagsRepository.fetch(any())).thenAnswer(
+        (_) => Stream<TagModelList>.error(expectedError),
+      );
 
       expect(useCase('1'), emitsError(expectedError));
     });

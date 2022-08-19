@@ -6,6 +6,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
+import '../../models.dart';
 import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -16,7 +17,7 @@ import 'providers/item_provider.dart';
 class CreateItemPage extends StatefulWidget {
   const CreateItemPage({super.key, required this.asModal, this.date, this.tag});
 
-  static PageRoute<void> route({bool asModal = false, DateTime? date, TagModel? tag}) {
+  static PageRoute<void> route({bool asModal = false, DateTime? date, TagViewModel? tag}) {
     return MaterialPageRoute<void>(
       builder: (_) => CreateItemPage(asModal: asModal, date: date, tag: tag),
       settings: const RouteSettings(name: AppRoutes.createItem),
@@ -25,7 +26,7 @@ class CreateItemPage extends StatefulWidget {
 
   final bool asModal;
   final DateTime? date;
-  final TagModel? tag;
+  final TagViewModel? tag;
 
   @override
   State<CreateItemPage> createState() => CreateItemPageState();

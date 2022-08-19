@@ -29,10 +29,10 @@ class TagDetailPageController with ChangeNotifier {
     }
   }
 
-  TagModel? get tag => _tag;
-  TagModel? _tag;
+  TagViewModel? get tag => _tag;
+  TagViewModel? _tag;
 
-  set tag(TagModel? tag) {
+  set tag(TagViewModel? tag) {
     if (this.tag != tag) {
       _tag = tag;
       notifyListeners();

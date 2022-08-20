@@ -29,10 +29,10 @@ class TagDetailPageController with ChangeNotifier {
     }
   }
 
-  TagModel? get tag => _tag;
-  TagModel? _tag;
+  TagViewModel? get tag => _tag;
+  TagViewModel? _tag;
 
-  set tag(TagModel? tag) {
+  set tag(TagViewModel? tag) {
     if (this.tag != tag) {
       _tag = tag;
       notifyListeners();
@@ -204,7 +204,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             if (widget.items.isEmpty) ...<Widget>[
               const SizedBox(width: 4),
               Consumer(
-                builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                builder: (_, WidgetRef ref, __) => IconButton(
                   onPressed: () async {
                     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('delete tag: ${widget.tag.id}')));
                     final bool isOk = await showErrorChoiceBanner(

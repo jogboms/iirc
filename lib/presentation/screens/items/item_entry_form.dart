@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
 
+import '../../models.dart';
 import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -22,12 +23,12 @@ class ItemEntryData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModel tag;
+  final TagViewModel tag;
 
   ItemEntryData copyWith({
     String? description,
     DateTime? date,
-    TagModel? tag,
+    TagViewModel? tag,
   }) =>
       ItemEntryData(
         description: description ?? this.description,
@@ -60,7 +61,7 @@ class ItemEntryForm extends StatefulWidget {
   final Analytics analytics;
   final String? description;
   final DateTime? date;
-  final TagModel? tag;
+  final TagViewModel? tag;
   final ItemEntryType type;
   final ItemEntryValueSaved onSaved;
 
@@ -71,6 +72,7 @@ class ItemEntryForm extends StatefulWidget {
 @visibleForTesting
 class ItemEntryFormState extends State<ItemEntryForm> {
   late final FocusNode descriptionFocusNode = FocusNode(debugLabel: 'description');
+  late final GlobalKey<FormFieldState<String>> tagsFormFieldKey = GlobalKey();
 
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
@@ -109,10 +111,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   void onCreateTag(BuildContext context, Reader read) async {
     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('create tag: form')));
     final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
-    if (tagId != null) {
-      final TagModelList tags = read(tagsProvider).value ?? TagModelList.empty();
-      dataNotifier.update(tag: tags.firstWhere((TagModel element) => element.id == tagId));
-    }
+    tagsFormFieldKey.currentState?.didChange(tagId);
   }
 
   @override
@@ -133,7 +132,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
           if (!hasInitialTag || widget.type == ItemEntryType.update) ...<Widget>[
             Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                final List<TagModel> tags = ref.watch(tagsProvider).value ?? <TagModel>[];
+                final TagViewModelList tags = ref.watch(tagsProvider).value ?? TagViewModelList.empty();
 
                 if (tags.isEmpty) {
                   return Align(
@@ -149,27 +148,28 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                 return Row(
                   children: <Widget>[
                     Expanded(
-                      child: DropdownButtonFormField<TagModel>(
-                        value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag,
-                        decoration: InputDecoration(
-                          hintText: context.l10n.selectItemTagCaption,
-                        ),
-                        items: <DropdownMenuItem<TagModel>>[
-                          for (final TagModel tag in tags)
-                            DropdownMenuItem<TagModel>(
-                              key: Key(tag.id),
-                              value: tag,
-                              child: Row(
-                                children: <Widget>[
-                                  TagColorBox(code: tag.color),
-                                  const SizedBox(width: 8),
-                                  Text(tag.title),
-                                ],
+                      child: tags.length == 1
+                          ? Builder(builder: (_) {
+                              final TagViewModel tag = tags.first;
+                              return _TagItem(key: Key(tag.id), tag: tags.first);
+                            })
+                          : DropdownButtonFormField<String>(
+                              key: tagsFormFieldKey,
+                              value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag.id,
+                              decoration: InputDecoration(
+                                hintText: context.l10n.selectItemTagCaption,
                               ),
+                              items: <DropdownMenuItem<String>>[
+                                for (final TagViewModel tag in tags)
+                                  DropdownMenuItem<String>(
+                                    key: Key(tag.id),
+                                    value: tag.id,
+                                    child: _TagItem(tag: tag),
+                                  ),
+                              ],
+                              onChanged: (String? id) =>
+                                  dataNotifier.update(tag: tags.firstWhere((TagViewModel element) => element.id == id)),
                             ),
-                        ],
-                        onChanged: (TagModel? tag) => dataNotifier.update(tag: tag),
-                      ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
@@ -213,7 +213,22 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   }
 }
 
-final TagModel _emptyTagModel = TagModel(
+class _TagItem extends StatelessWidget {
+  const _TagItem({super.key, required this.tag});
+
+  final TagViewModel tag;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          TagColorBox(code: tag.color),
+          const SizedBox(width: 8),
+          Text(tag.title),
+        ],
+      );
+}
+
+final TagViewModel _emptyTagModel = TagViewModel.fromTag(TagModel(
   id: 'EMPTY',
   color: 0xF,
   description: '',
@@ -221,13 +236,13 @@ final TagModel _emptyTagModel = TagModel(
   path: '',
   createdAt: DateTime(0),
   updatedAt: null,
-);
+));
 
-extension on TagModel {
+extension on TagViewModel {
   bool get isEmptyTag => this == _emptyTagModel;
 }
 
 extension on ValueNotifier<ItemEntryData> {
-  void update({String? description, DateTime? date, TagModel? tag}) =>
+  void update({String? description, DateTime? date, TagViewModel? tag}) =>
       value = value.copyWith(description: description, date: date, tag: tag);
 }

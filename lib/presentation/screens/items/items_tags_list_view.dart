@@ -23,42 +23,54 @@ class ItemsTagsListView extends StatelessWidget {
       child: Stack(
         alignment: Alignment.centerRight,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: ListView.separated(
-              padding: const EdgeInsets.only(left: 16, right: 40),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                final TagViewModel tag = tags.elementAt(index);
-                return ActionChip(
-                  key: Key(tag.id),
-                  label: Text('#' + tag.title.capitalize()),
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(borderRadius: AppBorderRadius.c6),
-                  visualDensity: VisualDensity.compact,
-                  labelStyle: theme.textTheme.bodyText1?.copyWith(color: tag.foregroundColor),
-                  backgroundColor: tag.backgroundColor,
-                  onPressed: () {
-                    analytics.log(AnalyticsEvent.itemClick('view tag: ${tag.id}'));
-                    Navigator.of(context).push<void>(TagDetailPage.route(id: tag.id));
-                  },
-                );
-              },
-              separatorBuilder: (BuildContext context, _) => const SizedBox(width: 8),
-              itemCount: tags.length,
+          if (tags.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(context.l10n.noTagsCreatedMessage),
+              ),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.only(right: 24),
+              child: ListView.separated(
+                padding: const EdgeInsets.only(left: 16, right: 40),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  final TagViewModel tag = tags.elementAt(index);
+                  return ActionChip(
+                    key: Key(tag.id),
+                    label: Text('#' + tag.title.capitalize()),
+                    elevation: 0,
+                    shape: const RoundedRectangleBorder(borderRadius: AppBorderRadius.c6),
+                    visualDensity: VisualDensity.compact,
+                    labelStyle: theme.textTheme.bodyText1?.copyWith(color: tag.foregroundColor),
+                    backgroundColor: tag.backgroundColor,
+                    onPressed: () {
+                      analytics.log(AnalyticsEvent.itemClick('view tag: ${tag.id}'));
+                      Navigator.of(context).push<void>(TagDetailPage.route(id: tag.id));
+                    },
+                  );
+                },
+                separatorBuilder: (BuildContext context, _) => const SizedBox(width: 8),
+                itemCount: tags.length,
+              ),
             ),
-          ),
-          FloatingActionButton.small(
-            onPressed: () {
-              analytics.log(AnalyticsEvent.buttonClick('create tag: items'));
-              Navigator.of(context).push(CreateTagPage.route());
-            },
-            elevation: 0,
-            tooltip: context.l10n.createTagCaption,
-            heroTag: 'CreateTagHeroTag',
-            backgroundColor: colorScheme.mutedBackground,
-            foregroundColor: colorScheme.onMutedBackground,
-            child: const Icon(Icons.add),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: FloatingActionButton.small(
+              onPressed: () {
+                analytics.log(AnalyticsEvent.buttonClick('create tag: items'));
+                Navigator.of(context).push(CreateTagPage.route());
+              },
+              elevation: 0,
+              tooltip: context.l10n.createTagCaption,
+              heroTag: 'CreateTagHeroTag',
+              backgroundColor: tags.isEmpty ? colorScheme.primary : colorScheme.mutedBackground,
+              foregroundColor: tags.isEmpty ? colorScheme.onPrimary : colorScheme.onMutedBackground,
+              child: const Icon(Icons.add),
+            ),
           ),
         ],
       ),

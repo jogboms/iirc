@@ -31,6 +31,9 @@ void main() {
       await tester.pumpWidget(createApp(
         home: const ItemsPage(),
         overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(TagViewModelList.empty()),
+          ),
           itemsProvider.overrideWithValue(
             AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
           ),
@@ -41,6 +44,34 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(ItemsPageState.emptyDataViewKey).descendantOf(itemsPage), findsOneWidget);
+    });
+
+    testWidgets('should show list of tags', (WidgetTester tester) async {
+      final TagViewModelList expectedTags = TagViewModelList.generate(
+        3,
+        (_) => TagsMockImpl.generateTag().asViewModel,
+      );
+
+      await tester.pumpWidget(createApp(
+        home: const ItemsPage(),
+        overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(expectedTags),
+          ),
+          itemsProvider.overrideWithValue(
+            AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
+          ),
+        ],
+      ));
+
+      await tester.pump();
+      await tester.pump();
+
+      // Find all tags
+      for (final TagViewModel tag in expectedTags) {
+        expect(find.byKey(Key(tag.id)).descendantOf(itemsPage), findsOneWidget);
+        expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
+      }
     });
 
     testWidgets('should show unique list of items', (WidgetTester tester) async {
@@ -54,6 +85,9 @@ void main() {
       await tester.pumpWidget(createApp(
         home: const ItemsPage(),
         overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(TagViewModelList.empty()),
+          ),
           itemsProvider.overrideWithValue(
             AsyncData<ItemViewModelList>(expectedItems),
           ),
@@ -62,12 +96,6 @@ void main() {
 
       await tester.pump();
       await tester.pump();
-
-      // Find all tags
-      for (final TagViewModel tag in expectedItems.map((ItemViewModel e) => e.tag)) {
-        expect(find.byKey(Key(tag.id)).descendantOf(itemsPage), findsOneWidget);
-        expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
-      }
 
       // Find all items
       for (final TagModel tag in uniqueTags) {
@@ -84,6 +112,9 @@ void main() {
       await tester.pumpWidget(createApp(
         home: const ItemsPage(),
         overrides: <Override>[
+          tagsProvider.overrideWithValue(
+            AsyncData<TagViewModelList>(TagViewModelList.empty()),
+          ),
           itemsProvider.overrideWithValue(
             AsyncError<ItemViewModelList>(expectedError),
           ),

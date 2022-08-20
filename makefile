@@ -11,7 +11,7 @@ analyze:
 	fvm flutter analyze lib
 
 test_coverage:
-	fvm flutter test --no-pub --coverage
+	fvm flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
 build_coverage:
 	make test_coverage && genhtml -o coverage coverage/lcov.info

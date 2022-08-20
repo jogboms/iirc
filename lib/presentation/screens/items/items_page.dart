@@ -26,9 +26,10 @@ class ItemsPageState extends State<ItemsPage> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
-            data: (ItemViewModelList data) => _ItemsDataView(
+            data: (FilteredItemsState state) => _ItemsDataView(
               key: dataViewKey,
-              items: data,
+              tags: state.tags,
+              items: state.items,
               analytics: ref.read(analyticsProvider),
             ),
             error: ErrorView.new,
@@ -40,8 +41,9 @@ class ItemsPageState extends State<ItemsPage> {
 }
 
 class _ItemsDataView extends StatelessWidget {
-  const _ItemsDataView({super.key, required this.items, required this.analytics});
+  const _ItemsDataView({super.key, required this.tags, required this.items, required this.analytics});
 
+  final TagViewModelList tags;
   final ItemViewModelList items;
   final Analytics analytics;
 
@@ -54,6 +56,12 @@ class _ItemsDataView extends StatelessWidget {
           asSliver: true,
           centerTitle: true,
         ),
+        SliverToBoxAdapter(
+          child: ItemsTagsListView(
+            tags: tags,
+            analytics: analytics,
+          ),
+        ),
         if (items.isEmpty)
           SliverFillRemaining(
             key: ItemsPageState.emptyDataViewKey,
@@ -62,12 +70,6 @@ class _ItemsDataView extends StatelessWidget {
             ),
           )
         else ...<Widget>[
-          SliverToBoxAdapter(
-            child: ItemsTagsListView(
-              tags: items.map((ItemViewModel e) => e.tag),
-              analytics: analytics,
-            ),
-          ),
           SliverPadding(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
             sliver: SliverList(

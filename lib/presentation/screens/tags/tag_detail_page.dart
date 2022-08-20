@@ -204,7 +204,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             if (widget.items.isEmpty) ...<Widget>[
               const SizedBox(width: 4),
               Consumer(
-                builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                builder: (_, WidgetRef ref, __) => IconButton(
                   onPressed: () async {
                     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('delete tag: ${widget.tag.id}')));
                     final bool isOk = await showErrorChoiceBanner(

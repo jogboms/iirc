@@ -12,6 +12,7 @@ import '../../state.dart';
 import '../../theme.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
+import 'create_item_page.dart';
 import 'providers/item_provider.dart';
 import 'providers/selected_item_provider.dart';
 import 'update_item_page.dart';
@@ -77,6 +78,18 @@ class _SelectedItemDataView extends StatelessWidget {
         CustomAppBar(
           title: Text(context.l10n.informationCaption),
           actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                analytics.log(AnalyticsEvent.buttonClick('create item: ${AppRoutes.itemDetail}'));
+                Navigator.of(context).pushAndRemoveUntil(
+                  CreateItemPage.route(asModal: true, tag: item.tag),
+                  (Route<void> route) => route.settings.name == AppRoutes.tagDetail,
+                );
+              },
+              icon: const Icon(Icons.redo_outlined),
+              color: theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 4),
             IconButton(
               onPressed: () {
                 analytics.log(AnalyticsEvent.buttonClick('edit item: ${item.id}'));

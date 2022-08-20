@@ -55,7 +55,7 @@ android {
     defaultConfig {
         applicationId "io.github.jogboms.iirc"
         minSdkVersion project.ext.minimumSdkVersion
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode generateVersionCode(flutterVersionName, project.ext.minimumSdkVersion) + flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

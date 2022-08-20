@@ -72,6 +72,7 @@ class ItemEntryForm extends StatefulWidget {
 @visibleForTesting
 class ItemEntryFormState extends State<ItemEntryForm> {
   late final FocusNode descriptionFocusNode = FocusNode(debugLabel: 'description');
+  late final GlobalKey<FormFieldState<String>> tagsFormFieldKey = GlobalKey();
 
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
@@ -110,10 +111,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   void onCreateTag(BuildContext context, Reader read) async {
     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('create tag: form')));
     final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
-    if (tagId != null) {
-      final TagViewModelList tags = read(tagsProvider).value ?? TagViewModelList.empty();
-      dataNotifier.update(tag: tags.firstWhere((TagModel element) => element.id == tagId));
-    }
+    tagsFormFieldKey.currentState?.didChange(tagId);
   }
 
   @override
@@ -150,27 +148,28 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                 return Row(
                   children: <Widget>[
                     Expanded(
-                      child: DropdownButtonFormField<TagViewModel>(
-                        value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag,
-                        decoration: InputDecoration(
-                          hintText: context.l10n.selectItemTagCaption,
-                        ),
-                        items: <DropdownMenuItem<TagViewModel>>[
-                          for (final TagViewModel tag in tags)
-                            DropdownMenuItem<TagViewModel>(
-                              key: Key(tag.id),
-                              value: tag,
-                              child: Row(
-                                children: <Widget>[
-                                  TagColorBox(code: tag.color),
-                                  const SizedBox(width: 8),
-                                  Text(tag.title),
-                                ],
+                      child: tags.length == 1
+                          ? Builder(builder: (_) {
+                              final TagViewModel tag = tags.first;
+                              return _TagItem(key: Key(tag.id), tag: tags.first);
+                            })
+                          : DropdownButtonFormField<String>(
+                              key: tagsFormFieldKey,
+                              value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag.id,
+                              decoration: InputDecoration(
+                                hintText: context.l10n.selectItemTagCaption,
                               ),
+                              items: <DropdownMenuItem<String>>[
+                                for (final TagViewModel tag in tags)
+                                  DropdownMenuItem<String>(
+                                    key: Key(tag.id),
+                                    value: tag.id,
+                                    child: _TagItem(tag: tag),
+                                  ),
+                              ],
+                              onChanged: (String? id) =>
+                                  dataNotifier.update(tag: tags.firstWhere((TagViewModel element) => element.id == id)),
                             ),
-                        ],
-                        onChanged: (TagViewModel? tag) => dataNotifier.update(tag: tag),
-                      ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
@@ -212,6 +211,21 @@ class ItemEntryFormState extends State<ItemEntryForm> {
       ),
     );
   }
+}
+
+class _TagItem extends StatelessWidget {
+  const _TagItem({super.key, required this.tag});
+
+  final TagViewModel tag;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          TagColorBox(code: tag.color),
+          const SizedBox(width: 8),
+          Text(tag.title),
+        ],
+      );
 }
 
 final TagViewModel _emptyTagModel = TagViewModel.fromTag(TagModel(

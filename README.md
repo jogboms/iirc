@@ -6,6 +6,8 @@
   <br /><br />
 
 [![Format, Analyze and Test](https://github.com/jogboms/iirc/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/jogboms/iirc/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/jogboms/iirc/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/iirc)
+
+  <a href='https://play.google.com/store/apps/details?id=io.github.jogboms.iirc'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='36px'/></a>
 </div>
 
 ---

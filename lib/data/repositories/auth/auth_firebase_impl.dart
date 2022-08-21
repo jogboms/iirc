@@ -26,6 +26,8 @@ class AuthFirebaseImpl extends AuthRepository {
       return await firebase.auth.signInWithGoogle();
     } on AppFirebaseAuthException catch (e, stackTrace) {
       switch (e.type) {
+        case AppFirebaseAuthExceptionType.canceled:
+          Error.throwWithStackTrace(const AuthException.canceled(), stackTrace);
         case AppFirebaseAuthExceptionType.invalidEmail:
           Error.throwWithStackTrace(AuthException.invalidEmail(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.userNotFound:

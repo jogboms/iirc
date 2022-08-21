@@ -1,6 +1,12 @@
 abstract class AuthException {
   const factory AuthException.unknown(Exception exception) = AuthExceptionUnknown;
 
+  const factory AuthException.canceled() = AuthExceptionCanceled;
+
+  const factory AuthException.failed() = AuthExceptionFailed;
+
+  const factory AuthException.networkUnavailable() = AuthExceptionNetworkUnavailable;
+
   const factory AuthException.invalidEmail({String? email}) = AuthExceptionInvalidEmail;
 
   const factory AuthException.userDisabled({String? email}) = AuthExceptionUserDisabled;
@@ -14,6 +20,18 @@ class AuthExceptionUnknown implements AuthException {
   const AuthExceptionUnknown(this.exception);
 
   final Exception exception;
+}
+
+class AuthExceptionCanceled implements AuthException {
+  const AuthExceptionCanceled();
+}
+
+class AuthExceptionFailed implements AuthException {
+  const AuthExceptionFailed();
+}
+
+class AuthExceptionNetworkUnavailable implements AuthException {
+  const AuthExceptionNetworkUnavailable();
 }
 
 class AuthExceptionInvalidEmail implements AuthException {

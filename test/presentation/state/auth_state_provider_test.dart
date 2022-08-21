@@ -182,6 +182,9 @@ Future<void> main() async {
             verify(() => mockUseCases.updateUserUseCase.call(any())).called(1);
             verify(() => mockUseCases.signOutUseCase.call()).called(1);
           });
+
+          // TODO: AuthException tests
+          group('Exceptions', () {}, skip: true);
         });
       });
 

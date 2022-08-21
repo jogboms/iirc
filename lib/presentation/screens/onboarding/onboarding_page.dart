@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
@@ -74,19 +75,7 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 
     ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
       if (state is AuthErrorState) {
-        final String message;
-        switch (state.reason) {
-          case AuthErrorStateReason.message:
-            message = state.error;
-            break;
-          case AuthErrorStateReason.tooManyRequests:
-            message = context.l10n.tryAgainMessage;
-            break;
-          case AuthErrorStateReason.userDisabled:
-            message = context.l10n.bannedUserMessage;
-            break;
-        }
-        AppSnackBar.of(context).error(message);
+        AppSnackBar.of(context).error(state.toPrettyMessage(context.l10n));
       } else if (state == AuthState.complete) {
         Navigator.of(context).pushReplacement(MenuPage.route());
       }
@@ -105,5 +94,22 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
               child: Text(context.l10n.continueWithGoogle),
             ),
     );
+  }
+}
+
+extension on AuthErrorState {
+  String toPrettyMessage(L10n l10n) {
+    switch (reason) {
+      case AuthErrorStateReason.message:
+        return error;
+      case AuthErrorStateReason.tooManyRequests:
+        return l10n.tryAgainMessage;
+      case AuthErrorStateReason.userDisabled:
+        return l10n.bannedUserMessage;
+      case AuthErrorStateReason.failed:
+        return l10n.failedSignInMessage;
+      case AuthErrorStateReason.networkUnavailable:
+        return l10n.tryAgainMessage;
+    }
   }
 }

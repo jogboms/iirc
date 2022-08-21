@@ -67,12 +67,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     } on AuthException catch (error, stackTrace) {
       if (error is AuthExceptionCanceled) {
         state = AuthState.idle;
+      } else if (error is AuthExceptionNetworkUnavailable) {
+        state = AuthState.reason(AuthErrorStateReason.networkUnavailable);
       } else if (error is AuthExceptionTooManyRequests) {
         await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
-        state = AuthState.error('', AuthErrorStateReason.tooManyRequests);
+        state = AuthState.reason(AuthErrorStateReason.tooManyRequests);
       } else if (error is AuthExceptionUserDisabled) {
         await analytics.log(AnalyticsEvent.userDisabled(error.email));
-        state = AuthState.error('', AuthErrorStateReason.userDisabled);
+        state = AuthState.reason(AuthErrorStateReason.userDisabled);
+      } else if (error is AuthExceptionFailed) {
+        AppLog.e(error, stackTrace);
+        state = AuthState.reason(AuthErrorStateReason.failed);
       } else {
         _handleError(error, stackTrace);
       }
@@ -118,6 +123,8 @@ class AuthState with EquatableMixin {
 
   factory AuthState.error(String error, [AuthErrorStateReason reason]) = AuthErrorState;
 
+  factory AuthState.reason(AuthErrorStateReason reason) => AuthState.error('', reason);
+
   static const AuthState idle = AuthState(_AuthStateType.idle);
   static const AuthState loading = AuthState(_AuthStateType.loading);
   static const AuthState complete = AuthState(_AuthStateType.complete);
@@ -128,7 +135,13 @@ class AuthState with EquatableMixin {
   List<Object> get props => [_type];
 }
 
-enum AuthErrorStateReason { message, tooManyRequests, userDisabled }
+enum AuthErrorStateReason {
+  message,
+  failed,
+  networkUnavailable,
+  tooManyRequests,
+  userDisabled,
+}
 
 class AuthErrorState extends AuthState {
   const AuthErrorState(this.error, [this.reason = AuthErrorStateReason.message]) : super(_AuthStateType.error);
@@ -137,5 +150,5 @@ class AuthErrorState extends AuthState {
   final AuthErrorStateReason reason;
 
   @override
-  List<Object> get props => <Object>[...super.props, error];
+  List<Object> get props => <Object>[...super.props, error, reason];
 }

@@ -27,6 +27,8 @@ class AppFirebaseAuthException implements Exception {
 
 enum AppFirebaseAuthExceptionType {
   canceled,
+  failed,
+  networkUnavailable,
   invalidEmail,
   userDisabled,
   userNotFound,

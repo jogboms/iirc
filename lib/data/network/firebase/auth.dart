@@ -36,11 +36,6 @@ class Auth {
       return response.user!.uid;
     } on FirebaseAuthException catch (e, stackTrace) {
       switch (e.code) {
-        case GoogleSignIn.kSignInCanceledError:
-          Error.throwWithStackTrace(
-            AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled, email: e.email),
-            stackTrace,
-          );
         case 'invalid-email':
           Error.throwWithStackTrace(
             AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail, email: e.email),
@@ -59,6 +54,25 @@ class Auth {
         case 'too-many-requests':
           Error.throwWithStackTrace(
             AppFirebaseAuthException(AppFirebaseAuthExceptionType.tooManyRequests, email: e.email),
+            stackTrace,
+          );
+      }
+      Error.throwWithStackTrace(Exception(e.toString()), stackTrace);
+    } on PlatformException catch (e, stackTrace) {
+      switch (e.code) {
+        case GoogleSignIn.kSignInCanceledError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled, email: null),
+            stackTrace,
+          );
+        case GoogleSignIn.kSignInFailedError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.failed, email: null),
+            stackTrace,
+          );
+        case GoogleSignIn.kNetworkError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.networkUnavailable, email: null),
             stackTrace,
           );
       }

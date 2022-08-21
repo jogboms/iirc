@@ -65,7 +65,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         state = AuthState.complete;
       }
     } on AuthException catch (error, stackTrace) {
-      if (error is AuthExceptionTooManyRequests) {
+      if (error is AuthExceptionCanceled) {
+        state = AuthState.idle;
+      } else if (error is AuthExceptionTooManyRequests) {
         await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
         state = AuthState.error('', AuthErrorStateReason.tooManyRequests);
       } else if (error is AuthExceptionUserDisabled) {

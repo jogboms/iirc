@@ -75,7 +75,7 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 
     ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
       if (state is AuthErrorState) {
-        AppSnackBar.of(context).error(state.toPrettyMessage(context.l10n));
+        AppSnackBar.of(context).error(state.toPrettyMessage(context.l10n, environment.isProduction));
       } else if (state == AuthState.complete) {
         Navigator.of(context).pushReplacement(MenuPage.route());
       }
@@ -98,10 +98,10 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 }
 
 extension on AuthErrorState {
-  String toPrettyMessage(L10n l10n) {
+  String toPrettyMessage(L10n l10n, bool isProduction) {
     switch (reason) {
       case AuthErrorStateReason.message:
-        return error;
+        return isProduction ? l10n.genericErrorMessage : error;
       case AuthErrorStateReason.tooManyRequests:
         return l10n.tryAgainMessage;
       case AuthErrorStateReason.userDisabled:

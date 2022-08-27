@@ -6,5 +6,5 @@ class GetAccountUseCase {
 
   final AuthRepository _auth;
 
-  Future<AccountModel> call() => _auth.account;
+  Future<AccountModel> call() => _auth.fetch();
 }

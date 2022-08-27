@@ -15,13 +15,13 @@ void main() {
     tearDown(() => reset(authRepository));
 
     test('should fetch auth', () {
-      when(() => authRepository.account).thenAnswer((_) async => dummyAccount);
+      when(() => authRepository.fetch()).thenAnswer((_) async => dummyAccount);
 
       expect(useCase(), completion(dummyAccount));
     });
 
     test('should bubble fetch errors', () {
-      when(() => authRepository.account).thenThrow(Exception('an error'));
+      when(() => authRepository.fetch()).thenThrow(Exception('an error'));
 
       expect(() => useCase(), throwsException);
     });

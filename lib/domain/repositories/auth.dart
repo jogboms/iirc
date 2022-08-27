@@ -1,7 +1,7 @@
 import '../models/account.dart';
 
 abstract class AuthRepository {
-  Future<AccountModel> get account;
+  Future<AccountModel> fetch();
 
   Future<String> signIn();
 

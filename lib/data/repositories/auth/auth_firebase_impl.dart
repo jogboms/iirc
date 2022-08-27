@@ -6,12 +6,16 @@ import '../../network/firebase/models.dart';
 import '../extensions.dart';
 
 class AuthFirebaseImpl extends AuthRepository {
-  AuthFirebaseImpl({required this.firebase});
+  AuthFirebaseImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
   final Firebase firebase;
+  final bool isDev;
 
   @override
-  Future<AccountModel> get account async {
+  Future<AccountModel> fetch() async {
     final FireUser? user = firebase.auth.getUser;
     if (user == null) {
       throw const AuthException.userNotFound();
@@ -40,15 +44,15 @@ class AuthFirebaseImpl extends AuthRepository {
           Error.throwWithStackTrace(AuthException.tooManyRequests(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.userDisabled:
           Error.throwWithStackTrace(AuthException.userDisabled(email: e.email), stackTrace);
-        default:
-          Error.throwWithStackTrace(AuthException.unknown(e), stackTrace);
       }
+    } on Exception catch (e, stackTrace) {
+      Error.throwWithStackTrace(AuthException.unknown(e), stackTrace);
     }
   }
 
   @override
   Stream<String?> get onAuthStateChanged =>
-      firebase.auth.onAuthStateChanged.map((FireUser? convert) => convert?.uid).mapErrorToAppException(true);
+      firebase.auth.onAuthStateChanged.map((FireUser? convert) => convert?.uid).mapErrorToAppException(isDev);
 
   @override
   Future<void> signOut() => firebase.auth.signOutWithGoogle();

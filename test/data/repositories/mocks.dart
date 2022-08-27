@@ -4,12 +4,20 @@ import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockFirebase extends Mock implements Firebase {
-  MockFirebase({CloudDb? db}) {
+  MockFirebase({
+    Auth? auth,
+    CloudDb? db,
+  }) {
+    if (auth != null) {
+      when(() => this.auth).thenReturn(auth);
+    }
     if (db != null) {
       when(() => this.db).thenReturn(db);
     }
   }
 }
+
+class MockAuth extends Mock implements Auth {}
 
 class MockCloudDb extends Mock implements CloudDb {}
 
@@ -64,5 +72,13 @@ class MockUserDocumentReference extends MockMapDocumentReference {
       when(() => snapshot.reference).thenReturn(reference);
       when(() => reference.path).thenReturn(data['path'] as String);
     }
+  }
+}
+
+class MockFireUser extends Mock implements FireUser {
+  MockFireUser({required String uid, required String email, required String displayName}) {
+    when(() => this.uid).thenReturn(uid);
+    when(() => this.email).thenReturn(email);
+    when(() => this.displayName).thenReturn(displayName);
   }
 }

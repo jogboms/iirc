@@ -17,7 +17,7 @@ void main() {
 
       when(() => authRepository.signIn()).thenAnswer((_) async => '1');
       when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));
-      when(() => mockRepositories.auth.account).thenAnswer((_) async => dummyAccount);
+      when(() => mockRepositories.auth.fetch()).thenAnswer((_) async => dummyAccount);
 
       expect(useCase(), completion(dummyAccount));
     });

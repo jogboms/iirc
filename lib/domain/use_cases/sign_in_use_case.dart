@@ -13,7 +13,7 @@ class SignInUseCase {
 
     late StreamSubscription<void> sub;
     sub = _auth.onAuthStateChanged.where((String? id) => id != null).listen((_) {
-      completer.complete(_auth.account);
+      completer.complete(_auth.fetch());
       sub.cancel();
     }, onError: (Object error, StackTrace st) {
       completer.completeError(error, st);

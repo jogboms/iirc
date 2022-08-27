@@ -183,8 +183,133 @@ Future<void> main() async {
             verify(() => mockUseCases.signOutUseCase.call()).called(1);
           });
 
-          // TODO: AuthException tests
-          group('Exceptions', () {}, skip: true);
+          group('Exceptions', () {
+            test('when canceled', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.canceled());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.idle,
+              ]);
+            });
+
+            test('when network unavailable', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.networkUnavailable());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.reason(AuthErrorStateReason.networkUnavailable),
+              ]);
+            });
+
+            test('when popup blocked by browser', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.popupBlockedByBrowser());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser),
+              ]);
+            });
+
+            test('when too many requests', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.tooManyRequests());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.reason(AuthErrorStateReason.tooManyRequests),
+              ]);
+            });
+
+            test('when failed', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.failed());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.reason(AuthErrorStateReason.failed),
+              ]);
+            });
+
+            test('when user disabled', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.userDisabled());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.reason(AuthErrorStateReason.userDisabled),
+              ]);
+            });
+
+            test('when invalid email', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.invalidEmail());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.error("Instance of 'AuthExceptionInvalidEmail'", AuthErrorStateReason.message),
+              ]);
+            });
+
+            test('when user not found', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.userNotFound());
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.error("Instance of 'AuthExceptionUserNotFound'", AuthErrorStateReason.message),
+              ]);
+            });
+
+            test('when unknown', () async {
+              when(() => mockUseCases.signInUseCase.call()).thenThrow(AuthException.unknown(Exception()));
+
+              createProvider().signIn();
+
+              await pumpEventQueue();
+
+              expect(log, <AuthState>[
+                AuthState.idle,
+                AuthState.loading,
+                AuthState.error("Instance of 'AuthExceptionUnknown'", AuthErrorStateReason.message),
+              ]);
+            });
+          });
         });
       });
 

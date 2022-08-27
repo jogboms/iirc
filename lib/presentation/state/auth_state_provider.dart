@@ -69,6 +69,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         state = AuthState.idle;
       } else if (error is AuthExceptionNetworkUnavailable) {
         state = AuthState.reason(AuthErrorStateReason.networkUnavailable);
+      } else if (error is AuthExceptionPopupBlockedByBrowser) {
+        state = AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser);
       } else if (error is AuthExceptionTooManyRequests) {
         await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
         state = AuthState.reason(AuthErrorStateReason.tooManyRequests);
@@ -139,6 +141,7 @@ enum AuthErrorStateReason {
   message,
   failed,
   networkUnavailable,
+  popupBlockedByBrowser,
   tooManyRequests,
   userDisabled,
 }

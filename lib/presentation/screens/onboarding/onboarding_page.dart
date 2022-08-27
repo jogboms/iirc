@@ -71,19 +71,11 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthState authState = ref.watch(authStateProvider);
-
-    ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
-      if (state is AuthErrorState) {
-        AppSnackBar.of(context).error(state.toPrettyMessage(context.l10n, environment.isProduction));
-      } else if (state == AuthState.complete) {
-        Navigator.of(context).pushReplacement(MenuPage.route());
-      }
-    });
+    ref.listen<AuthState>(authStateProvider, _authStateListener);
 
     return AnimatedSwitcher(
       duration: kThemeAnimationDuration,
-      child: authState == AuthState.loading
+      child: ref.watch(authStateProvider) == AuthState.loading
           ? const LoadingView()
           : ElevatedButton(
               key: signInButtonKey,
@@ -94,6 +86,20 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
               child: Text(context.l10n.continueWithGoogle),
             ),
     );
+  }
+
+  void _authStateListener(AuthState? _, AuthState state) {
+    if (state is AuthErrorState) {
+      final AppSnackBar snackBar = AppSnackBar.of(context);
+      final String message = state.toPrettyMessage(context.l10n, environment.isProduction);
+      if (state is AuthExceptionPopupBlockedByBrowser) {
+        snackBar.info(message);
+      } else {
+        snackBar.error(message);
+      }
+    } else if (state == AuthState.complete) {
+      Navigator.of(context).pushReplacement(MenuPage.route());
+    }
   }
 }
 
@@ -110,6 +116,8 @@ extension on AuthErrorState {
         return l10n.failedSignInMessage;
       case AuthErrorStateReason.networkUnavailable:
         return l10n.tryAgainMessage;
+      case AuthErrorStateReason.popupBlockedByBrowser:
+        return l10n.popupBlockedByBrowserMessage;
     }
   }
 }

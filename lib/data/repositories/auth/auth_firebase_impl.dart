@@ -36,6 +36,8 @@ class AuthFirebaseImpl extends AuthRepository {
           Error.throwWithStackTrace(const AuthException.failed(), stackTrace);
         case AppFirebaseAuthExceptionType.networkUnavailable:
           Error.throwWithStackTrace(const AuthException.networkUnavailable(), stackTrace);
+        case AppFirebaseAuthExceptionType.popupBlockedByBrowser:
+          Error.throwWithStackTrace(const AuthException.popupBlockedByBrowser(), stackTrace);
         case AppFirebaseAuthExceptionType.invalidEmail:
           Error.throwWithStackTrace(AuthException.invalidEmail(email: e.email), stackTrace);
         case AppFirebaseAuthExceptionType.userNotFound:

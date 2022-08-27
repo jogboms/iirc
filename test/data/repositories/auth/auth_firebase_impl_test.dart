@@ -91,6 +91,17 @@ void main() {
           );
         });
 
+        test('should handle when popup blocked by browser', () {
+          when(() => auth.signInWithGoogle()).thenThrow(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.popupBlockedByBrowser, email: 'email'),
+          );
+
+          expect(
+            () => repo.signIn(),
+            throwsA(isA<AuthExceptionPopupBlockedByBrowser>()),
+          );
+        });
+
         test('should handle when invalid email', () {
           when(() => auth.signInWithGoogle()).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail, email: 'email'),

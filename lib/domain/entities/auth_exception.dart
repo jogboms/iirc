@@ -7,6 +7,8 @@ abstract class AuthException {
 
   const factory AuthException.networkUnavailable() = AuthExceptionNetworkUnavailable;
 
+  const factory AuthException.popupBlockedByBrowser() = AuthExceptionPopupBlockedByBrowser;
+
   const factory AuthException.invalidEmail({String? email}) = AuthExceptionInvalidEmail;
 
   const factory AuthException.userDisabled({String? email}) = AuthExceptionUserDisabled;
@@ -32,6 +34,10 @@ class AuthExceptionFailed implements AuthException {
 
 class AuthExceptionNetworkUnavailable implements AuthException {
   const AuthExceptionNetworkUnavailable();
+}
+
+class AuthExceptionPopupBlockedByBrowser implements AuthException {
+  const AuthExceptionPopupBlockedByBrowser();
 }
 
 class AuthExceptionInvalidEmail implements AuthException {

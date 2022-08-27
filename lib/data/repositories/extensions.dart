@@ -33,7 +33,7 @@ extension RandomEnum<T extends Object> on Iterable<T> {
   T random() => elementAt(Random().nextInt(length - 1));
 }
 
-extension FetchEntriesExtensions on FireStoreDb {
+extension FetchEntriesCloudDbCollectionExtensions on CloudDbCollection {
   static const String entriesCollectionName = 'entries';
 
   String deriveEntriesPath(String userId, [String? id]) =>
@@ -45,7 +45,7 @@ extension FetchEntriesExtensions on FireStoreDb {
     required Future<T> Function(MapDocumentSnapshot) mapper,
     required bool isDev,
   }) =>
-      instance
+      db
           .collection(deriveEntriesPath(userId))
           .orderBy(orderBy, descending: true)
           .snapshots()

@@ -11,16 +11,18 @@ class TagsFirebaseImpl implements TagsRepository {
   TagsFirebaseImpl({
     required Firebase firebase,
     required this.isDev,
+    this.idGenerator,
   }) : tags = CloudDbCollection(firebase.db, collectionName);
 
   static const String collectionName = 'tags';
 
   final CloudDbCollection tags;
   final bool isDev;
+  final String Function()? idGenerator;
 
   @override
   Future<String> create(String userId, CreateTagData tag) async {
-    final String id = const Uuid().v4();
+    final String id = idGenerator?.call() ?? const Uuid().v4();
     await tags.db.doc(tags.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'title': tag.title,
       'description': tag.description,

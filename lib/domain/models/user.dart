@@ -21,7 +21,4 @@ class UserModel with EquatableMixin {
 
   @override
   List<Object> get props => <Object>[id, path, email, firstName, lastName, lastSeenAt, createdAt];
-
-  @override
-  bool? get stringify => true;
 }

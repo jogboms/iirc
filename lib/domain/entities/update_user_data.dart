@@ -11,7 +11,4 @@ class UpdateUserData with EquatableMixin {
 
   @override
   List<Object?> get props => <Object?>[id, lastSeenAt];
-
-  @override
-  bool? get stringify => true;
 }

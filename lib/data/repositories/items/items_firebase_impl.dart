@@ -12,16 +12,18 @@ class ItemsFirebaseImpl implements ItemsRepository {
   ItemsFirebaseImpl({
     required Firebase firebase,
     required this.isDev,
+    this.idGenerator,
   }) : items = CloudDbCollection(firebase.db, collectionName);
 
   static const String collectionName = 'items';
 
   final CloudDbCollection items;
   final bool isDev;
+  final String Function()? idGenerator;
 
   @override
   Future<String> create(String userId, CreateItemData item) async {
-    final String id = const Uuid().v4();
+    final String id = idGenerator?.call() ?? const Uuid().v4();
     await items.db.doc(items.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
       'date': CloudTimestamp.fromDate(item.date.toUtc()),

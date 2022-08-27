@@ -1,5 +1,4 @@
 import 'package:clock/clock.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue, Timestamp;
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,45 +12,47 @@ class ItemsFirebaseImpl implements ItemsRepository {
   ItemsFirebaseImpl({
     required Firebase firebase,
     required this.isDev,
-  }) : stores = FireStoreDb(firebase.db.instance, collectionName);
+    this.idGenerator,
+  }) : items = CloudDbCollection(firebase.db, collectionName);
 
   static const String collectionName = 'items';
 
-  final FireStoreDb stores;
+  final CloudDbCollection items;
   final bool isDev;
+  final String Function()? idGenerator;
 
   @override
   Future<String> create(String userId, CreateItemData item) async {
-    final String id = const Uuid().v4();
-    await stores.instance.doc(stores.deriveEntriesPath(userId, id)).set(<String, dynamic>{
+    final String id = idGenerator?.call() ?? const Uuid().v4();
+    await items.db.doc(items.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date.toUtc()),
-      'tag': stores.instance.doc(item.tag.path),
-      'createdAt': FieldValue.serverTimestamp(),
+      'date': CloudTimestamp.fromDate(item.date.toUtc()),
+      'tag': items.db.doc(item.tag.path),
+      'createdAt': CloudValue.serverTimestamp(),
     });
     return id;
   }
 
   @override
   Future<bool> delete(String path) async {
-    await stores.instance.doc(path).delete();
+    await items.db.doc(path).delete();
     return true;
   }
 
   @override
   Future<bool> update(UpdateItemData item) async {
-    await stores.instance.doc(item.path).update(<String, dynamic>{
+    await items.db.doc(item.path).update(<String, dynamic>{
       'description': item.description,
-      'date': Timestamp.fromDate(item.date.toUtc()),
-      'tag': stores.instance.doc(item.tag.path),
-      'updatedAt': FieldValue.serverTimestamp(),
+      'date': CloudTimestamp.fromDate(item.date.toUtc()),
+      'tag': items.db.doc(item.tag.path),
+      'updatedAt': CloudValue.serverTimestamp(),
     });
     return true;
   }
 
   @override
   Stream<ItemModelList> fetch(String userId) =>
-      stores.fetchEntries(userId: userId, orderBy: 'date', mapper: _deriveItemFromDocument, isDev: isDev);
+      items.fetchEntries(userId: userId, orderBy: 'date', mapper: _deriveItemFromDocument, isDev: isDev);
 }
 
 Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
@@ -62,9 +63,9 @@ Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
     id: document.id,
     path: document.reference.path,
     description: data['description'] as String,
-    date: deriveDateFromTimestamp(data['date'] as Timestamp),
+    date: deriveDateFromTimestamp(data['date'] as CloudTimestamp),
     tag: TagModelReference(id: tag.id, path: tag.path),
-    createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as Timestamp) : clock.now(),
-    updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as Timestamp) : null,
+    createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as CloudTimestamp) : clock.now(),
+    updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as CloudTimestamp) : null,
   );
 }

@@ -11,7 +11,7 @@ class AuthMockImpl extends AuthRepository {
   final BehaviorSubject<String?> _authIdState$ = BehaviorSubject<String?>();
 
   @override
-  Future<AccountModel> get account async => generateAccount();
+  Future<AccountModel> fetch() async => generateAccount();
 
   @override
   Stream<String?> get onAuthStateChanged => _authIdState$;

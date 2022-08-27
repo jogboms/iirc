@@ -75,6 +75,11 @@ class Auth {
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.networkUnavailable, email: null),
             stackTrace,
           );
+        case 'popup_blocked_by_browser':
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.popupBlockedByBrowser, email: null),
+            stackTrace,
+          );
       }
       Error.throwWithStackTrace(Exception(e.toString()), stackTrace);
     }

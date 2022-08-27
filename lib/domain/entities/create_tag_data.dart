@@ -13,7 +13,4 @@ class CreateTagData with EquatableMixin {
 
   @override
   List<Object> get props => <Object>[title, description, color];
-
-  @override
-  bool? get stringify => true;
 }

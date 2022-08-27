@@ -4,6 +4,7 @@ import 'package:clock/clock.dart';
 import 'package:equatable/equatable.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
+import 'package:iirc/presentation.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -47,7 +48,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final UpdateUserUseCase updateUserUseCase;
 
   void signIn() async {
-    state = AuthState.loading;
+    _setState(AuthState.loading);
 
     try {
       final account = await signInUseCase();
@@ -61,23 +62,23 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await analytics.setUserId(account.id);
       await analytics.log(AnalyticsEvent.login(account.email, account.id));
 
-      if (mounted) {
-        state = AuthState.complete;
-      }
+      _setState(AuthState.complete);
     } on AuthException catch (error, stackTrace) {
       if (error is AuthExceptionCanceled) {
-        state = AuthState.idle;
+        _setState(AuthState.idle);
       } else if (error is AuthExceptionNetworkUnavailable) {
-        state = AuthState.reason(AuthErrorStateReason.networkUnavailable);
+        _setState(AuthState.reason(AuthErrorStateReason.networkUnavailable));
+      } else if (error is AuthExceptionPopupBlockedByBrowser) {
+        _setState(AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser));
       } else if (error is AuthExceptionTooManyRequests) {
         await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
-        state = AuthState.reason(AuthErrorStateReason.tooManyRequests);
+        _setState(AuthState.reason(AuthErrorStateReason.tooManyRequests));
       } else if (error is AuthExceptionUserDisabled) {
         await analytics.log(AnalyticsEvent.userDisabled(error.email));
-        state = AuthState.reason(AuthErrorStateReason.userDisabled);
+        _setState(AuthState.reason(AuthErrorStateReason.userDisabled));
       } else if (error is AuthExceptionFailed) {
         AppLog.e(error, stackTrace);
-        state = AuthState.reason(AuthErrorStateReason.failed);
+        _setState(AuthState.reason(AuthErrorStateReason.failed));
       } else {
         _handleError(error, stackTrace);
       }
@@ -88,31 +89,29 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void signOut() async {
-    state = AuthState.loading;
+    _setState(AuthState.loading);
 
     try {
       await signOutUseCase();
       await analytics.log(AnalyticsEvent.logout);
       await analytics.removeUserId();
 
-      if (mounted) {
-        state = AuthState.complete;
-      }
+      _setState(AuthState.complete);
     } catch (error, stackTrace) {
       _handleError(error, stackTrace);
     }
   }
 
-  void _handleError(Object error, StackTrace stackTrace) {
+  void _setState(AuthState newState) {
     if (mounted) {
-      final String message = error.toString();
-      if (message.isNotEmpty) {
-        AppLog.e(error, stackTrace);
-        state = AuthState.error(message);
-      } else {
-        state = AuthState.idle;
-      }
+      state = newState;
     }
+  }
+
+  void _handleError(Object error, StackTrace stackTrace) {
+    final String message = error.toString();
+    AppLog.e(error, stackTrace);
+    _setState(AuthState.error(message));
   }
 }
 
@@ -139,6 +138,7 @@ enum AuthErrorStateReason {
   message,
   failed,
   networkUnavailable,
+  popupBlockedByBrowser,
   tooManyRequests,
   userDisabled,
 }

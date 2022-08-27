@@ -17,7 +17,4 @@ class UpdateTagData with EquatableMixin {
 
   @override
   List<Object?> get props => <Object?>[id, path, title, description, color];
-
-  @override
-  bool? get stringify => true;
 }

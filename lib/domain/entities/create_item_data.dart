@@ -15,7 +15,4 @@ class CreateItemData with EquatableMixin {
 
   @override
   List<Object> get props => <Object>[description, date, tag];
-
-  @override
-  bool? get stringify => true;
 }

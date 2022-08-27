@@ -112,7 +112,7 @@ void main() async {
 
 class _Repository {
   _Repository.firebase(Firebase firebase, bool isDev)
-      : auth = AuthFirebaseImpl(firebase: firebase),
+      : auth = AuthFirebaseImpl(firebase: firebase, isDev: isDev),
         items = ItemsFirebaseImpl(firebase: firebase, isDev: isDev),
         tags = TagsFirebaseImpl(firebase: firebase, isDev: isDev),
         users = UsersFirebaseImpl(firebase: firebase);

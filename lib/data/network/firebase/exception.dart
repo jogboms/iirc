@@ -29,6 +29,7 @@ enum AppFirebaseAuthExceptionType {
   canceled,
   failed,
   networkUnavailable,
+  popupBlockedByBrowser,
   invalidEmail,
   userDisabled,
   userNotFound,

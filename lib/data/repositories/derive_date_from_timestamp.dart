@@ -1,3 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import '../network/firebase/models.dart';
 
-DateTime deriveDateFromTimestamp(Timestamp timestamp) => timestamp.toDate();
+DateTime deriveDateFromTimestamp(CloudTimestamp timestamp) => timestamp.toDate();

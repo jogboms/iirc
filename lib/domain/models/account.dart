@@ -13,7 +13,4 @@ class AccountModel with EquatableMixin {
 
   @override
   List<Object?> get props => <Object?>[id, displayName, email];
-
-  @override
-  bool? get stringify => true;
 }

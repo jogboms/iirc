@@ -48,8 +48,8 @@ Future<UserModel> _deriveUserModelFromJson(String id, String path, DynamicMap da
       id: id,
       path: path,
       email: data['email'] as String,
-      firstName: data['first_name'] as String? ?? '',
-      lastName: data['last_name'] as String? ?? '',
+      firstName: data['firstName'] as String? ?? '',
+      lastName: data['lastName'] as String? ?? '',
       lastSeenAt: deriveDateFromTimestamp(data['lastSeenAt'] as CloudTimestamp),
       createdAt: deriveDateFromTimestamp(data['createdAt'] as CloudTimestamp),
     );

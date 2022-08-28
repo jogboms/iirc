@@ -39,6 +39,14 @@ jobs:
       - run: flutter analyze lib
       - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
+      - name: Clean-up lcov
+        run: |
+          dart pub global activate clean_coverage
+          clean_coverage clean --exclusions '**/generated/*' coverage/lcov.info
+          clean_coverage clean --exclusions '**/presentation/theme/*' coverage/lcov.info
+          clean_coverage clean --exclusions '**/presentation/constants/*' coverage/lcov.info
+          clean_coverage clean --exclusions '**/*_mock_impl.dart' coverage/lcov.info
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1
         with:

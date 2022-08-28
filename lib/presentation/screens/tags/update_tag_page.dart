@@ -37,16 +37,16 @@ class UpdateTagPage extends StatelessWidget {
             color: tag.color,
           ),
           type: TagEntryType.update,
-          onSaved: _onSubmit(context),
+          onSaved: _onSubmit(context, ref),
         ),
       ),
     );
   }
 
-  TagEntryValueSaved _onSubmit(BuildContext context) {
+  ValueChanged<TagEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
-    return (WidgetRef ref, TagEntryData data) async {
+    return (TagEntryData data) async {
       try {
         snackBar.loading();
 

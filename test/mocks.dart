@@ -40,6 +40,10 @@ class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
+class MockValueChangedCallback<T> extends Mock {
+  void call(T data);
+}
+
 class MockAsyncCallback<T> extends Mock {
   Future<T> call();
 }

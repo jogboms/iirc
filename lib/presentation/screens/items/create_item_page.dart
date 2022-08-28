@@ -47,16 +47,16 @@ class CreateItemPageState extends State<CreateItemPage> {
           date: widget.date,
           tag: widget.tag,
           type: ItemEntryType.create,
-          onSaved: _onSubmit(context),
+          onSaved: _onSubmit(context, ref),
         ),
       ),
     );
   }
 
-  ItemEntryValueSaved _onSubmit(BuildContext context) {
+  ValueChanged<ItemEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
-    return (WidgetRef ref, ItemEntryData data) async {
+    return (ItemEntryData data) async {
       try {
         snackBar.loading();
 

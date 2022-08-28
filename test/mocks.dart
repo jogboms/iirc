@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:iirc/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -37,6 +38,8 @@ class MockCreateUserUseCase extends Mock implements CreateUserUseCase {}
 
 class MockFetchUserUseCase extends Mock implements FetchUserUseCase {}
 
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
 class MockAsyncCallback<T> extends Mock {
   Future<T> call();
 }
@@ -56,3 +59,5 @@ class FakeAccountModel extends Fake implements AccountModel {}
 class FakeItemModel extends Fake implements ItemModel {}
 
 class FakeTagModel extends Fake implements TagModel {}
+
+class FakeRoute extends Fake implements Route<dynamic> {}

@@ -13,8 +13,6 @@ enum MenuPageItem {
   insights,
   more;
 
-  static const MenuPageItem defaultPage = calendar;
-
   @override
   String toString() => name;
 }

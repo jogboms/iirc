@@ -9,6 +9,7 @@ export 'presentation/screens/items/providers/item_provider.dart';
 export 'presentation/screens/items/providers/selected_item_provider.dart';
 export 'presentation/screens/items/update_item_page.dart';
 export 'presentation/screens/menu/menu_page.dart';
+export 'presentation/screens/menu/menu_page_item_provider.dart';
 export 'presentation/screens/more/logout_list_tile.dart';
 export 'presentation/screens/more/more_page.dart';
 export 'presentation/screens/onboarding/onboarding_page.dart';

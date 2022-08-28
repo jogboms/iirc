@@ -1,8 +1,9 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/data.dart';
 import 'package:iirc/presentation.dart';
 import 'package:iirc/registry.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../../mocks.dart';
 import '../../../utils.dart';
@@ -11,76 +12,189 @@ void main() {
   group('OnboardingPage', () {
     final Finder onboardingPage = find.byType(OnboardingPage);
     final Registry registry = createRegistry().withMockedUseCases();
+    final NavigatorObserver navigatorObserver = MockNavigatorObserver();
 
     setUpAll(() {
+      registerFallbackValue(FakeRoute());
       registerFallbackValue(FakeUpdateUserData());
     });
 
-    tearDown(() => mockUseCases.reset());
-
-    testWidgets('should auto-login w/ cold start', (WidgetTester tester) async {
-      when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => AuthMockImpl.generateAccount());
-      when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => UsersMockImpl.user);
-      when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
-
-      await tester.pumpWidget(createApp(
-        home: const OnboardingPage(isColdStart: true),
-        registry: registry,
-      ));
-
-      await tester.pump();
-
-      expect(onboardingPage, findsOneWidget);
-      expect(find.byType(LoadingView).descendantOf(onboardingPage), findsOneWidget);
+    tearDown(() {
+      reset(navigatorObserver);
+      mockUseCases.reset();
     });
 
-    testWidgets('should logout when failure to get user', (WidgetTester tester) async {
-      when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => AuthMockImpl.generateAccount());
-      when(() => mockUseCases.signOutUseCase.call()).thenAnswer((_) async {});
+    testWidgets('should auto-login w/ cold start', (WidgetTester tester) async {
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
       await tester.pumpWidget(createApp(
         home: const OnboardingPage(isColdStart: true),
         registry: registry,
+        overrides: <Override>[
+          authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+        ],
       ));
 
       await tester.pump();
 
       expect(onboardingPage, findsOneWidget);
       expect(find.byType(LoadingView).descendantOf(onboardingPage), findsOneWidget);
+      verify(() => mockAuthStateNotifier.signIn()).called(1);
     });
 
     testWidgets('should not auto-login w/o cold start', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(home: const OnboardingPage(isColdStart: false)));
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+
+      await tester.pumpWidget(createApp(
+        home: const OnboardingPage(isColdStart: false),
+        overrides: <Override>[
+          authStateProvider.overrideWithValue(mockAuthStateNotifier),
+        ],
+      ));
 
       await tester.pump();
 
       expect(onboardingPage, findsOneWidget);
       expect(find.byType(LoadingView).descendantOf(onboardingPage), findsNothing);
       expect(find.byKey(OnboardingDataViewState.signInButtonKey).descendantOf(onboardingPage), findsOneWidget);
+      verifyZeroInteractions(mockAuthStateNotifier);
     });
 
     testWidgets('should navigate to MenuPage on successful login', (WidgetTester tester) async {
-      when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => AuthMockImpl.generateAccount());
-      when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => UsersMockImpl.user);
-      when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
       await tester.pumpWidget(createApp(
         home: const OnboardingPage(isColdStart: true),
         registry: registry,
+        observers: <NavigatorObserver>[navigatorObserver],
+        overrides: <Override>[
+          authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+        ],
       ));
 
       await tester.pump();
 
       expect(onboardingPage, findsOneWidget);
       expect(find.byType(LoadingView).descendantOf(onboardingPage), findsOneWidget);
-      expect(find.byKey(OnboardingPageState.dataViewKey).descendantOf(onboardingPage), findsOneWidget);
 
-      expect(find.byType(MenuPage), findsNothing);
+      mockAuthStateNotifier.setState(AuthState.complete);
+
+      await tester.verifyPushNavigation<MenuPage>(navigatorObserver);
+    });
+
+    testWidgets('should login and navigate w/ button', (WidgetTester tester) async {
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+
+      await tester.pumpWidget(createApp(
+        home: const OnboardingPage(isColdStart: false),
+        registry: registry,
+        observers: <NavigatorObserver>[navigatorObserver],
+        overrides: <Override>[
+          authStateProvider.overrideWithValue(mockAuthStateNotifier),
+        ],
+      ));
 
       await tester.pump();
-      await tester.pump();
 
-      expect(find.byType(MenuPage), findsOneWidget);
+      await tester.tap(find.byKey(OnboardingDataViewState.signInButtonKey));
+
+      expect(onboardingPage, findsOneWidget);
+      expect(find.byType(LoadingView).descendantOf(onboardingPage), findsNothing);
+
+      mockAuthStateNotifier.setState(AuthState.complete);
+
+      await tester.verifyPushNavigation<MenuPage>(navigatorObserver);
+    });
+
+    group('Exceptions', () {
+      testWidgets('should show info message on popup error', (WidgetTester tester) async {
+        final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+
+        await tester.pumpWidget(createApp(
+          home: const OnboardingPage(isColdStart: false),
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+          ],
+        ));
+
+        await tester.pump();
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser));
+
+        await tester.pump();
+
+        expect(onboardingPage, findsOneWidget);
+        expect(find.byKey(AppSnackBar.infoKey), findsOneWidget);
+      });
+
+      testWidgets('should show error messages on failed error', (WidgetTester tester) async {
+        final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+
+        await tester.pumpWidget(createApp(
+          home: const OnboardingPage(isColdStart: false),
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+          ],
+        ));
+
+        await tester.pump();
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.failed));
+
+        await tester.pump();
+
+        expect(onboardingPage, findsOneWidget);
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+      });
+
+      testWidgets('should show error messages on error', (WidgetTester tester) async {
+        final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+
+        await tester.pumpWidget(createApp(
+          home: const OnboardingPage(isColdStart: false),
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+          ],
+        ));
+
+        await tester.pump();
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.failed));
+
+        await tester.pump();
+
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.networkUnavailable));
+
+        await tester.pump();
+
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.userDisabled));
+
+        await tester.pump();
+
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.tooManyRequests));
+
+        await tester.pump();
+
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+
+        mockAuthStateNotifier.setState(AuthState.reason(AuthErrorStateReason.message));
+
+        await tester.pump();
+
+        expect(find.byKey(AppSnackBar.errorKey), findsOneWidget);
+      });
     });
   });
+}
+
+class MockAuthStateNotifier extends StateNotifier<AuthState> with Mock implements AuthStateNotifier {
+  MockAuthStateNotifier([super.state = AuthState.idle]);
+
+  void setState(AuthState newState) => state = newState;
 }

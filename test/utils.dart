@@ -163,6 +163,14 @@ extension WidgetTesterExtensions on WidgetTester {
     mt.verify(() => observer.didPush(mt.any(), mt.any()));
     expect(find.byType(U), findsOneWidget);
   }
+
+  Future<void> verifyPopNavigation(NavigatorObserver observer) async {
+    // NOTE: This is done for pages that show any indefinite animated loaders, CircularProgress
+    await pump();
+    await pump();
+
+    mt.verify(() => observer.didPop(mt.any(), mt.any()));
+  }
 }
 
 extension UniqueByExtension<E> on Iterable<E> {

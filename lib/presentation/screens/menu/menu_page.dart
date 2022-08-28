@@ -13,7 +13,12 @@ import '../more/more_page.dart';
 import 'menu_page_item_provider.dart';
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+  const MenuPage({
+    super.key,
+    this.initialPage = MenuPageItem.calendar,
+  });
+
+  final MenuPageItem initialPage;
 
   static PageRoute<void> route() {
     return MaterialPageRoute<void>(
@@ -31,7 +36,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
   late final TabController tabController = TabController(
     vsync: this,
     length: MenuPageItem.values.length,
-    initialIndex: MenuPageItem.defaultPage.index,
+    initialIndex: widget.initialPage.index,
   );
 
   @override
@@ -40,7 +45,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
           menuPageItemProvider.overrideWithValue(tabController),
         ],
         child: Consumer(
-          builder: (BuildContext context, WidgetRef ref, _) => _MenuPageDataView(
+          builder: (BuildContext context, WidgetRef ref, _) => MenuPageDataView(
             key: dataViewKey,
             analytics: ref.read(analyticsProvider),
             controller: ref.read(menuPageItemProvider),
@@ -49,42 +54,46 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
       );
 }
 
-class _MenuPageDataView extends StatefulWidget {
-  const _MenuPageDataView({super.key, required this.analytics, required this.controller});
+@visibleForTesting
+class MenuPageDataView extends StatefulWidget {
+  const MenuPageDataView({super.key, required this.analytics, required this.controller});
 
   final Analytics analytics;
   final TabController controller;
 
   @override
-  State<_MenuPageDataView> createState() => _MenuPageDataViewState();
+  State<MenuPageDataView> createState() => MenuPageDataViewState();
 }
 
-class _MenuPageDataViewState extends State<_MenuPageDataView> {
-  Map<MenuPageItem, _TabRouteView> get _tabRouteViews => <MenuPageItem, _TabRouteView>{
-        MenuPageItem.items: _TabRouteView(
+@visibleForTesting
+class MenuPageDataViewState extends State<MenuPageDataView> {
+  static const Key fabKey = Key('fabKey');
+
+  Map<MenuPageItem, TabRouteView> get tabRouteViews => <MenuPageItem, TabRouteView>{
+        MenuPageItem.items: TabRouteView(
           L10n.current.itemsCaption,
           const Icon(Icons.list_outlined),
           const ItemsPage(key: PageStorageKey<String>('items')),
         ),
-        MenuPageItem.calendar: _TabRouteView(
+        MenuPageItem.calendar: TabRouteView(
           L10n.current.calendarCaption,
           const Icon(Icons.calendar_today_outlined),
           const CalendarPage(key: PageStorageKey<String>('calendar')),
         ),
-        MenuPageItem.insights: _TabRouteView(
+        MenuPageItem.insights: TabRouteView(
           L10n.current.insightsCaption,
           const Icon(Icons.insights_outlined),
           const InsightsPage(key: PageStorageKey<String>('insights')),
         ),
-        MenuPageItem.more: _TabRouteView(
+        MenuPageItem.more: TabRouteView(
           L10n.current.moreCaption,
           const Icon(Icons.more_horiz),
           const MorePage(key: PageStorageKey<String>('more')),
         ),
       };
 
-  late final Map<MenuPageItem, GlobalKey> _destinationKeys = <MenuPageItem, GlobalKey>{
-    for (MapEntry<MenuPageItem, _TabRouteView> item in _tabRouteViews.entries)
+  late final Map<MenuPageItem, GlobalKey> destinationKeys = <MenuPageItem, GlobalKey>{
+    for (MapEntry<MenuPageItem, TabRouteView> item in tabRouteViews.entries)
       item.key: GlobalKey(debugLabel: item.key.toString()),
   };
 
@@ -117,17 +126,17 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
         valueListenable: widget.controller.animation!,
         builder: (BuildContext context, double value, Widget? child) => Stack(
           children: <Widget>[
-            for (MapEntry<MenuPageItem, _TabRouteView> item in _tabRouteViews.entries)
+            for (MapEntry<MenuPageItem, TabRouteView> item in tabRouteViews.entries)
               Positioned(
                 left: (item.key.index - value) * width,
                 bottom: 0,
                 top: 0,
                 width: width,
                 child: KeyedSubtree(
-                  key: _destinationKeys[item.key],
+                  key: destinationKeys[item.key],
                   child: Material(
                     type: MaterialType.transparency,
-                    child: _tabRouteViews[item.key]!.widget,
+                    child: tabRouteViews[item.key]!.widget,
                   ),
                 ),
               ),
@@ -141,8 +150,11 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
           currentIndex: currentIndex,
           onTap: (int index) => widget.controller.navigateToItem(MenuPageItem.values[index]),
           items: <BottomNavigationBarItem>[
-            for (final _TabRouteView item in _tabRouteViews.values)
-              BottomNavigationBarItem(icon: item.icon, label: item.title),
+            for (final TabRouteView item in tabRouteViews.values)
+              BottomNavigationBarItem(
+                icon: item.icon,
+                label: item.title,
+              ),
           ],
         ),
       ),
@@ -150,13 +162,14 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
         animation: widget.controller,
         builder: (BuildContext context, _) {
           final MenuPageItem menuItem = MenuPageItem.values[currentIndex];
-          final Route<void> Function(Object?)? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
+          final Route<void> Function(Object)? routeBuilder = menuItem.floatingActionButtonRouteBuilder;
 
           return AnimatedScale(
             scale: routeBuilder != null ? 1 : 0,
             duration: const Duration(milliseconds: 250),
             child: Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
+                key: fabKey,
                 onPressed: () {
                   widget.analytics.log(AnalyticsEvent.buttonClick('create item: $menuItem'));
                   Navigator.of(context).push<void>(
@@ -173,8 +186,9 @@ class _MenuPageDataViewState extends State<_MenuPageDataView> {
   }
 }
 
-class _TabRouteView {
-  const _TabRouteView(this.title, this.icon, this.widget);
+@visibleForTesting
+class TabRouteView {
+  const TabRouteView(this.title, this.icon, this.widget);
 
   final String title;
   final Widget icon;
@@ -182,15 +196,10 @@ class _TabRouteView {
 }
 
 extension on MenuPageItem {
-  Route<void> Function(Object? param)? get floatingActionButtonRouteBuilder {
+  Route<void> Function(Object param)? get floatingActionButtonRouteBuilder {
     switch (this) {
       case MenuPageItem.calendar:
-        return (Object? date) {
-          if (date is! DateTime) {
-            throw ArgumentError('Expected a DateTime');
-          }
-          return CreateItemPage.route(asModal: true, date: date);
-        };
+        return (Object date) => CreateItemPage.route(asModal: true, date: date as DateTime);
       case MenuPageItem.items:
         return (_) => CreateItemPage.route();
       case MenuPageItem.insights:

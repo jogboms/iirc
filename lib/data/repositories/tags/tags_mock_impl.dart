@@ -7,11 +7,11 @@ import '../auth/auth_mock_impl.dart';
 import '../extensions.dart';
 
 class TagsMockImpl extends TagsRepository {
-  static TagModel generateTag({String? id}) {
+  static TagModel generateTag({String? id, String? userId}) {
     id ??= faker.guid.guid();
     return TagModel(
       id: id,
-      path: '/tags/${AuthMockImpl.id}/$id',
+      path: '/tags/${userId ?? AuthMockImpl.id}/$id',
       title: faker.lorem.words(1).join(' '),
       description: faker.lorem.sentence(),
       color: faker.randomGenerator.integer(1000000) * 0xfffff,

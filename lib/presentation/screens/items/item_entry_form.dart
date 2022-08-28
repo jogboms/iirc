@@ -40,12 +40,7 @@ class ItemEntryData with EquatableMixin {
   List<Object> get props => <Object>[description, date, tag];
 
   bool get isValid => description.length > 2 && !tag.isEmptyTag;
-
-  @override
-  bool? get stringify => true;
 }
-
-typedef ItemEntryValueSaved = void Function(WidgetRef ref, ItemEntryData data);
 
 class ItemEntryForm extends StatefulWidget {
   const ItemEntryForm({
@@ -63,7 +58,7 @@ class ItemEntryForm extends StatefulWidget {
   final DateTime? date;
   final TagViewModel? tag;
   final ItemEntryType type;
-  final ItemEntryValueSaved onSaved;
+  final ValueChanged<ItemEntryData> onSaved;
 
   @override
   State<ItemEntryForm> createState() => ItemEntryFormState();
@@ -71,14 +66,19 @@ class ItemEntryForm extends StatefulWidget {
 
 @visibleForTesting
 class ItemEntryFormState extends State<ItemEntryForm> {
+  static const Key descriptionFieldKey = Key('descriptionFieldKey');
+  static const Key dateFieldKey = Key('dateFieldKey');
+  static const Key createTagButtonKey = Key('createTagButtonKey');
+  static const Key submitButtonKey = Key('submitButtonKey');
+  static final GlobalKey<FormFieldState<String>> tagsFieldKey = GlobalKey(debugLabel: 'tagsFieldKey');
+
   late final FocusNode descriptionFocusNode = FocusNode(debugLabel: 'description');
-  late final GlobalKey<FormFieldState<String>> tagsFormFieldKey = GlobalKey();
 
   late final ValueNotifier<ItemEntryData> dataNotifier = ValueNotifier<ItemEntryData>(
     ItemEntryData(
       description: widget.description ?? '',
       date: DateUtils.dateOnly(widget.date ?? clock.now()),
-      tag: widget.tag ?? _emptyTagModel,
+      tag: widget.tag ?? emptyTagModel,
     ),
   );
 
@@ -111,7 +111,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
   void onCreateTag(BuildContext context, Reader read) async {
     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('create tag: form')));
     final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
-    tagsFormFieldKey.currentState?.didChange(tagId);
+    tagsFieldKey.currentState?.didChange(tagId);
   }
 
   @override
@@ -124,6 +124,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
           const SizedBox(height: 12),
           if (!hasInitialDate || widget.type == ItemEntryType.update) ...<Widget>[
             DatePickerField(
+              key: dateFieldKey,
               initialValue: dataNotifier.value.date,
               onChanged: (DateTime value) => dataNotifier.update(date: value),
             ),
@@ -138,6 +139,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                   return Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
+                      key: createTagButtonKey,
                       onPressed: () => onCreateTag(context, ref.read),
                       icon: const Icon(Icons.tag),
                       label: Text(context.l10n.createNewTagCaption),
@@ -154,7 +156,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                               return _TagItem(key: Key(tag.id), tag: tags.first);
                             })
                           : DropdownButtonFormField<String>(
-                              key: tagsFormFieldKey,
+                              key: tagsFieldKey,
                               value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag.id,
                               decoration: InputDecoration(
                                 hintText: context.l10n.selectItemTagCaption,
@@ -167,12 +169,16 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                                     child: _TagItem(tag: tag),
                                   ),
                               ],
-                              onChanged: (String? id) =>
-                                  dataNotifier.update(tag: tags.firstWhere((TagViewModel element) => element.id == id)),
+                              onChanged: (String? id) {
+                                if (id != null) {
+                                  dataNotifier.update(tag: tags.firstWhere((TagViewModel element) => element.id == id));
+                                }
+                              },
                             ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
+                      key: createTagButtonKey,
                       onPressed: () => onCreateTag(context, ref.read),
                       icon: const Icon(Icons.add),
                     ),
@@ -183,6 +189,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
             const SizedBox(height: 12),
           ],
           TextField(
+            key: descriptionFieldKey,
             focusNode: descriptionFocusNode,
             controller: descriptionTextEditingController,
             decoration: InputDecoration(
@@ -195,15 +202,14 @@ class ItemEntryFormState extends State<ItemEntryForm> {
           const SizedBox(height: 24),
           ValueListenableBuilder<ItemEntryData>(
             valueListenable: dataNotifier,
-            builder: (BuildContext context, ItemEntryData value, Widget? child) => Consumer(
-              builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
-                onPressed: value.isValid
-                    ? () => widget
-                      ..analytics.log(AnalyticsEvent.buttonClick('submit item'))
-                      ..onSaved(ref, value)
-                    : null,
-                child: child,
-              ),
+            builder: (BuildContext context, ItemEntryData value, Widget? child) => ElevatedButton(
+              key: submitButtonKey,
+              onPressed: value.isValid
+                  ? () => widget
+                    ..analytics.log(AnalyticsEvent.buttonClick('submit item'))
+                    ..onSaved(value)
+                  : null,
+              child: child,
             ),
             child: Text(context.l10n.submitCaption),
           ),
@@ -228,7 +234,8 @@ class _TagItem extends StatelessWidget {
       );
 }
 
-final TagViewModel _emptyTagModel = TagViewModel.fromTag(TagModel(
+@visibleForTesting
+final TagViewModel emptyTagModel = TagViewModel.fromTag(TagModel(
   id: 'EMPTY',
   color: 0xF,
   description: '',
@@ -239,7 +246,7 @@ final TagViewModel _emptyTagModel = TagViewModel.fromTag(TagModel(
 ));
 
 extension on TagViewModel {
-  bool get isEmptyTag => this == _emptyTagModel;
+  bool get isEmptyTag => this == emptyTagModel;
 }
 
 extension on ValueNotifier<ItemEntryData> {

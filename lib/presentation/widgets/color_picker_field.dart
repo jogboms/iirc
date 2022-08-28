@@ -9,7 +9,7 @@ class ColorPickerField extends FormField<Color> {
   ColorPickerField({
     super.key,
     super.initialValue,
-    required ValueChanged<Color> onChanged,
+    required this.onChanged,
   }) : super(
           builder: (FormFieldState<Color> fieldState) {
             final ColorPickerState state = fieldState as ColorPickerState;
@@ -36,17 +36,15 @@ class ColorPickerField extends FormField<Color> {
                   OColorPicker(
                     selectedColor: color,
                     colors: primaryColorsPalette,
-                    onColorChange: (Color color) {
-                      fieldState.didChange(color);
-                      onChanged(color);
-                      state.toggle();
-                    },
+                    onColorChange: (Color color) => fieldState.didChange(color),
                   ),
                 ]
               ],
             );
           },
         );
+
+  final ValueChanged<Color> onChanged;
 
   @override
   FormFieldState<Color> createState() => ColorPickerState();
@@ -57,4 +55,11 @@ class ColorPickerState extends CommonFormFieldState<Color> {
   bool isSelecting = false;
 
   void toggle() => setState(() => isSelecting = !isSelecting);
+
+  @override
+  void didChange(Color? value) {
+    (widget as ColorPickerField).onChanged(value!);
+    toggle();
+    super.didChange(value);
+  }
 }

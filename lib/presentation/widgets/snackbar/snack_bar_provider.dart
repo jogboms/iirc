@@ -47,6 +47,7 @@ class SnackBarProviderState extends State<SnackBarProvider> {
 
   FutureOr<String> showSnackBar(
     Widget child, {
+    Key? key,
     Duration? duration,
     bool dismissible = true,
     Alignment? alignment,
@@ -55,6 +56,7 @@ class SnackBarProviderState extends State<SnackBarProvider> {
 
     final OverlayEntry barrier = OverlayEntry(
       builder: (_) => GestureDetector(
+        key: key,
         onTapUp: dismissible ? (_) => hideCurrentSnackBar() : null,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),

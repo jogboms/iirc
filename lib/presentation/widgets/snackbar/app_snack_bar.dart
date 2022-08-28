@@ -12,11 +12,17 @@ class AppSnackBar {
       : _context = context,
         state = SnackBarProvider.of(context);
 
+  static const Key successKey = Key('snackBarSuccessKey');
+  static const Key infoKey = Key('snackBarInfoKey');
+  static const Key errorKey = Key('snackBarErrorKey');
+  static const Key loadingKey = Key('snackBarLoadingKey');
+
   final BuildContext _context;
   final SnackBarProviderState? state;
 
   FutureOr<void> success(String value, {Duration? duration, Alignment? alignment}) => _show(
         value,
+        key: successKey,
         leading: const Icon(Icons.check, color: Colors.white, size: 24),
         alignment: alignment,
         duration: duration,
@@ -26,6 +32,7 @@ class AppSnackBar {
 
   FutureOr<void> info(String value, {Duration? duration, Alignment? alignment}) => _show(
         value,
+        key: infoKey,
         leading: Icon(Icons.alarm, color: Theme.of(_context).primaryColor, size: 24),
         alignment: alignment,
         duration: duration,
@@ -35,6 +42,7 @@ class AppSnackBar {
 
   FutureOr<void> error(String value, {Duration? duration, Alignment? alignment}) => _show(
         value,
+        key: errorKey,
         leading: const Icon(Icons.warning, color: Colors.white, size: 24),
         alignment: alignment,
         duration: duration,
@@ -51,6 +59,7 @@ class AppSnackBar {
   }) =>
       _show(
         value ?? L10n.of(_context).loadingMessage,
+        key: loadingKey,
         color: color ?? Colors.black,
         alignment: alignment,
         dismissible: dismissible,
@@ -61,6 +70,7 @@ class AppSnackBar {
 
   FutureOr<void> _show(
     String? value, {
+    required Key key,
     required Color backgroundColor,
     required Color color,
     Widget? leading,
@@ -85,6 +95,7 @@ class AppSnackBar {
             ),
           ],
         ),
+        key: key,
         duration: duration,
         alignment: alignment,
         dismissible: dismissible,

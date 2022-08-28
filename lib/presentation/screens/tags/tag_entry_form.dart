@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iirc/domain.dart';
 
 import '../../utils.dart';
@@ -34,12 +33,7 @@ class TagEntryData with EquatableMixin {
   List<Object> get props => <Object>[title, description, color];
 
   bool get isValid => title.length > 3 && description.isNotEmpty && color != 0;
-
-  @override
-  bool? get stringify => true;
 }
-
-typedef TagEntryValueSaved = void Function(WidgetRef ref, TagEntryData data);
 
 class TagEntryForm extends StatefulWidget {
   const TagEntryForm({
@@ -53,7 +47,7 @@ class TagEntryForm extends StatefulWidget {
   final Analytics analytics;
   final TagEntryData? initialValue;
   final TagEntryType type;
-  final TagEntryValueSaved onSaved;
+  final ValueChanged<TagEntryData> onSaved;
 
   @override
   State<TagEntryForm> createState() => TagEntryFormState();
@@ -61,6 +55,11 @@ class TagEntryForm extends StatefulWidget {
 
 @visibleForTesting
 class TagEntryFormState extends State<TagEntryForm> {
+  static const Key titleFieldKey = Key('titleFieldKey');
+  static const Key descriptionFieldKey = Key('descriptionFieldKey');
+  static const Key colorFieldKey = Key('colorFieldKey');
+  static const Key submitButtonKey = Key('submitButtonKey');
+
   late final ValueNotifier<TagEntryData> dataNotifier = ValueNotifier<TagEntryData>(
     TagEntryData(
       title: widget.initialValue?.title ?? '',
@@ -94,6 +93,7 @@ class TagEntryFormState extends State<TagEntryForm> {
         children: <Widget>[
           const SizedBox(height: 12),
           TextField(
+            key: titleFieldKey,
             controller: titleTextEditingController,
             autofocus: true,
             textInputAction: TextInputAction.next,
@@ -105,6 +105,7 @@ class TagEntryFormState extends State<TagEntryForm> {
           ),
           const SizedBox(height: 12),
           TextField(
+            key: descriptionFieldKey,
             controller: descriptionTextEditingController,
             decoration: InputDecoration(
               label: Text(context.l10n.descriptionLabel),
@@ -117,6 +118,7 @@ class TagEntryFormState extends State<TagEntryForm> {
           ValueListenableBuilder<TagEntryData>(
             valueListenable: dataNotifier,
             builder: (BuildContext context, TagEntryData value, _) => ColorPickerField(
+              key: colorFieldKey,
               initialValue: Color(value.color),
               onChanged: (Color color) => dataNotifier.update(color: color.value),
             ),
@@ -124,15 +126,14 @@ class TagEntryFormState extends State<TagEntryForm> {
           const SizedBox(height: 24),
           ValueListenableBuilder<TagEntryData>(
             valueListenable: dataNotifier,
-            builder: (BuildContext context, TagEntryData value, Widget? child) => Consumer(
-              builder: (BuildContext context, WidgetRef ref, _) => ElevatedButton(
-                onPressed: value.isValid
-                    ? () => widget
-                      ..analytics.log(AnalyticsEvent.buttonClick('submit tag'))
-                      ..onSaved(ref, value)
-                    : null,
-                child: child,
-              ),
+            builder: (BuildContext context, TagEntryData value, Widget? child) => ElevatedButton(
+              key: submitButtonKey,
+              onPressed: value.isValid
+                  ? () => widget
+                    ..analytics.log(AnalyticsEvent.buttonClick('submit tag'))
+                    ..onSaved(value)
+                  : null,
+              child: child,
             ),
             child: Text(context.l10n.submitCaption),
           ),

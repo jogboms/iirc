@@ -10,7 +10,7 @@ class DatePickerField extends FormField<DateTime> {
   DatePickerField({
     super.key,
     required super.initialValue,
-    required ValueChanged<DateTime> onChanged,
+    required this.onChanged,
   }) : super(
           builder: (FormFieldState<DateTime> fieldState) {
             final DateTime date = fieldState.value ?? clock.now();
@@ -33,9 +33,6 @@ class DatePickerField extends FormField<DateTime> {
                       lastDate: DateTime(clock.now().year + 1),
                     );
                     fieldState.didChange(value);
-                    if (value != null) {
-                      onChanged(value);
-                    }
                   },
                   child: Text(fieldState.context.l10n.selectItemDateCaption),
                 ),
@@ -44,6 +41,19 @@ class DatePickerField extends FormField<DateTime> {
           },
         );
 
+  final ValueChanged<DateTime> onChanged;
+
   @override
-  FormFieldState<DateTime> createState() => CommonFormFieldState<DateTime>();
+  FormFieldState<DateTime> createState() => DatePickerState();
+}
+
+@visibleForTesting
+class DatePickerState extends CommonFormFieldState<DateTime> {
+  @override
+  void didChange(DateTime? value) {
+    if (value != null) {
+      (widget as DatePickerField).onChanged(value);
+    }
+    super.didChange(value);
+  }
 }

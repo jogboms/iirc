@@ -106,6 +106,7 @@ Widget createApp({
   Widget? home,
   Registry? registry,
   List<Override>? overrides,
+  List<NavigatorObserver>? observers,
   bool includeMaterial = true,
 }) {
   registry ??= createRegistry();
@@ -117,6 +118,7 @@ Widget createApp({
     ],
     child: App(
       registry: registry,
+      navigatorObservers: observers,
       home: includeMaterial ? Material(child: home) : home,
     ),
   );
@@ -150,6 +152,25 @@ class ProviderListener<T> {
 
 extension FinderExtensions on Finder {
   Finder descendantOf(Finder of) => find.descendant(of: of, matching: this);
+}
+
+extension WidgetTesterExtensions on WidgetTester {
+  Future<void> verifyPushNavigation<U extends Widget>(NavigatorObserver observer) async {
+    // NOTE: This is done for pages that show any indefinite animated loaders, CircularProgress
+    await pump();
+    await pump();
+
+    mt.verify(() => observer.didPush(mt.any(), mt.any()));
+    expect(find.byType(U), findsOneWidget);
+  }
+
+  Future<void> verifyPopNavigation(NavigatorObserver observer) async {
+    // NOTE: This is done for pages that show any indefinite animated loaders, CircularProgress
+    await pump();
+    await pump();
+
+    mt.verify(() => observer.didPop(mt.any(), mt.any()));
+  }
 }
 
 extension UniqueByExtension<E> on Iterable<E> {

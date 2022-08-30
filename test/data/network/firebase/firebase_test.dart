@@ -3,7 +3,7 @@ import 'package:firebase_core_platform_interface/firebase_core_platform_interfac
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 
-import 'utils.dart';
+import 'mocks.dart';
 
 void main() {
   group('Firebase', () {

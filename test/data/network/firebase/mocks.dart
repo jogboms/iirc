@@ -1,8 +1,11 @@
+// ignore_for_file: subtype_of_sealed_class
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGoogleSignIn extends Mock implements GoogleSignIn {}
@@ -34,4 +37,13 @@ class MockFirebaseAnalytics extends Mock implements FirebaseAnalytics {
   }
 }
 
-class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
+class MockFirebaseFirestore extends Mock implements FirebaseFirestore {
+  MockFirebaseFirestore() {
+    when(() => collection(any())).thenReturn(MockMapCollectionReference());
+    when(() => doc(any())).thenReturn(MockMapDocumentReference());
+  }
+}
+
+class MockMapCollectionReference extends Mock implements MapCollectionReference {}
+
+class MockMapDocumentReference extends Mock implements MapDocumentReference {}

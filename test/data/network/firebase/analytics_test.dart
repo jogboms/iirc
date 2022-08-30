@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'utils.dart';
+import 'mocks.dart';
 
 void main() {
   group('CloudAnalytics', () {

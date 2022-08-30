@@ -282,7 +282,7 @@ packages:
     source: hosted
     version: "1.21.0"
   firebase_core_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"

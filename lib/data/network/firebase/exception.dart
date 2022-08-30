@@ -20,9 +20,7 @@ class AppFirebaseAuthException implements Exception {
   int get hashCode => type.hashCode ^ email.hashCode;
 
   @override
-  String toString() {
-    return 'AppFirebaseException{type: $type, email: $email}';
-  }
+  String toString() => 'AppFirebaseAuthException{type: $type, email: $email}';
 }
 
 enum AppFirebaseAuthExceptionType {

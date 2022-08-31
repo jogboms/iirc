@@ -36,6 +36,7 @@ dependencies:
 
 dev_dependencies:
   build_runner:
+  firebase_core_platform_interface:
   flutter_launcher_icons: ^0.10.0
   flutter_test:
     sdk: flutter

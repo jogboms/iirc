@@ -3,6 +3,8 @@
 import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../network/firebase/mocks.dart';
+
 class MockFirebase extends Mock implements Firebase {
   MockFirebase({
     Auth? auth,
@@ -21,7 +23,7 @@ class MockAuth extends Mock implements Auth {}
 
 class MockCloudDb extends Mock implements CloudDb {}
 
-class MockCollectionReference extends Mock implements MapCollectionReference {
+class MockCollectionReference extends MockMapCollectionReference {
   MockCollectionReference(List<DynamicMap> items) {
     final MapQuerySnapshot querySnapshot = MockQuerySnapshot();
 
@@ -48,8 +50,6 @@ class MockCollectionReference extends Mock implements MapCollectionReference {
 class MockQuerySnapshot extends Mock implements MapQuerySnapshot {}
 
 class MockQueryDocumentSnapshot extends Mock implements MapQueryDocumentSnapshot {}
-
-class MockMapDocumentReference extends Mock implements MapDocumentReference {}
 
 class MockTagDocumentReference extends MockMapDocumentReference {
   MockTagDocumentReference(String id, String path) {

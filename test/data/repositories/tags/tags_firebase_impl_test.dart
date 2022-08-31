@@ -3,6 +3,7 @@ import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../network/firebase/mocks.dart';
 import '../mocks.dart';
 
 void main() {

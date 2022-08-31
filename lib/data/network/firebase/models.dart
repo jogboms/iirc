@@ -1,16 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class FireUser {
-  FireUser(this._reference);
+  factory FireUser(User reference) => FireUser._(
+        uid: reference.uid,
+        email: reference.email,
+        displayName: reference.displayName,
+      );
 
-  final User _reference;
+  const FireUser._({required this.uid, required this.email, required this.displayName});
 
-  String get uid => _reference.uid;
+  final String uid;
+  final String? email;
+  final String? displayName;
 
-  String? get email => _reference.email;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FireUser &&
+          runtimeType == other.runtimeType &&
+          uid == other.uid &&
+          email == other.email &&
+          displayName == other.displayName;
 
-  String? get displayName => _reference.displayName;
+  @override
+  int get hashCode => uid.hashCode ^ email.hashCode ^ displayName.hashCode;
 }
 
 typedef DynamicMap = Map<String, dynamic>;

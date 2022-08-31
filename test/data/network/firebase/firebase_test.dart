@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart' as firebase;
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'mocks.dart';
 
@@ -16,8 +17,10 @@ void main() {
       TestFirebaseCoreHostApi.setup(null);
     });
 
-    test('should initialize without errors', () {
-      expect(
+    test('should initialize without errors', () async {
+      final MockFirebaseAnalytics analytics = MockFirebaseAnalytics();
+
+      await expectLater(
         Firebase.initialize(
           options: const firebase.FirebaseOptions(
             apiKey: '',
@@ -28,7 +31,7 @@ void main() {
           ),
           isAnalyticsEnabled: true,
           name: 'TEST',
-          analytics: MockFirebaseAnalytics(),
+          analytics: analytics,
           googleSignIn: MockGoogleSignIn(),
           auth: MockFirebaseAuth(),
           crashlytics: MockFirebaseCrashlytics(),
@@ -36,6 +39,7 @@ void main() {
         ),
         completes,
       );
+      verify(() => analytics.setAnalyticsCollectionEnabled(true)).called(1);
     });
   });
 }

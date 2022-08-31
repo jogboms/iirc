@@ -8,9 +8,62 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGoogleSignIn extends Mock implements GoogleSignIn {}
+class FakeAuthCredential extends Mock implements AuthCredential {}
 
-class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+class MockUserCredential extends Mock implements UserCredential {
+  MockUserCredential() {
+    when(() => user).thenReturn(FakeUser(uid: '1'));
+  }
+}
+
+class MockGoogleSignInAuthentication extends Mock implements GoogleSignInAuthentication {
+  MockGoogleSignInAuthentication() {
+    when(() => accessToken).thenReturn('accessToken');
+  }
+}
+
+class MockGoogleSignInAccount extends Mock implements GoogleSignInAccount {
+  MockGoogleSignInAccount() {
+    when(() => authentication).thenAnswer((_) async => MockGoogleSignInAuthentication());
+  }
+}
+
+class FakeGoogleSignInAccount extends Fake implements GoogleSignInAccount {
+  @override
+  Future<GoogleSignInAuthentication> get authentication =>
+      Future<GoogleSignInAuthentication>.value(MockGoogleSignInAuthentication());
+}
+
+class MockUser extends Mock implements User {
+  MockUser() {
+    when(() => uid).thenReturn('1');
+    when(() => email).thenReturn('email');
+    when(() => displayName).thenReturn('display name');
+  }
+}
+
+class FakeUser extends Fake implements User {
+  FakeUser({required this.uid, this.email, this.displayName});
+
+  @override
+  final String uid;
+  @override
+  final String? email;
+  @override
+  final String? displayName;
+}
+
+class MockGoogleSignIn extends Mock implements GoogleSignIn {
+  MockGoogleSignIn() {
+    when(() => signOut()).thenAnswer((_) async => null);
+  }
+}
+
+class MockFirebaseAuth extends Mock implements FirebaseAuth {
+  MockFirebaseAuth() {
+    when(() => signOut()).thenAnswer((_) async => true);
+  }
+}
 
 class MockFirebaseCrashlytics extends Mock implements FirebaseCrashlytics {
   MockFirebaseCrashlytics() {

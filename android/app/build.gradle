@@ -65,11 +65,13 @@ android {
     productFlavors {
         dev {
             dimension "flavor-type"
+            resValue "string", "app_name", "Dev"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
         mock {
             dimension "flavor-type"
+            resValue "string", "app_name", "IIRC"
             applicationIdSuffix ".mock"
             versionNameSuffix "-mock"
         }

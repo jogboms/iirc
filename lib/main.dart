@@ -107,6 +107,7 @@ void main() async {
     isReleaseMode: !environment.isDebugging,
     errorViewBuilder: (_) => const AppCrashErrorView(),
     onException: AppLog.e,
+    onCrash: errorReporter.reportCrash,
   );
 }
 
@@ -139,6 +140,9 @@ class _ReporterClient implements ReporterClient {
       client.report(error, stackTrace);
 
   @override
+  async.FutureOr<void> reportCrash(FlutterErrorDetails details) async => client.reportCrash(details);
+
+  @override
   void log(Object object) => AppLog.i(object);
 }
 
@@ -146,12 +150,12 @@ class _Analytics implements Analytics {
   const _Analytics(this.analytics);
 
   final CloudAnalytics analytics;
+  static const Analytics _log = _PrintAnalytics();
 
   @override
   Future<void> log(AnalyticsEvent event) async {
     if (kDebugMode) {
-      AppLog.i(event);
-      return;
+      return _log.log(event);
     }
     return analytics.log(event.name, event.parameters);
   }
@@ -159,8 +163,7 @@ class _Analytics implements Analytics {
   @override
   Future<void> setCurrentScreen(String name) async {
     if (kDebugMode) {
-      AppLog.i('screen_view: $name');
-      return;
+      return _log.setCurrentScreen(name);
     }
     return analytics.setCurrentScreen(name);
   }

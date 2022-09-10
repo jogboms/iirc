@@ -107,7 +107,7 @@ void main() {
     });
 
     group('Exceptions', () {
-      testWidgets('should show info message on popup error', (WidgetTester tester) async {
+      testWidgets('should ignore error message on popup error', (WidgetTester tester) async {
         final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
         await tester.pumpWidget(createApp(
@@ -124,7 +124,7 @@ void main() {
         await tester.pump();
 
         expect(onboardingPage, findsOneWidget);
-        expect(find.byKey(AppSnackBar.infoKey), findsOneWidget);
+        expect(find.byKey(AppSnackBar.errorKey), findsNothing);
       });
 
       testWidgets('should show error messages on failed error', (WidgetTester tester) async {

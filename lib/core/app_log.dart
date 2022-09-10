@@ -3,24 +3,26 @@ import 'package:logging/logging.dart';
 class AppLog {
   AppLog._();
 
+  static final Logger _logger = Logger.root;
+
   static void init({
     required _LogFilter logFilter,
     required _ExceptionFilter exceptionFilter,
     required _ExceptionLogger onException,
     required _Logger onLog,
   }) {
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen(_logListener(logFilter, exceptionFilter, onException, onLog));
+    _logger.level = Level.ALL;
+    _logger.onRecord.listen(_logListener(logFilter, exceptionFilter, onException, onLog));
   }
 
-  static void e(Object error, StackTrace stackTrace, {Object? message}) {
-    Logger.root.log(Level.SEVERE, message ?? error.toString(), error,
-        error is Error && error.stackTrace != null ? error.stackTrace! : stackTrace);
-  }
+  static void e(Object error, StackTrace stackTrace, {Object? message}) => _logger.log(
+        Level.SEVERE,
+        message ?? error.toString(),
+        error,
+        error is Error && error.stackTrace != null ? error.stackTrace! : stackTrace,
+      );
 
-  static void i(Object message) {
-    Logger.root.info(message);
-  }
+  static void i(Object message) => _logger.info(message);
 }
 
 typedef _LogFilter = bool Function();

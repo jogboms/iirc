@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
+import 'package:flutter/foundation.dart';
 import 'package:platform/platform.dart';
 
 class ErrorReporter {
   ErrorReporter({
-    this.client = const NoopReporterClient(),
+    required this.client,
     this.platform = const LocalPlatform(),
   });
 
@@ -29,27 +30,19 @@ class ErrorReporter {
     try {
       await client.report(error: error, stackTrace: stackTrace, extra: extra);
     } catch (e) {
-      log(error);
+      log(e);
     }
   }
 
-  void log(Object object) {
-    client.log(object);
-  }
+  Future<void> reportCrash(FlutterErrorDetails details) async => client.reportCrash(details);
+
+  void log(Object object) => client.log(object);
 }
 
 abstract class ReporterClient {
   FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra});
 
+  FutureOr<void> reportCrash(FlutterErrorDetails details);
+
   void log(Object object);
-}
-
-class NoopReporterClient implements ReporterClient {
-  const NoopReporterClient();
-
-  @override
-  FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) {}
-
-  @override
-  void log(Object object) {}
 }

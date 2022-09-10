@@ -4,10 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
 import 'mocks.dart';
 
 void main() {
   group('Firebase', () {
+    setUpAll(() {
+      registerFallbackValue(FakeFlutterErrorDetails());
+    });
+
     setUp(() {
       TestWidgetsFlutterBinding.ensureInitialized();
       setupFirebaseCoreMocks();

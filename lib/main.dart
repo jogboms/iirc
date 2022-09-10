@@ -39,7 +39,7 @@ void main() async {
       break;
     case Environment.mock:
     default:
-      reporterClient = const NoopReporterClient();
+      reporterClient = const _NoopReporterClient();
       repository = _Repository.mock();
       navigationObserver = NavigatorObserver();
       analytics = const _PrintAnalytics();
@@ -94,8 +94,12 @@ void main() async {
     /// Environment.
     ..set(environment);
 
-  ErrorBoundary.runApp(
-    ProviderScope(
+  runApp(ErrorBoundary(
+    isReleaseMode: !environment.isDebugging,
+    errorViewBuilder: (_) => const AppCrashErrorView(),
+    onException: AppLog.e,
+    onCrash: errorReporter.reportCrash,
+    child: ProviderScope(
       overrides: <Override>[
         registryProvider.overrideWithValue(registry),
       ],
@@ -104,10 +108,7 @@ void main() async {
         navigatorObservers: <NavigatorObserver>[navigationObserver],
       ),
     ),
-    isReleaseMode: !environment.isDebugging,
-    errorViewBuilder: (_) => const AppCrashErrorView(),
-    onException: AppLog.e,
-  );
+  ));
 }
 
 class _Repository {
@@ -139,19 +140,35 @@ class _ReporterClient implements ReporterClient {
       client.report(error, stackTrace);
 
   @override
+  async.FutureOr<void> reportCrash(FlutterErrorDetails details) async => client.reportCrash(details);
+
+  @override
   void log(Object object) => AppLog.i(object);
+}
+
+class _NoopReporterClient implements ReporterClient {
+  const _NoopReporterClient();
+
+  @override
+  async.FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) {}
+
+  @override
+  async.FutureOr<void> reportCrash(FlutterErrorDetails details) {}
+
+  @override
+  void log(Object object) {}
 }
 
 class _Analytics implements Analytics {
   const _Analytics(this.analytics);
 
   final CloudAnalytics analytics;
+  static const Analytics _log = _PrintAnalytics();
 
   @override
   Future<void> log(AnalyticsEvent event) async {
     if (kDebugMode) {
-      AppLog.i(event);
-      return;
+      return _log.log(event);
     }
     return analytics.log(event.name, event.parameters);
   }
@@ -159,8 +176,7 @@ class _Analytics implements Analytics {
   @override
   Future<void> setCurrentScreen(String name) async {
     if (kDebugMode) {
-      AppLog.i('screen_view: $name');
-      return;
+      return _log.setCurrentScreen(name);
     }
     return analytics.setCurrentScreen(name);
   }

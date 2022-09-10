@@ -6,10 +6,12 @@ on:
       - master
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 env:
   java_version: "12.x"
-  flutter_version: "3.3.0"
-  flutter_path: /opt/hostedtoolcache/flutter
 
 jobs:
   build:
@@ -18,20 +20,23 @@ jobs:
       REPO_TOKEN: ${{secrets.REPO_TOKEN}}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ env.java_version }}
+      - name: Initialize environment variables from FVM config
+        uses: kuhnroyal/flutter-fvm-config-action@v1
       - name: Cache Flutter dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ env.flutter_path }}
+          path: /opt/hostedtoolcache/flutter
           key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: ${{ env.flutter_version }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter doctor
       - run: flutter config --enable-web
       - run: flutter pub get

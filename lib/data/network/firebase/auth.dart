@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -89,6 +90,21 @@ class Auth {
     await _auth.signOut();
     await _googleSignIn.signOut();
   }
+
+  Future<String> signInWithApple() async {
+    try {
+      final AppleAuthProvider provider = AppleAuthProvider();
+      final UserCredential response =
+          await (kIsWeb ? _auth.signInWithPopup(provider) : _auth.signInWithAuthProvider(provider));
+
+      return response.user!.uid;
+    } catch (e) {
+      // TODO(Jogboms): error handling
+      rethrow;
+    }
+  }
+
+  Future<void> signOutWithApple() async => _auth.signOut();
 
   FireUser? _mapFirebaseUserToUser(User? _user) {
     if (_user == null) {

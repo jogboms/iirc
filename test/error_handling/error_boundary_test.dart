@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/core.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../mocks.dart';
 
 void main() {
   group('ErrorBoundary', () {
@@ -137,13 +138,4 @@ class MockCrashHandler extends Mock {
 
 class MockExceptionHandler extends Mock {
   void call(Object error, StackTrace stackTrace);
-}
-
-class FakeStackTrace extends Fake implements StackTrace {}
-
-class FakeFlutterErrorDetails extends Fake implements FlutterErrorDetails {
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return toDiagnosticsNode(style: DiagnosticsTreeStyle.error).toStringDeep(minLevel: minLevel);
-  }
 }

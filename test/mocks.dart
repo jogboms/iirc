@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iirc/domain.dart';
 import 'package:mocktail/mocktail.dart';
@@ -65,3 +66,12 @@ class FakeItemModel extends Fake implements ItemModel {}
 class FakeTagModel extends Fake implements TagModel {}
 
 class FakeRoute extends Fake implements Route<dynamic> {}
+
+class FakeStackTrace extends Fake implements StackTrace {}
+
+class FakeFlutterErrorDetails extends Fake implements FlutterErrorDetails {
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return toDiagnosticsNode(style: DiagnosticsTreeStyle.error).toStringDeep(minLevel: minLevel);
+  }
+}

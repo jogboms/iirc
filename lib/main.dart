@@ -39,7 +39,7 @@ void main() async {
       break;
     case Environment.mock:
     default:
-      reporterClient = const NoopReporterClient();
+      reporterClient = const _NoopReporterClient();
       repository = _Repository.mock();
       navigationObserver = NavigatorObserver();
       analytics = const _PrintAnalytics();
@@ -144,6 +144,19 @@ class _ReporterClient implements ReporterClient {
 
   @override
   void log(Object object) => AppLog.i(object);
+}
+
+class _NoopReporterClient implements ReporterClient {
+  const _NoopReporterClient();
+
+  @override
+  async.FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) {}
+
+  @override
+  async.FutureOr<void> reportCrash(FlutterErrorDetails details) {}
+
+  @override
+  void log(Object object) {}
 }
 
 class _Analytics implements Analytics {

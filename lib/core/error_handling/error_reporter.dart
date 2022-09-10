@@ -6,7 +6,7 @@ import 'package:platform/platform.dart';
 
 class ErrorReporter {
   ErrorReporter({
-    this.client = const NoopReporterClient(),
+    required this.client,
     this.platform = const LocalPlatform(),
   });
 
@@ -45,17 +45,4 @@ abstract class ReporterClient {
   FutureOr<void> reportCrash(FlutterErrorDetails details);
 
   void log(Object object);
-}
-
-class NoopReporterClient implements ReporterClient {
-  const NoopReporterClient();
-
-  @override
-  FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) {}
-
-  @override
-  FutureOr<void> reportCrash(FlutterErrorDetails details) {}
-
-  @override
-  void log(Object object) {}
 }

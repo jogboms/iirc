@@ -94,8 +94,12 @@ void main() async {
     /// Environment.
     ..set(environment);
 
-  ErrorBoundary.runApp(
-    ProviderScope(
+  runApp(ErrorBoundary(
+    isReleaseMode: !environment.isDebugging,
+    errorViewBuilder: (_) => const AppCrashErrorView(),
+    onException: AppLog.e,
+    onCrash: errorReporter.reportCrash,
+    child: ProviderScope(
       overrides: <Override>[
         registryProvider.overrideWithValue(registry),
       ],
@@ -104,11 +108,7 @@ void main() async {
         navigatorObservers: <NavigatorObserver>[navigationObserver],
       ),
     ),
-    isReleaseMode: !environment.isDebugging,
-    errorViewBuilder: (_) => const AppCrashErrorView(),
-    onException: AppLog.e,
-    onCrash: errorReporter.reportCrash,
-  );
+  ));
 }
 
 class _Repository {

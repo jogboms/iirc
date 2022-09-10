@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/registry.dart';
+import 'package:iirc/presentation.dart';
 
 void main() {
   group('Registry', () {

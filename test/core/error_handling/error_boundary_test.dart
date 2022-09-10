@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/core.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../mocks.dart';
+import '../../mocks.dart';
 
 void main() {
   group('ErrorBoundary', () {

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/presentation.dart';
-import 'package:iirc/registry.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -11,7 +10,6 @@ import '../../../utils.dart';
 void main() {
   group('OnboardingPage', () {
     final Finder onboardingPage = find.byType(OnboardingPage);
-    final Registry registry = createRegistry().withMockedUseCases();
     final NavigatorObserver navigatorObserver = MockNavigatorObserver();
 
     setUpAll(() {
@@ -30,7 +28,6 @@ void main() {
       await tester.pumpWidget(
         createApp(
           home: const OnboardingPage(isColdStart: true),
-          registry: registry,
           overrides: <Override>[
             authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
           ],
@@ -70,7 +67,6 @@ void main() {
       await tester.pumpWidget(
         createApp(
           home: const OnboardingPage(isColdStart: true),
-          registry: registry,
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
             authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
@@ -94,7 +90,6 @@ void main() {
       await tester.pumpWidget(
         createApp(
           home: const OnboardingPage(isColdStart: false),
-          registry: registry,
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
             authStateProvider.overrideWithValue(mockAuthStateNotifier),

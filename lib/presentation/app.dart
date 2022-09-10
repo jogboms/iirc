@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:iirc/core.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
-import 'core.dart';
-import 'presentation.dart';
 import 'registry.dart';
+import 'screens/onboarding/onboarding_page.dart';
+import 'theme.dart';
+import 'utils.dart';
+import 'widgets.dart';
 
 class App extends StatefulWidget {
   const App({

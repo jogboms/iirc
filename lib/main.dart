@@ -6,14 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 import 'package:universal_io/io.dart' as io;
 
-import 'app.dart';
 import 'core.dart';
 import 'data.dart';
 import 'domain.dart';
 import 'firebase_options.dev.dart' as dev;
 import 'firebase_options.prod.dart' as prod;
 import 'presentation.dart';
-import 'registry.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

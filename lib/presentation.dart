@@ -1,4 +1,6 @@
+export 'presentation/app.dart';
 export 'presentation/models.dart';
+export 'presentation/registry.dart';
 export 'presentation/screens/calendar/calendar_page.dart';
 export 'presentation/screens/insights/insights_page.dart';
 export 'presentation/screens/items/create_item_page.dart';

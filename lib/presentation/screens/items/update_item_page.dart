@@ -51,20 +51,23 @@ class UpdateItemPageState extends State<UpdateItemPage> {
   ValueChanged<ItemEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
+    final NavigatorState navigator = Navigator.of(context);
     return (ItemEntryData data) async {
       try {
         snackBar.loading();
 
-        await ref.read(itemProvider).update(UpdateItemData(
-              id: widget.item.id,
-              path: widget.item.path,
-              description: data.description,
-              date: data.date,
-              tag: data.tag.reference,
-            ));
+        await ref.read(itemProvider).update(
+              UpdateItemData(
+                id: widget.item.id,
+                path: widget.item.path,
+                description: data.description,
+                date: data.date,
+                tag: data.tag.reference,
+              ),
+            );
 
         snackBar.success(l10n.successfulMessage);
-        return Navigator.pop(context);
+        return navigator.pop();
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
         snackBar.error(l10n.genericErrorMessage);

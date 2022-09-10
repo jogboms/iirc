@@ -6,14 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 import 'package:universal_io/io.dart' as io;
 
-import 'app.dart';
 import 'core.dart';
 import 'data.dart';
 import 'domain.dart';
 import 'firebase_options.dev.dart' as dev;
 import 'firebase_options.prod.dart' as prod;
 import 'presentation.dart';
-import 'registry.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +35,8 @@ void main() async {
       navigationObserver = firebase.analytics.navigatorObserver;
       analytics = _Analytics(firebase.analytics);
       break;
+    case Environment.testing:
     case Environment.mock:
-    default:
       reporterClient = const _NoopReporterClient();
       repository = _Repository.mock();
       navigationObserver = NavigatorObserver();
@@ -94,21 +92,23 @@ void main() async {
     /// Environment.
     ..set(environment);
 
-  runApp(ErrorBoundary(
-    isReleaseMode: !environment.isDebugging,
-    errorViewBuilder: (_) => const AppCrashErrorView(),
-    onException: AppLog.e,
-    onCrash: errorReporter.reportCrash,
-    child: ProviderScope(
-      overrides: <Override>[
-        registryProvider.overrideWithValue(registry),
-      ],
-      child: App(
-        registry: registry,
-        navigatorObservers: <NavigatorObserver>[navigationObserver],
+  runApp(
+    ErrorBoundary(
+      isReleaseMode: !environment.isDebugging,
+      errorViewBuilder: (_) => const AppCrashErrorView(),
+      onException: AppLog.e,
+      onCrash: errorReporter.reportCrash,
+      child: ProviderScope(
+        overrides: <Override>[
+          registryProvider.overrideWithValue(registry),
+        ],
+        child: App(
+          registry: registry,
+          navigatorObservers: <NavigatorObserver>[navigationObserver],
+        ),
       ),
     ),
-  ));
+  );
 }
 
 class _Repository {

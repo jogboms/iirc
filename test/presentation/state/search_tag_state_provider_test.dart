@@ -16,9 +16,7 @@ Future<void> main() async {
       ItemsMockImpl.generateNormalizedItem(tag: tag.copyWith(title: 'Beta', description: 'Orange')),
     ];
 
-    tearDown(() {
-      mockUseCases.reset();
-    });
+    tearDown(mockUseCases.reset);
 
     ProviderBase<List<NormalizedItemModel>> createProvider() {
       container = createProviderContainer();

@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../utils.dart';
 
-// TODO: improve tests w/ calendar day selection
+// TODO(Jogboms): improve tests w/ calendar day selection
 void main() {
   group('CalendarPage', () {
     final Finder calendarPage = find.byType(CalendarPage);
@@ -41,14 +41,16 @@ void main() {
         (_) => ItemsMockImpl.generateNormalizedItem(tag: tag, date: now).asViewModel,
       );
 
-      await tester.pumpWidget(createApp(
-        home: const CalendarPage(),
-        overrides: <Override>[
-          itemsProvider.overrideWithValue(
-            AsyncData<ItemViewModelList>(expectedItems),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CalendarPage(),
+          overrides: <Override>[
+            itemsProvider.overrideWithValue(
+              AsyncData<ItemViewModelList>(expectedItems),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -63,14 +65,16 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      await tester.pumpWidget(createApp(
-        home: const CalendarPage(),
-        overrides: <Override>[
-          itemsProvider.overrideWithValue(
-            AsyncError<ItemViewModelList>(expectedError),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CalendarPage(),
+          overrides: <Override>[
+            itemsProvider.overrideWithValue(
+              AsyncError<ItemViewModelList>(expectedError),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();

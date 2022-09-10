@@ -28,17 +28,19 @@ void main() {
     });
 
     testWidgets('should show empty view', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: const ItemsPage(),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(
-            AsyncData<TagViewModelList>(TagViewModelList.empty()),
-          ),
-          itemsProvider.overrideWithValue(
-            AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemsPage(),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(
+              AsyncData<TagViewModelList>(TagViewModelList.empty()),
+            ),
+            itemsProvider.overrideWithValue(
+              AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();
@@ -52,17 +54,19 @@ void main() {
         (_) => TagsMockImpl.generateTag().asViewModel,
       );
 
-      await tester.pumpWidget(createApp(
-        home: const ItemsPage(),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(
-            AsyncData<TagViewModelList>(expectedTags),
-          ),
-          itemsProvider.overrideWithValue(
-            AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemsPage(),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(
+              AsyncData<TagViewModelList>(expectedTags),
+            ),
+            itemsProvider.overrideWithValue(
+              AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();
@@ -82,17 +86,19 @@ void main() {
       );
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
-      await tester.pumpWidget(createApp(
-        home: const ItemsPage(),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(
-            AsyncData<TagViewModelList>(TagViewModelList.empty()),
-          ),
-          itemsProvider.overrideWithValue(
-            AsyncData<ItemViewModelList>(expectedItems),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemsPage(),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(
+              AsyncData<TagViewModelList>(TagViewModelList.empty()),
+            ),
+            itemsProvider.overrideWithValue(
+              AsyncData<ItemViewModelList>(expectedItems),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();
@@ -109,17 +115,19 @@ void main() {
     testWidgets('should show error if any', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      await tester.pumpWidget(createApp(
-        home: const ItemsPage(),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(
-            AsyncData<TagViewModelList>(TagViewModelList.empty()),
-          ),
-          itemsProvider.overrideWithValue(
-            AsyncError<ItemViewModelList>(expectedError),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemsPage(),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(
+              AsyncData<TagViewModelList>(TagViewModelList.empty()),
+            ),
+            itemsProvider.overrideWithValue(
+              AsyncError<ItemViewModelList>(expectedError),
+            ),
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();

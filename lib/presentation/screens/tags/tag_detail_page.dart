@@ -164,7 +164,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             IconButton(
               onPressed: () {
                 widget.analytics.log(AnalyticsEvent.buttonClick('view tag insights: ${widget.tag.id}'));
-                // TODO: route to insights details
+                // TODO(Jogboms): route to insights details
               },
               icon: const Icon(Icons.insights_outlined),
               color: theme.colorScheme.onSurface,
@@ -206,13 +206,17 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
               Consumer(
                 builder: (_, WidgetRef ref, __) => IconButton(
                   onPressed: () async {
+                    final AppSnackBar snackBar = context.snackBar;
+                    final L10n l10n = context.l10n;
+                    final NavigatorState navigator = Navigator.of(context);
+
                     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('delete tag: ${widget.tag.id}')));
                     final bool isOk = await showErrorChoiceBanner(
                       context,
                       message: context.l10n.areYouSureAboutThisMessage,
                     );
                     if (isOk) {
-                      _onDelete(context, ref);
+                      _onDelete(ref, l10n: l10n, snackBar: snackBar, navigator: navigator);
                     }
                   },
                   icon: const Icon(Icons.delete_forever_outlined),
@@ -233,16 +237,19 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
     );
   }
 
-  void _onDelete(BuildContext context, WidgetRef ref) async {
-    final AppSnackBar snackBar = context.snackBar;
-    final L10n l10n = context.l10n;
+  void _onDelete(
+    WidgetRef ref, {
+    required L10n l10n,
+    required AppSnackBar snackBar,
+    required NavigatorState navigator,
+  }) async {
     try {
       snackBar.loading();
 
       await ref.read(tagProvider).delete(widget.tag);
 
       snackBar.success(l10n.successfulMessage);
-      return Navigator.pop(context);
+      return navigator.pop();
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(l10n.genericErrorMessage);

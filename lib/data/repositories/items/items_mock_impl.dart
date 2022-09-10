@@ -18,7 +18,7 @@ class ItemsMockImpl extends ItemsRepository {
       path: '/items/${AuthMockImpl.id}/$id',
       description: faker.lorem.sentence(),
       date: date ?? faker.randomGenerator.dateTime,
-      tag: (tag ?? TagsMockImpl.tags.values.random()),
+      tag: tag ?? TagsMockImpl.tags.values.random(),
       createdAt: faker.randomGenerator.dateTime,
       updatedAt: clock.now(),
     );

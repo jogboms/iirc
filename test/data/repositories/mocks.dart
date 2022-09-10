@@ -28,13 +28,13 @@ class MockCollectionReference extends MockMapCollectionReference {
     final MapQuerySnapshot querySnapshot = MockQuerySnapshot();
 
     when(() => orderBy(any(), descending: any(named: 'descending'))).thenReturn(this);
-    when(() => snapshots()).thenAnswer((_) => Stream<MapQuerySnapshot>.value(querySnapshot));
+    when(snapshots).thenAnswer((_) => Stream<MapQuerySnapshot>.value(querySnapshot));
 
     final List<MapQueryDocumentSnapshot> docs = <MapQueryDocumentSnapshot>[];
     for (final DynamicMap data in items) {
       final MapQueryDocumentSnapshot snapshot = MockQueryDocumentSnapshot();
       when(() => snapshot.id).thenAnswer((_) => data['id'] as String);
-      when(() => snapshot.data()).thenAnswer((_) => data);
+      when(snapshot.data).thenAnswer((_) => data);
 
       final MapDocumentReference reference = MockMapDocumentReference();
       when(() => snapshot.reference).thenReturn(reference);
@@ -61,12 +61,12 @@ class MockTagDocumentReference extends MockMapDocumentReference {
 class MockUserDocumentReference extends MockMapDocumentReference {
   MockUserDocumentReference([DynamicMap? data]) {
     final MapQueryDocumentSnapshot snapshot = MockQueryDocumentSnapshot();
-    when(() => get()).thenAnswer((_) async => snapshot);
+    when(get).thenAnswer((_) async => snapshot);
     when(() => snapshot.exists).thenReturn(data != null);
 
     if (data != null) {
       when(() => snapshot.id).thenAnswer((_) => data['id'] as String);
-      when(() => snapshot.data()).thenAnswer((_) => data);
+      when(snapshot.data).thenAnswer((_) => data);
 
       final MapDocumentReference reference = MockMapDocumentReference();
       when(() => snapshot.reference).thenReturn(reference);

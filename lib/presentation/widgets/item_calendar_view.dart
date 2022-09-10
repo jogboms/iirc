@@ -71,18 +71,15 @@ class ItemCalendarViewController with ChangeNotifier {
   );
 
   @visibleForTesting
-  void onFocusDayChanged(DateTime date) => focusedDay = date;
-
-  @visibleForTesting
   void onSelectedDayChanged(DateTime date) {
-    onFocusDayChanged(date);
+    focusedDay = date;
     forceUpdate(date);
   }
 
   void today() => onSelectedDayChanged(_kToday);
 
   void clearSelection() {
-    onFocusDayChanged(DateTime(focusedDay.year, focusedDay.month));
+    focusedDay = DateTime(focusedDay.year, focusedDay.month);
     forceUpdate(_kEmptyDate);
   }
 
@@ -174,8 +171,6 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
         height: widget.controller.height,
         color: theme.colorScheme.surface,
         child: TableCalendar<ItemViewModel>(
-          calendarFormat: CalendarFormat.month,
-          startingDayOfWeek: StartingDayOfWeek.sunday,
           currentDay: _kToday,
           daysOfWeekHeight: kToolbarHeight * .75,
           headerVisible: false,
@@ -192,7 +187,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
           firstDay: _kEmptyDate,
           lastDay: DateTime(_kToday.year + 2),
           selectedDayPredicate: (DateTime day) => isSameDay(widget.controller.selectedDate, day),
-          onPageChanged: widget.controller.onFocusDayChanged,
+          onPageChanged: (DateTime date) => widget.controller.focusedDay = date,
           calendarBuilders: CalendarBuilders<ItemViewModel>(
             prioritizedBuilder: (BuildContext context, DateTime date, DateTime focusedDay) {
               final bool isSelected = isSameDay(date, focusedDay);

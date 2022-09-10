@@ -63,7 +63,6 @@ class SnackBarProviderState extends State<SnackBarProvider> {
           child: Material(
             color: Colors.black26,
             child: IgnorePointer(
-              ignoring: true,
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
@@ -78,15 +77,17 @@ class SnackBarProviderState extends State<SnackBarProvider> {
 
     final Completer<String> completer = Completer<String>();
     final String id = shortHash(Object());
-    _snacks.add(Snack(
-      id: id,
-      barrier: barrier,
-      completer: completer,
-      timer: Timer(duration ?? _duration, () {
-        completer.complete(id);
-        barrier.remove();
-      }),
-    ));
+    _snacks.add(
+      Snack(
+        id: id,
+        barrier: barrier,
+        completer: completer,
+        timer: Timer(duration ?? _duration, () {
+          completer.complete(id);
+          barrier.remove();
+        }),
+      ),
+    );
 
     _overlayState?.insert(barrier);
 

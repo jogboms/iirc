@@ -10,8 +10,10 @@ import '../network/firebase/exception.dart';
 import '../network/firebase/models.dart';
 
 extension ListExtensions<T> on Iterable<T> {
-  Map<String, T> foldToMap(String Function(T) keyBuilder) => fold(<String, T>{},
-      (Map<String, T> previousValue, T element) => <String, T>{...previousValue, keyBuilder(element): element});
+  Map<String, T> foldToMap(String Function(T) keyBuilder) => fold(
+        <String, T>{},
+        (Map<String, T> previousValue, T element) => <String, T>{...previousValue, keyBuilder(element): element},
+      );
 }
 
 extension RandomGeneratorExtensions on RandomGenerator {
@@ -23,8 +25,8 @@ extension RandomGeneratorExtensions on RandomGenerator {
       integer(year, min: year),
       integer(min(month + 1, 12), min: max(month - 1, 0)),
       integer(29, min: 1),
-      integer(23, min: 0),
-      integer(59, min: 0),
+      integer(23),
+      integer(59),
     );
   }
 }

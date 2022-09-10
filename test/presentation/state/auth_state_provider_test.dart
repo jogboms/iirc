@@ -18,7 +18,7 @@ Future<void> main() async {
       registerFallbackValue(FakeAccountModel());
     });
 
-    tearDown(() => mockUseCases.reset());
+    tearDown(mockUseCases.reset);
 
     AuthStateNotifier createProvider() {
       final AuthStateNotifier provider = AuthStateNotifier(
@@ -36,7 +36,7 @@ Future<void> main() async {
 
     test('should create new instance with idle state when read', () {
       final ProviderContainer container = createProviderContainer();
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       expect(container.read(authStateProvider), AuthState.idle);
     });
@@ -47,7 +47,7 @@ Future<void> main() async {
         final UserModel dummyUser = UsersMockImpl.user;
 
         setUp(() {
-          when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+          when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);
         });
 
         test('should sign in known user and update user info', () async {
@@ -63,7 +63,7 @@ Future<void> main() async {
             AuthState.loading,
             AuthState.complete,
           ]);
-          verify(() => mockUseCases.signInUseCase.call()).called(1);
+          verify(mockUseCases.signInUseCase.call).called(1);
           verify(() => mockUseCases.fetchUserUseCase.call(dummyAccount.id)).called(1);
           verify(() => mockUseCases.updateUserUseCase.call(any())).called(1);
         });
@@ -99,18 +99,18 @@ Future<void> main() async {
             AuthState.loading,
             AuthState.complete,
           ]);
-          verify(() => mockUseCases.signInUseCase.call()).called(1);
+          verify(mockUseCases.signInUseCase.call).called(1);
           verify(() => mockUseCases.fetchUserUseCase.call(dummyAccount.id)).called(1);
           verify(() => mockUseCases.createUserUseCase.call(dummyAccount)).called(1);
         });
 
         group('should sign out', () {
           setUp(() {
-            when(() => mockUseCases.signOutUseCase.call()).thenAnswer((_) async {});
+            when(mockUseCases.signOutUseCase.call).thenAnswer((_) async {});
           });
 
           test('when sign in fails', () async {
-            when(() => mockUseCases.signInUseCase.call()).thenThrow(Exception());
+            when(mockUseCases.signInUseCase.call).thenThrow(Exception());
 
             createProvider().signIn();
 
@@ -121,12 +121,12 @@ Future<void> main() async {
               AuthState.loading,
               AuthState.error('${Exception()}'),
             ]);
-            verify(() => mockUseCases.signInUseCase.call()).called(1);
-            verify(() => mockUseCases.signOutUseCase.call()).called(1);
+            verify(mockUseCases.signInUseCase.call).called(1);
+            verify(mockUseCases.signOutUseCase.call).called(1);
           });
 
           test('when fetch user fails', () async {
-            when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+            when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);
             when(() => mockUseCases.fetchUserUseCase.call(any())).thenThrow(Exception());
 
             createProvider().signIn();
@@ -138,13 +138,13 @@ Future<void> main() async {
               AuthState.loading,
               AuthState.error('${Exception()}'),
             ]);
-            verify(() => mockUseCases.signInUseCase.call()).called(1);
+            verify(mockUseCases.signInUseCase.call).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
-            verify(() => mockUseCases.signOutUseCase.call()).called(1);
+            verify(mockUseCases.signOutUseCase.call).called(1);
           });
 
           test('when create user fails', () async {
-            when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+            when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);
             when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => null);
             when(() => mockUseCases.createUserUseCase.call(any())).thenThrow(Exception());
 
@@ -157,14 +157,14 @@ Future<void> main() async {
               AuthState.loading,
               AuthState.error('${Exception()}'),
             ]);
-            verify(() => mockUseCases.signInUseCase.call()).called(1);
+            verify(mockUseCases.signInUseCase.call).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
             verify(() => mockUseCases.createUserUseCase.call(any())).called(1);
-            verify(() => mockUseCases.signOutUseCase.call()).called(1);
+            verify(mockUseCases.signOutUseCase.call).called(1);
           });
 
           test('when update user fails', () async {
-            when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+            when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);
             when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => dummyUser);
             when(() => mockUseCases.updateUserUseCase.call(any())).thenThrow(Exception());
 
@@ -177,15 +177,15 @@ Future<void> main() async {
               AuthState.loading,
               AuthState.error('${Exception()}'),
             ]);
-            verify(() => mockUseCases.signInUseCase.call()).called(1);
+            verify(mockUseCases.signInUseCase.call).called(1);
             verify(() => mockUseCases.fetchUserUseCase.call(any())).called(1);
             verify(() => mockUseCases.updateUserUseCase.call(any())).called(1);
-            verify(() => mockUseCases.signOutUseCase.call()).called(1);
+            verify(mockUseCases.signOutUseCase.call).called(1);
           });
 
           group('Exceptions', () {
             test('when canceled', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.canceled());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.canceled());
 
               createProvider().signIn();
 
@@ -199,7 +199,7 @@ Future<void> main() async {
             });
 
             test('when network unavailable', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.networkUnavailable());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.networkUnavailable());
 
               createProvider().signIn();
 
@@ -213,7 +213,7 @@ Future<void> main() async {
             });
 
             test('when popup blocked by browser', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.popupBlockedByBrowser());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.popupBlockedByBrowser());
 
               createProvider().signIn();
 
@@ -227,7 +227,7 @@ Future<void> main() async {
             });
 
             test('when too many requests', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.tooManyRequests());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.tooManyRequests());
 
               createProvider().signIn();
 
@@ -241,7 +241,7 @@ Future<void> main() async {
             });
 
             test('when failed', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.failed());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.failed());
 
               createProvider().signIn();
 
@@ -255,7 +255,7 @@ Future<void> main() async {
             });
 
             test('when user disabled', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.userDisabled());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.userDisabled());
 
               createProvider().signIn();
 
@@ -269,7 +269,7 @@ Future<void> main() async {
             });
 
             test('when invalid email', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.invalidEmail());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.invalidEmail());
 
               createProvider().signIn();
 
@@ -283,7 +283,7 @@ Future<void> main() async {
             });
 
             test('when user not found', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(const AuthException.userNotFound());
+              when(mockUseCases.signInUseCase.call).thenThrow(const AuthException.userNotFound());
 
               createProvider().signIn();
 
@@ -297,7 +297,7 @@ Future<void> main() async {
             });
 
             test('when unknown', () async {
-              when(() => mockUseCases.signInUseCase.call()).thenThrow(AuthException.unknown(Exception()));
+              when(mockUseCases.signInUseCase.call).thenThrow(AuthException.unknown(Exception()));
 
               createProvider().signIn();
 
@@ -315,7 +315,7 @@ Future<void> main() async {
 
       group('Sign Out', () {
         test('should sign out', () async {
-          when(() => mockUseCases.signOutUseCase.call()).thenAnswer((_) async {});
+          when(mockUseCases.signOutUseCase.call).thenAnswer((_) async {});
 
           createProvider().signOut();
 
@@ -326,11 +326,11 @@ Future<void> main() async {
             AuthState.loading,
             AuthState.complete,
           ]);
-          verify(() => mockUseCases.signOutUseCase.call()).called(1);
+          verify(mockUseCases.signOutUseCase.call).called(1);
         });
 
         test('should fail gracefully on error', () async {
-          when(() => mockUseCases.signOutUseCase.call()).thenThrow(Exception());
+          when(mockUseCases.signOutUseCase.call).thenThrow(Exception());
 
           createProvider().signOut();
 
@@ -341,7 +341,7 @@ Future<void> main() async {
             AuthState.loading,
             AuthState.error('${Exception()}'),
           ]);
-          verify(() => mockUseCases.signOutUseCase.call()).called(1);
+          verify(mockUseCases.signOutUseCase.call).called(1);
         });
       });
     });

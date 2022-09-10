@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iirc/registry.dart';
+import 'package:iirc/presentation.dart';
 
 void main() {
   group('Registry', () {
@@ -12,26 +12,29 @@ void main() {
 
       test('throws an assertion error when registered more than once', () {
         expect(
-            () => Registry()
-              ..set<int>(0)
-              ..set<int>(1),
-            throwsAssertionError);
+          () => Registry()
+            ..set<int>(0)
+            ..set<int>(1),
+          throwsAssertionError,
+        );
       });
 
       test('throws an assertion error when factory is registered more than once', () {
         expect(
-            () => Registry()
-              ..factory((_) => 1)
-              ..factory((_) => 2),
-            throwsAssertionError);
+          () => Registry()
+            ..factory((_) => 1)
+            ..factory((_) => 2),
+          throwsAssertionError,
+        );
       });
 
       test('throws an assertion error when factory is registered when normal exists', () {
         expect(
-            () => Registry()
-              ..set(1)
-              ..factory((_) => 2),
-            throwsAssertionError);
+          () => Registry()
+            ..set(1)
+            ..factory((_) => 2),
+          throwsAssertionError,
+        );
       });
     });
 

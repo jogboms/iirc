@@ -12,9 +12,7 @@ Future<void> main() async {
   group('UserProvider', () {
     final UserModel dummyUser = UsersMockImpl.user;
 
-    tearDown(() {
-      mockUseCases.reset();
-    });
+    tearDown(mockUseCases.reset);
 
     Future<UserModel> createProviderFuture() {
       final AccountModel dummyAccount = AuthMockImpl.generateAccount();
@@ -23,7 +21,7 @@ Future<void> main() async {
           accountProvider.overrideWithValue(AsyncData<AccountModel>(dummyAccount)),
         ],
       );
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
       return container.read(userProvider.future);
     }
 

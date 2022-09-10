@@ -69,18 +69,20 @@ void main() {
     const Analytics analytics = NoopAnalytics();
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: TagEntryForm(
-          initialValue: TagEntryData(
-            title: nonconst('title'),
-            description: 'description',
-            color: 0xF,
+      await tester.pumpWidget(
+        createApp(
+          home: TagEntryForm(
+            initialValue: TagEntryData(
+              title: nonconst('title'),
+              description: 'description',
+              color: 0xF,
+            ),
+            type: TagEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
           ),
-          type: TagEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -93,14 +95,16 @@ void main() {
         description: 'description',
         color: 0xF,
       );
-      await tester.pumpWidget(createApp(
-        home: TagEntryForm(
-          initialValue: initialValue,
-          type: TagEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: TagEntryForm(
+            initialValue: initialValue,
+            type: TagEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -113,14 +117,16 @@ void main() {
     });
 
     testWidgets('should assign default initial values', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: TagEntryForm(
-          initialValue: null,
-          type: TagEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: TagEntryForm(
+            initialValue: null,
+            type: TagEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -132,14 +138,16 @@ void main() {
     testWidgets('should enable submit button only when valid', (WidgetTester tester) async {
       final MockValueChangedCallback<TagEntryData> onSubmit = MockValueChangedCallback<TagEntryData>();
 
-      await tester.pumpWidget(createApp(
-        home: TagEntryForm(
-          initialValue: null,
-          type: TagEntryType.create,
-          analytics: analytics,
-          onSaved: onSubmit,
+      await tester.pumpWidget(
+        createApp(
+          home: TagEntryForm(
+            initialValue: null,
+            type: TagEntryType.create,
+            analytics: analytics,
+            onSaved: onSubmit,
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 

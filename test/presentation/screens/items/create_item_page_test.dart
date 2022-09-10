@@ -10,7 +10,7 @@ import '../../../mocks.dart';
 import '../../../utils.dart';
 import 'utils.dart';
 
-// TODO: improve tests w/ input form
+// TODO(Jogboms): improve tests w/ input form
 void main() {
   group('CreateItemPage', () {
     final Finder createItemPage = find.byType(CreateItemPage);
@@ -46,14 +46,16 @@ void main() {
       final MockItemProvider mockItemProvider = MockItemProvider();
       when(() => mockItemProvider.create(any())).thenAnswer((_) async => '1');
 
-      await tester.pumpWidget(createApp(
-        home: const CreateItemPage(asModal: false),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          itemProvider.overrideWithValue(mockItemProvider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateItemPage(asModal: false),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            itemProvider.overrideWithValue(mockItemProvider),
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -66,14 +68,16 @@ void main() {
       final MockItemProvider mockItemProvider = MockItemProvider();
       when(() => mockItemProvider.create(any())).thenAnswer((_) async => '1');
 
-      await tester.pumpWidget(createApp(
-        home: const CreateItemPage(asModal: true),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          itemProvider.overrideWithValue(mockItemProvider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateItemPage(asModal: true),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            itemProvider.overrideWithValue(mockItemProvider),
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -86,14 +90,16 @@ void main() {
       final MockItemProvider mockItemProvider = MockItemProvider();
       when(() => mockItemProvider.create(any())).thenThrow(Exception());
 
-      await tester.pumpWidget(createApp(
-        home: const CreateItemPage(asModal: false),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          itemProvider.overrideWithValue(mockItemProvider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateItemPage(asModal: false),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            itemProvider.overrideWithValue(mockItemProvider),
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -109,11 +115,13 @@ extension on WidgetTester {
     await enterFields(tag);
 
     verify(
-      () => itemProvider.create(CreateItemData(
-        description: 'description',
-        date: DateTime(1),
-        tag: const TagModelReference(id: '1', path: 'path'),
-      )),
+      () => itemProvider.create(
+        CreateItemData(
+          description: 'description',
+          date: DateTime(1),
+          tag: const TagModelReference(id: '1', path: 'path'),
+        ),
+      ),
     ).called(1);
   }
 }

@@ -97,11 +97,13 @@ void main() {
 
           await expectLater(
             () => auth.signInWithGoogle(),
-            throwsA(isA<AppFirebaseAuthException>().having(
-              (AppFirebaseAuthException e) => e.type,
-              'type',
-              AppFirebaseAuthExceptionType.canceled,
-            )),
+            throwsA(
+              isA<AppFirebaseAuthException>().having(
+                (AppFirebaseAuthException e) => e.type,
+                'type',
+                AppFirebaseAuthExceptionType.canceled,
+              ),
+            ),
           );
         });
 
@@ -119,11 +121,13 @@ void main() {
 
             await expectLater(
               () => auth.signInWithGoogle(),
-              throwsA(isA<AppFirebaseAuthException>().having(
-                (AppFirebaseAuthException e) => e.type,
-                'type',
-                entry.value,
-              )),
+              throwsA(
+                isA<AppFirebaseAuthException>().having(
+                  (AppFirebaseAuthException e) => e.type,
+                  'type',
+                  entry.value,
+                ),
+              ),
             );
           }
         });
@@ -134,11 +138,13 @@ void main() {
 
           await expectLater(
             () => auth.signInWithGoogle(),
-            throwsA(isA<Exception>().having(
-              (Exception e) => e.toString(),
-              'toString()',
-              'Exception: PlatformException(empty, null, null, null)',
-            )),
+            throwsA(
+              isA<Exception>().having(
+                (Exception e) => e.toString(),
+                'toString()',
+                'Exception: PlatformException(empty, null, null, null)',
+              ),
+            ),
           );
         });
 
@@ -151,17 +157,21 @@ void main() {
           };
 
           for (final MapEntry<String, AppFirebaseAuthExceptionType> entry in exceptions.entries) {
-            when(() => mockFirebaseAuth.signInWithCredential(any())).thenThrow(FirebaseAuthException(
-              code: entry.key,
-              email: 'email',
-            ));
+            when(() => mockFirebaseAuth.signInWithCredential(any())).thenThrow(
+              FirebaseAuthException(
+                code: entry.key,
+                email: 'email',
+              ),
+            );
             when(() => mockGoogleSignIn.currentUser).thenReturn(FakeGoogleSignInAccount());
 
             await expectLater(
               () => auth.signInWithGoogle(),
-              throwsA(isA<AppFirebaseAuthException>()
-                  .having((AppFirebaseAuthException e) => e.type, 'type', entry.value)
-                  .having((AppFirebaseAuthException e) => e.email, 'email', 'email')),
+              throwsA(
+                isA<AppFirebaseAuthException>()
+                    .having((AppFirebaseAuthException e) => e.type, 'type', entry.value)
+                    .having((AppFirebaseAuthException e) => e.email, 'email', 'email'),
+              ),
             );
           }
         });
@@ -172,11 +182,13 @@ void main() {
 
           await expectLater(
             () => auth.signInWithGoogle(),
-            throwsA(isA<Exception>().having(
-              (Exception e) => e.toString(),
-              'toString()',
-              'Exception: [firebase_auth/empty] null',
-            )),
+            throwsA(
+              isA<Exception>().having(
+                (Exception e) => e.toString(),
+                'toString()',
+                'Exception: [firebase_auth/empty] null',
+              ),
+            ),
           );
         });
       });

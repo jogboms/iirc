@@ -11,7 +11,7 @@ void main() {
       final DateTime now = DateTime(0);
       withClock(Clock(() => now), () {
         final ProviderContainer container = createProviderContainer();
-        addTearDown(() => container.dispose());
+        addTearDown(container.dispose);
 
         expect(
           container.read(calendarStateProvider),

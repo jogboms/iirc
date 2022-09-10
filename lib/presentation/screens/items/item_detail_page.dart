@@ -102,13 +102,17 @@ class _SelectedItemDataView extends StatelessWidget {
             Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => IconButton(
                 onPressed: () async {
+                  final AppSnackBar snackBar = context.snackBar;
+                  final L10n l10n = context.l10n;
+                  final NavigatorState navigator = Navigator.of(context);
+
                   unawaited(analytics.log(AnalyticsEvent.buttonClick('delete item: ${item.id}')));
                   final bool isOk = await showErrorChoiceBanner(
                     context,
                     message: context.l10n.areYouSureAboutThisMessage,
                   );
                   if (isOk) {
-                    _onDelete(context, ref);
+                    _onDelete(ref, l10n: l10n, snackBar: snackBar, navigator: navigator);
                   }
                 },
                 icon: const Icon(Icons.delete_forever_outlined),
@@ -152,16 +156,19 @@ class _SelectedItemDataView extends StatelessWidget {
     );
   }
 
-  void _onDelete(BuildContext context, WidgetRef ref) async {
-    final AppSnackBar snackBar = context.snackBar;
-    final L10n l10n = context.l10n;
+  void _onDelete(
+    WidgetRef ref, {
+    required L10n l10n,
+    required AppSnackBar snackBar,
+    required NavigatorState navigator,
+  }) async {
     try {
       snackBar.loading();
 
       await ref.read(itemProvider).delete(item.path);
 
       snackBar.success(l10n.successfulMessage);
-      return Navigator.pop(context);
+      return navigator.pop();
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(l10n.genericErrorMessage);

@@ -35,7 +35,6 @@ class ColorPickerField extends FormField<Color> {
                   const SizedBox(height: 4),
                   OColorPicker(
                     selectedColor: color,
-                    colors: primaryColorsPalette,
                     onColorChange: (Color color) => fieldState.didChange(color),
                   ),
                 ]

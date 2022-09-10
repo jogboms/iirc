@@ -30,16 +30,18 @@ void main() {
       final TagModel tag = TagsMockImpl.generateTag();
       final NormalizedItemModel item = ItemsMockImpl.generateNormalizedItem(tag: tag);
 
-      await tester.pumpWidget(createApp(
-        home: ItemDetailPage(id: item.id),
-        overrides: <Override>[
-          selectedItemStateProvider(item.id).overrideWithValue(
-            PreserveStateNotifier.withState<ItemViewModel>(
-              AsyncData<ItemViewModel>(item.asViewModel),
+      await tester.pumpWidget(
+        createApp(
+          home: ItemDetailPage(id: item.id),
+          overrides: <Override>[
+            selectedItemStateProvider(item.id).overrideWithValue(
+              PreserveStateNotifier.withState<ItemViewModel>(
+                AsyncData<ItemViewModel>(item.asViewModel),
+              ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();
@@ -50,16 +52,18 @@ void main() {
     testWidgets('should show error if item fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      await tester.pumpWidget(createApp(
-        home: const ItemDetailPage(id: '1'),
-        overrides: <Override>[
-          selectedItemStateProvider('1').overrideWithValue(
-            PreserveStateNotifier.withState<ItemViewModel>(
-              AsyncError<ItemViewModel>(expectedError),
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemDetailPage(id: '1'),
+          overrides: <Override>[
+            selectedItemStateProvider('1').overrideWithValue(
+              PreserveStateNotifier.withState<ItemViewModel>(
+                AsyncError<ItemViewModel>(expectedError),
+              ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();

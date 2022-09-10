@@ -15,5 +15,5 @@ class CloudAnalytics {
 
   Future<void> setUserId(String id) async => _analytics.setUserId(id: id);
 
-  Future<void> removeUserId() async => _analytics.setUserId(id: null);
+  Future<void> removeUserId() async => _analytics.setUserId();
 }

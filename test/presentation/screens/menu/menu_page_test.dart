@@ -62,12 +62,14 @@ extension on WidgetTester {
     required NavigatorObserver navigatorObserver,
     MenuPageItem initialPage = MenuPageItem.calendar,
   }) =>
-      pumpWidget(createApp(
-        home: MenuPage(initialPage: initialPage),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
-          itemsProvider.overrideWithValue(AsyncData<ItemViewModelList>(ItemViewModelList.empty())),
-        ],
-      )).then((_) => pump());
+      pumpWidget(
+        createApp(
+          home: MenuPage(initialPage: initialPage),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
+            itemsProvider.overrideWithValue(AsyncData<ItemViewModelList>(ItemViewModelList.empty())),
+          ],
+        ),
+      ).then((_) => pump());
 }

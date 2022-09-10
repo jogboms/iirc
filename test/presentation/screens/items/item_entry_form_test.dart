@@ -95,16 +95,18 @@ void main() {
     });
 
     testWidgets('smoke test', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: 'description',
-          date: DateTime(0),
-          tag: dummyTagViewModel,
-          type: ItemEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: 'description',
+            date: DateTime(0),
+            tag: dummyTagViewModel,
+            type: ItemEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -117,19 +119,21 @@ void main() {
         date: DateTime(0),
         tag: dummyTagViewModel,
       );
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: initialValue.description,
-          date: initialValue.date,
-          tag: initialValue.tag,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: initialValue.description,
+            date: initialValue.date,
+            tag: initialValue.tag,
+            type: ItemEntryType.update,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
         ),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      );
 
       await tester.pump();
 
@@ -145,16 +149,18 @@ void main() {
     });
 
     testWidgets('should hide date picker when initial date is given and in create mode', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: null,
-          date: DateTime(0),
-          tag: null,
-          type: ItemEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: null,
+            date: DateTime(0),
+            tag: null,
+            type: ItemEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -162,16 +168,18 @@ void main() {
     });
 
     testWidgets('should hide tag picker when initial tag is given and in create mode', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: dummyTagViewModel,
-          type: ItemEntryType.create,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: null,
+            date: null,
+            tag: dummyTagViewModel,
+            type: ItemEntryType.create,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -179,16 +187,18 @@ void main() {
     });
 
     testWidgets('should show create tag button when total tags is empty', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: dummyTagViewModel,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: null,
+            date: null,
+            tag: dummyTagViewModel,
+            type: ItemEntryType.update,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
         ),
-      ));
+      );
 
       await tester.pump();
 
@@ -197,20 +207,22 @@ void main() {
     });
 
     testWidgets('should navigate to create tag when total tags is empty', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        observers: <NavigatorObserver>[navigatorObserver],
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: null,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: (_) {},
+      await tester.pumpWidget(
+        createApp(
+          observers: <NavigatorObserver>[navigatorObserver],
+          home: ItemEntryForm(
+            description: null,
+            date: null,
+            tag: null,
+            type: ItemEntryType.update,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
+          ],
         ),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
-        ],
-      ));
+      );
 
       await tester.pump();
 
@@ -222,53 +234,9 @@ void main() {
     });
 
     testWidgets('should navigate to create tag when total tags are available', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        observers: <NavigatorObserver>[navigatorObserver],
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: null,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: (_) {},
-        ),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
-
-      await tester.pump();
-
-      await tester.tap(find.byKey(ItemEntryFormState.createTagButtonKey));
-      await tester.verifyPushNavigation<CreateTagPage>(navigatorObserver);
-
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-    });
-
-    testWidgets('should show single tag when total tags are exactly 1', (WidgetTester tester) async {
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: dummyTagViewModel,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: (_) {},
-        ),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList.sublist(0, 1))),
-        ],
-      ));
-
-      await tester.pump();
-
-      expect(find.byKey(Key(dummyTagsList.first.id)), findsOneWidget);
-    });
-
-    testWidgets('should assign default initial values', (WidgetTester tester) async {
-      await withClock(Clock.fixed(DateTime(0)), () async {
-        await tester.pumpWidget(createApp(
+      await tester.pumpWidget(
+        createApp(
+          observers: <NavigatorObserver>[navigatorObserver],
           home: ItemEntryForm(
             description: null,
             date: null,
@@ -280,7 +248,57 @@ void main() {
           overrides: <Override>[
             tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
           ],
-        ));
+        ),
+      );
+
+      await tester.pump();
+
+      await tester.tap(find.byKey(ItemEntryFormState.createTagButtonKey));
+      await tester.verifyPushNavigation<CreateTagPage>(navigatorObserver);
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('should show single tag when total tags are exactly 1', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: null,
+            date: null,
+            tag: dummyTagViewModel,
+            type: ItemEntryType.update,
+            analytics: analytics,
+            onSaved: (_) {},
+          ),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList.sublist(0, 1))),
+          ],
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.byKey(Key(dummyTagsList.first.id)), findsOneWidget);
+    });
+
+    testWidgets('should assign default initial values', (WidgetTester tester) async {
+      await withClock(Clock.fixed(DateTime(0)), () async {
+        await tester.pumpWidget(
+          createApp(
+            home: ItemEntryForm(
+              description: null,
+              date: null,
+              tag: null,
+              type: ItemEntryType.update,
+              analytics: analytics,
+              onSaved: (_) {},
+            ),
+            overrides: <Override>[
+              tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            ],
+          ),
+        );
 
         await tester.pump();
       });
@@ -293,19 +311,21 @@ void main() {
     testWidgets('should enable submit button only when valid', (WidgetTester tester) async {
       final MockValueChangedCallback<ItemEntryData> onSubmit = MockValueChangedCallback<ItemEntryData>();
 
-      await tester.pumpWidget(createApp(
-        home: ItemEntryForm(
-          description: null,
-          date: null,
-          tag: null,
-          type: ItemEntryType.update,
-          analytics: analytics,
-          onSaved: onSubmit,
+      await tester.pumpWidget(
+        createApp(
+          home: ItemEntryForm(
+            description: null,
+            date: null,
+            tag: null,
+            type: ItemEntryType.update,
+            analytics: analytics,
+            onSaved: onSubmit,
+          ),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
         ),
-        overrides: <Override>[
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      );
 
       await tester.pump();
 

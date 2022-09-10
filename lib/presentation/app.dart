@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:iirc/core.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
-import 'core.dart';
-import 'presentation.dart';
 import 'registry.dart';
+import 'screens/onboarding/onboarding_page.dart';
+import 'theme.dart';
+import 'utils.dart';
+import 'widgets.dart';
 
 class App extends StatefulWidget {
   const App({
@@ -88,7 +91,7 @@ class _Banner extends StatelessWidget {
   }
 }
 
-// TODO: intl_util generates a delegate that always sets the defaultLocale to a wrong value. This was the way to go until recently.
+// TODO(Jogboms): intl_util generates a delegate that always sets the defaultLocale to a wrong value. This was the way to go until recently.
 // This fix basically resets the defaultLocale and uses the one determined by findSystemLocale from intl found in main.dart
 // See
 // https://github.com/localizely/intl_utils/pull/18

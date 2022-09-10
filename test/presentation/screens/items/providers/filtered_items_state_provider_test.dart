@@ -76,7 +76,7 @@ Future<void> main() async {
 
       expect(listener.log.last.value, FilteredItemsState(tags: expectedTags, items: expectedItems1));
 
-      // TODO: figure out why this fails
+      // TODO(Jogboms): figure out why this fails
       // final ItemViewModelList expectedItems2 = ItemViewModelList.generate(
       //   3,
       //   (int index) => ItemsMockImpl.generateNormalizedItem(tag: TagsMockImpl.generateTag()).asViewModel,

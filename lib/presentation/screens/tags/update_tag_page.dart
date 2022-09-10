@@ -46,20 +46,23 @@ class UpdateTagPage extends StatelessWidget {
   ValueChanged<TagEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
+    final NavigatorState navigator = Navigator.of(context);
     return (TagEntryData data) async {
       try {
         snackBar.loading();
 
-        await ref.read(tagProvider).update(UpdateTagData(
-              id: tag.id,
-              path: tag.path,
-              title: data.title,
-              description: data.description,
-              color: data.color,
-            ));
+        await ref.read(tagProvider).update(
+              UpdateTagData(
+                id: tag.id,
+                path: tag.path,
+                title: data.title,
+                description: data.description,
+                color: data.color,
+              ),
+            );
 
         snackBar.success(l10n.successfulMessage);
-        return Navigator.pop(context);
+        return navigator.pop();
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
         snackBar.error(l10n.genericErrorMessage);

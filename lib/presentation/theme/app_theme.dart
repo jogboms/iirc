@@ -67,7 +67,6 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
 
   final RoundedRectangleBorder buttonShape = RoundedRectangleBorder(
     borderRadius: textFieldBorder.borderRadius,
-    side: BorderSide.none,
   );
   final ButtonStyle buttonStyle = ButtonStyle(
     shape: MaterialStateProperty.all(buttonShape),
@@ -102,7 +101,6 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
     elevatedButtonTheme: ElevatedButtonThemeData(style: buttonStyle),
     colorScheme: colorScheme,
     inputDecorationTheme: InputDecorationTheme(
-      isDense: false,
       border: textFieldBorder,
       focusedBorder: textFieldBorder,
       enabledBorder: textFieldBorder,

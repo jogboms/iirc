@@ -71,12 +71,13 @@ android {
         }
         mock {
             dimension "flavor-type"
-            resValue "string", "app_name", "IIRC"
+            resValue "string", "app_name", "Mock"
             applicationIdSuffix ".mock"
             versionNameSuffix "-mock"
         }
         prod {
             dimension "flavor-type"
+            resValue "string", "app_name", "IIRC"
         }
     }
 

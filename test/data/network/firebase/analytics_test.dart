@@ -37,7 +37,7 @@ void main() {
     test('should remove user id', () async {
       await analytics.removeUserId();
 
-      verify(() => mockFirebaseAnalytics.setUserId(id: null)).called(1);
+      verify(() => mockFirebaseAnalytics.setUserId()).called(1);
     });
   });
 }

@@ -34,7 +34,7 @@ Future<void> main() async {
 
     test('should create new instance when read', () {
       final ProviderContainer container = createProviderContainer();
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       expect(container.read(tagProvider), isA<TagProvider>());
     });
@@ -47,29 +47,31 @@ Future<void> main() async {
           userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
         ],
       );
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       final TagProvider provider = container.read(tagProvider);
 
-      final String id = await provider.create(const CreateTagData(
-        title: 'title',
-        description: 'description',
-        color: 0xF,
-      ));
+      final String id = await provider.create(
+        const CreateTagData(
+          title: 'title',
+          description: 'description',
+          color: 0xF,
+        ),
+      );
 
       expect(id, '1');
     });
 
     group('Create', () {
       test('should create new tag for user', () async {
-        when(() => mockFetchUser.call()).thenAnswer((_) async => dummyUser);
+        when(mockFetchUser.call).thenAnswer((_) async => dummyUser);
         when(() => mockUseCases.createTagUseCase.call(any(), any())).thenAnswer((_) async => '1');
 
         const CreateTagData createTagData = CreateTagData(title: 'title', description: 'description', color: 0xF);
         final String tagId = await createProvider().create(createTagData);
 
         expect(tagId, '1');
-        verify(() => mockFetchUser.call()).called(1);
+        verify(mockFetchUser.call).called(1);
 
         final CreateTagData resultingCreateTagData =
             verify(() => mockUseCases.createTagUseCase.call(dummyUser.id, captureAny())).captured.first

@@ -204,7 +204,6 @@ extension on MenuPageItem {
         return (_) => CreateItemPage.route();
       case MenuPageItem.insights:
       case MenuPageItem.more:
-      default:
         return null;
     }
   }

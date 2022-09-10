@@ -33,7 +33,7 @@ Future<void> main() async {
 
     test('should create new instance when read', () {
       final ProviderContainer container = createProviderContainer();
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       expect(container.read(itemProvider), isA<ItemProvider>());
     });
@@ -46,22 +46,24 @@ Future<void> main() async {
           userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
         ],
       );
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       final ItemProvider provider = container.read(itemProvider);
 
-      final String id = await provider.create(CreateItemData(
-        description: 'description',
-        date: DateTime(0),
-        tag: const TagModelReference(id: '1', path: 'path'),
-      ));
+      final String id = await provider.create(
+        CreateItemData(
+          description: 'description',
+          date: DateTime(0),
+          tag: const TagModelReference(id: '1', path: 'path'),
+        ),
+      );
 
       expect(id, '1');
     });
 
     group('Create', () {
       test('should create new item for user', () async {
-        when(() => mockFetchUser.call()).thenAnswer((_) async => dummyUser);
+        when(mockFetchUser.call).thenAnswer((_) async => dummyUser);
         when(() => mockUseCases.createItemUseCase.call(any(), any())).thenAnswer((_) async => '1');
 
         final CreateItemData createItemData = CreateItemData(
@@ -72,7 +74,7 @@ Future<void> main() async {
         final String itemId = await createProvider().create(createItemData);
 
         expect(itemId, '1');
-        verify(() => mockFetchUser.call()).called(1);
+        verify(mockFetchUser.call).called(1);
 
         final CreateItemData resultingCreateItemData =
             verify(() => mockUseCases.createItemUseCase.call(dummyUser.id, captureAny())).captured.first

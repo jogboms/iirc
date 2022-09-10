@@ -18,15 +18,17 @@ class FetchItemsUseCase {
         _items.fetch(userId),
         _tags.fetch(userId),
         (ItemModelList items, TagModelList tags) => items
-            .map((ItemModel item) => NormalizedItemModel(
-                  id: item.id,
-                  path: item.path,
-                  description: item.description,
-                  date: item.date,
-                  tag: tags.firstWhere((TagModel tag) => tag.id == item.tag.id),
-                  createdAt: item.createdAt,
-                  updatedAt: item.updatedAt,
-                ))
+            .map(
+              (ItemModel item) => NormalizedItemModel(
+                id: item.id,
+                path: item.path,
+                description: item.description,
+                date: item.date,
+                tag: tags.firstWhere((TagModel tag) => tag.id == item.tag.id),
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+              ),
+            )
             .toList(),
       );
 }

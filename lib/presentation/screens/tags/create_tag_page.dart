@@ -45,24 +45,25 @@ class CreateTagPage extends StatelessWidget {
   ValueChanged<TagEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
+    final NavigatorState navigator = Navigator.of(context);
     return (TagEntryData data) async {
       try {
         snackBar.loading();
 
-        final String id = await ref.read(tagProvider).create(CreateTagData(
-              title: data.title,
-              description: data.description,
-              color: data.color,
-            ));
+        final String id = await ref.read(tagProvider).create(
+              CreateTagData(
+                title: data.title,
+                description: data.description,
+                color: data.color,
+              ),
+            );
 
         snackBar.success(l10n.successfulMessage);
         if (asModal) {
-          return Navigator.of(context).pop(id);
+          return navigator.pop(id);
         }
 
-        unawaited(
-          Navigator.of(context).pushReplacement(TagDetailPage.route(id: id)),
-        );
+        unawaited(navigator.pushReplacement(TagDetailPage.route(id: id)));
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
         snackBar.error(l10n.genericErrorMessage);

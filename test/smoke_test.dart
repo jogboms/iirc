@@ -22,10 +22,10 @@ void main() {
     final Finder menuPage = find.byType(MenuPage);
 
     when(() => mockUseCases.fetchUserUseCase.call(any())).thenAnswer((_) async => dummyUser);
-    when(() => mockUseCases.signInUseCase.call()).thenAnswer((_) async => dummyAccount);
+    when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);
     when(() => mockUseCases.updateUserUseCase.call(any())).thenAnswer((_) async => true);
 
-    addTearDown(() => mockUseCases.reset());
+    addTearDown(mockUseCases.reset);
 
     await tester.pumpWidget(
       createApp(

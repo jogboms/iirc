@@ -46,14 +46,16 @@ void main() {
       final MockItemProvider mockItemProvider = MockItemProvider();
       when(() => mockItemProvider.update(any())).thenAnswer((_) async => true);
 
-      await tester.pumpWidget(createApp(
-        home: UpdateItemPage(item: dummyItem),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          itemProvider.overrideWithValue(mockItemProvider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: UpdateItemPage(item: dummyItem),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            itemProvider.overrideWithValue(mockItemProvider),
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -66,14 +68,16 @@ void main() {
       final MockItemProvider mockItemProvider = MockItemProvider();
       when(() => mockItemProvider.update(any())).thenThrow(Exception());
 
-      await tester.pumpWidget(createApp(
-        home: UpdateItemPage(item: dummyItem),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          itemProvider.overrideWithValue(mockItemProvider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: UpdateItemPage(item: dummyItem),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            itemProvider.overrideWithValue(mockItemProvider),
+            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -89,13 +93,15 @@ extension on WidgetTester {
     await enterFields(tag);
 
     verify(
-      () => itemProvider.update(UpdateItemData(
-        id: item.id,
-        path: item.path,
-        description: 'description',
-        date: DateTime(1),
-        tag: TagModelReference(id: tag.id, path: tag.path),
-      )),
+      () => itemProvider.update(
+        UpdateItemData(
+          id: item.id,
+          path: item.path,
+          description: 'description',
+          date: DateTime(1),
+          tag: TagModelReference(id: tag.id, path: tag.path),
+        ),
+      ),
     ).called(1);
   }
 }

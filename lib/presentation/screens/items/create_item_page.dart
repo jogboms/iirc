@@ -56,24 +56,25 @@ class CreateItemPageState extends State<CreateItemPage> {
   ValueChanged<ItemEntryData> _onSubmit(BuildContext context, WidgetRef ref) {
     final AppSnackBar snackBar = context.snackBar;
     final L10n l10n = context.l10n;
+    final NavigatorState navigator = Navigator.of(context);
     return (ItemEntryData data) async {
       try {
         snackBar.loading();
 
-        await ref.read(itemProvider).create(CreateItemData(
-              description: data.description,
-              date: data.date,
-              tag: data.tag.reference,
-            ));
+        await ref.read(itemProvider).create(
+              CreateItemData(
+                description: data.description,
+                date: data.date,
+                tag: data.tag.reference,
+              ),
+            );
 
         snackBar.success(l10n.successfulMessage);
         if (widget.asModal) {
-          return Navigator.pop(context);
+          return navigator.pop();
         }
 
-        unawaited(
-          Navigator.of(context).pushReplacement(TagDetailPage.route(id: data.tag.id)),
-        );
+        unawaited(navigator.pushReplacement(TagDetailPage.route(id: data.tag.id)));
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
         snackBar.error(l10n.genericErrorMessage);

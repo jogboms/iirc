@@ -23,11 +23,13 @@ void main() {
       when(() => reference.set(any())).thenAnswer((_) async {});
 
       expect(
-        repo.create(const AccountModel(
-          id: '1',
-          displayName: 'display name',
-          email: 'email',
-        )),
+        repo.create(
+          const AccountModel(
+            id: '1',
+            displayName: 'display name',
+            email: 'email',
+          ),
+        ),
         completion('1'),
       );
 
@@ -46,10 +48,12 @@ void main() {
       when(() => reference.update(any())).thenAnswer((_) async {});
 
       expect(
-        repo.update(UpdateUserData(
-          id: 'id',
-          lastSeenAt: now,
-        )),
+        repo.update(
+          UpdateUserData(
+            id: 'id',
+            lastSeenAt: now,
+          ),
+        ),
         completion(true),
       );
 

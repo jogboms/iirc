@@ -37,8 +37,8 @@ void main() async {
       navigationObserver = firebase.analytics.navigatorObserver;
       analytics = _Analytics(firebase.analytics);
       break;
+    case Environment.testing:
     case Environment.mock:
-    default:
       reporterClient = const _NoopReporterClient();
       repository = _Repository.mock();
       navigationObserver = NavigatorObserver();
@@ -94,21 +94,23 @@ void main() async {
     /// Environment.
     ..set(environment);
 
-  runApp(ErrorBoundary(
-    isReleaseMode: !environment.isDebugging,
-    errorViewBuilder: (_) => const AppCrashErrorView(),
-    onException: AppLog.e,
-    onCrash: errorReporter.reportCrash,
-    child: ProviderScope(
-      overrides: <Override>[
-        registryProvider.overrideWithValue(registry),
-      ],
-      child: App(
-        registry: registry,
-        navigatorObservers: <NavigatorObserver>[navigationObserver],
+  runApp(
+    ErrorBoundary(
+      isReleaseMode: !environment.isDebugging,
+      errorViewBuilder: (_) => const AppCrashErrorView(),
+      onException: AppLog.e,
+      onCrash: errorReporter.reportCrash,
+      child: ProviderScope(
+        overrides: <Override>[
+          registryProvider.overrideWithValue(registry),
+        ],
+        child: App(
+          registry: registry,
+          navigatorObservers: <NavigatorObserver>[navigationObserver],
+        ),
       ),
     ),
-  ));
+  );
 }
 
 class _Repository {

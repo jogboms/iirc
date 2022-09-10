@@ -73,7 +73,6 @@ void main() {
           errorViewBuilder: (_) => const SizedBox.shrink(key: errorViewKey),
           onCrash: crashHandler,
           onException: exceptionHandler,
-          isReleaseMode: false,
           child: Builder(key: childKey, builder: (_) => throw Exception()),
         ),
       );
@@ -89,46 +88,50 @@ void main() {
       expect(find.byKey(errorViewKey), findsNothing);
     });
 
-    // TODO: No proper way to test PlatformDispatcher errors yet
-    testWidgets('should trigger onException', (WidgetTester tester) async {
-      const Key childKey = Key('child');
-      const Key errorViewKey = Key('errorView');
+    // TODO(Jogboms): No proper way to test PlatformDispatcher errors yet
+    testWidgets(
+      'should trigger onException',
+      (WidgetTester tester) async {
+        const Key childKey = Key('child');
+        const Key errorViewKey = Key('errorView');
 
-      final MockCrashHandler crashHandler = MockCrashHandler();
-      final MockExceptionHandler exceptionHandler = MockExceptionHandler();
+        final MockCrashHandler crashHandler = MockCrashHandler();
+        final MockExceptionHandler exceptionHandler = MockExceptionHandler();
 
-      await tester.pumpWidget(
-        ErrorBoundary(
-          platformDispatcher: tester.binding.platformDispatcher,
-          errorViewBuilder: (_) => const SizedBox.shrink(key: errorViewKey),
-          onCrash: crashHandler,
-          onException: exceptionHandler,
-          isReleaseMode: true,
-          child: MaterialApp(
-            home: GestureDetector(
-              key: childKey,
-              onTap: () async {
-                await const MethodChannel('crash').invokeMethod<void>('yes');
-              },
-              child: const Text('Tap'),
+        await tester.pumpWidget(
+          ErrorBoundary(
+            platformDispatcher: tester.binding.platformDispatcher,
+            errorViewBuilder: (_) => const SizedBox.shrink(key: errorViewKey),
+            onCrash: crashHandler,
+            onException: exceptionHandler,
+            isReleaseMode: true,
+            child: MaterialApp(
+              home: GestureDetector(
+                key: childKey,
+                onTap: () async {
+                  await const MethodChannel('crash').invokeMethod<void>('yes');
+                },
+                child: const Text('Tap'),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.pump();
+        await tester.pump();
 
-      expect(find.byKey(childKey), findsOneWidget);
-      await tester.tap(find.byKey(childKey));
+        expect(find.byKey(childKey), findsOneWidget);
+        await tester.tap(find.byKey(childKey));
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      verify(() => exceptionHandler.call(any(), any())).called(1);
-      verifyNever(() => crashHandler.call(any()));
+        verify(() => exceptionHandler.call(any(), any())).called(1);
+        verifyNever(() => crashHandler.call(any()));
 
-      expect(find.byKey(childKey), findsOneWidget);
-      expect(find.byKey(errorViewKey), findsOneWidget);
-    }, skip: true);
+        expect(find.byKey(childKey), findsOneWidget);
+        expect(find.byKey(errorViewKey), findsOneWidget);
+      },
+      skip: true,
+    );
   });
 }
 

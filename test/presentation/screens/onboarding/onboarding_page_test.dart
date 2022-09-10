@@ -27,30 +27,34 @@ void main() {
     testWidgets('should auto-login w/ cold start', (WidgetTester tester) async {
       final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-      await tester.pumpWidget(createApp(
-        home: const OnboardingPage(isColdStart: true),
-        registry: registry,
-        overrides: <Override>[
-          authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const OnboardingPage(isColdStart: true),
+          registry: registry,
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
       expect(onboardingPage, findsOneWidget);
       expect(find.byType(LoadingView).descendantOf(onboardingPage), findsOneWidget);
-      verify(() => mockAuthStateNotifier.signIn()).called(1);
+      verify(mockAuthStateNotifier.signIn).called(1);
     });
 
     testWidgets('should not auto-login w/o cold start', (WidgetTester tester) async {
       final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-      await tester.pumpWidget(createApp(
-        home: const OnboardingPage(isColdStart: false),
-        overrides: <Override>[
-          authStateProvider.overrideWithValue(mockAuthStateNotifier),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const OnboardingPage(isColdStart: false),
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -63,14 +67,16 @@ void main() {
     testWidgets('should navigate to MenuPage on successful login', (WidgetTester tester) async {
       final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-      await tester.pumpWidget(createApp(
-        home: const OnboardingPage(isColdStart: true),
-        registry: registry,
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const OnboardingPage(isColdStart: true),
+          registry: registry,
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -85,14 +91,16 @@ void main() {
     testWidgets('should login and navigate w/ button', (WidgetTester tester) async {
       final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-      await tester.pumpWidget(createApp(
-        home: const OnboardingPage(isColdStart: false),
-        registry: registry,
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          authStateProvider.overrideWithValue(mockAuthStateNotifier),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const OnboardingPage(isColdStart: false),
+          registry: registry,
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -110,12 +118,14 @@ void main() {
       testWidgets('should ignore error message on popup error', (WidgetTester tester) async {
         final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-        await tester.pumpWidget(createApp(
-          home: const OnboardingPage(isColdStart: false),
-          overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier),
-          ],
-        ));
+        await tester.pumpWidget(
+          createApp(
+            home: const OnboardingPage(isColdStart: false),
+            overrides: <Override>[
+              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+            ],
+          ),
+        );
 
         await tester.pump();
 
@@ -130,12 +140,14 @@ void main() {
       testWidgets('should show error messages on failed error', (WidgetTester tester) async {
         final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-        await tester.pumpWidget(createApp(
-          home: const OnboardingPage(isColdStart: false),
-          overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier),
-          ],
-        ));
+        await tester.pumpWidget(
+          createApp(
+            home: const OnboardingPage(isColdStart: false),
+            overrides: <Override>[
+              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+            ],
+          ),
+        );
 
         await tester.pump();
 
@@ -150,12 +162,14 @@ void main() {
       testWidgets('should show error messages on error', (WidgetTester tester) async {
         final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
 
-        await tester.pumpWidget(createApp(
-          home: const OnboardingPage(isColdStart: false),
-          overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier),
-          ],
-        ));
+        await tester.pumpWidget(
+          createApp(
+            home: const OnboardingPage(isColdStart: false),
+            overrides: <Override>[
+              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+            ],
+          ),
+        );
 
         await tester.pump();
 
@@ -196,5 +210,6 @@ void main() {
 class MockAuthStateNotifier extends StateNotifier<AuthState> with Mock implements AuthStateNotifier {
   MockAuthStateNotifier([super.state = AuthState.idle]);
 
+  // ignore: use_setters_to_change_properties
   void setState(AuthState newState) => state = newState;
 }

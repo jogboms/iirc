@@ -12,13 +12,16 @@ class SignInUseCase {
     final Completer<AccountModel> completer = Completer<AccountModel>();
 
     late StreamSubscription<void> sub;
-    sub = _auth.onAuthStateChanged.where((String? id) => id != null).listen((_) {
-      completer.complete(_auth.fetch());
-      sub.cancel();
-    }, onError: (Object error, StackTrace st) {
-      completer.completeError(error, st);
-      sub.cancel();
-    });
+    sub = _auth.onAuthStateChanged.where((String? id) => id != null).listen(
+      (_) {
+        completer.complete(_auth.fetch());
+        sub.cancel();
+      },
+      onError: (Object error, StackTrace st) {
+        completer.completeError(error, st);
+        sub.cancel();
+      },
+    );
 
     await _auth.signIn();
 

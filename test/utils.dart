@@ -183,27 +183,31 @@ extension TagModelViewModelExtensions on TagModel {
 }
 
 extension ItemModelListExtensions on ItemViewModelList {
-  ItemModelList get asItemModelList => map((ItemViewModel e) => ItemModel(
-        id: e.id,
-        path: e.path,
-        description: e.description,
-        date: e.date,
-        tag: e.tag.reference,
-        createdAt: e.createdAt,
-        updatedAt: e.updatedAt,
-      )).toList(growable: false);
+  ItemModelList get asItemModelList => map(
+        (ItemViewModel e) => ItemModel(
+          id: e.id,
+          path: e.path,
+          description: e.description,
+          date: e.date,
+          tag: e.tag.reference,
+          createdAt: e.createdAt,
+          updatedAt: e.updatedAt,
+        ),
+      ).toList(growable: false);
 }
 
 extension NormalizedItemModelListExtensions on NormalizedItemModelList {
-  ItemModelList get asItemModelList => map((NormalizedItemModel e) => ItemModel(
-        id: e.id,
-        path: e.path,
-        description: e.description,
-        date: e.date,
-        tag: e.tag.reference,
-        createdAt: e.createdAt,
-        updatedAt: e.updatedAt,
-      )).toList(growable: false);
+  ItemModelList get asItemModelList => map(
+        (NormalizedItemModel e) => ItemModel(
+          id: e.id,
+          path: e.path,
+          description: e.description,
+          date: e.date,
+          tag: e.tag.reference,
+          createdAt: e.createdAt,
+          updatedAt: e.updatedAt,
+        ),
+      ).toList(growable: false);
 }
 
 extension NormalizedItemModelViewModelExtensions on NormalizedItemModel {

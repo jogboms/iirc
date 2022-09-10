@@ -11,15 +11,13 @@ Future<void> main() async {
   group('AccountProvider', () {
     final AccountModel dummyAccount = AuthMockImpl.generateAccount();
 
-    tearDown(() {
-      mockUseCases.reset();
-    });
+    tearDown(mockUseCases.reset);
 
     test('should get current account', () {
-      when(() => mockUseCases.getAccountUseCase.call()).thenAnswer((_) async => dummyAccount);
+      when(mockUseCases.getAccountUseCase.call).thenAnswer((_) async => dummyAccount);
 
       final ProviderContainer container = createProviderContainer();
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
 
       expect(
         container.read(accountProvider.future),

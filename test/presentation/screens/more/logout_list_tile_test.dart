@@ -7,10 +7,10 @@ import '../../../utils.dart';
 
 void main() {
   group('LogoutListTile', () {
-    tearDown(() => mockUseCases.reset());
+    tearDown(mockUseCases.reset);
 
     testWidgets('should logout', (WidgetTester tester) async {
-      when(() => mockUseCases.signOutUseCase.call()).thenAnswer((_) async {});
+      when(mockUseCases.signOutUseCase.call).thenAnswer((_) async {});
 
       await tester.pumpWidget(
         createApp(

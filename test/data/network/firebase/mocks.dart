@@ -55,13 +55,13 @@ class FakeUser extends Fake implements User {
 
 class MockGoogleSignIn extends Mock implements GoogleSignIn {
   MockGoogleSignIn() {
-    when(() => signOut()).thenAnswer((_) async => null);
+    when(signOut).thenAnswer((_) async => null);
   }
 }
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {
   MockFirebaseAuth() {
-    when(() => signOut()).thenAnswer((_) async => true);
+    when(signOut).thenAnswer((_) async => true);
   }
 }
 

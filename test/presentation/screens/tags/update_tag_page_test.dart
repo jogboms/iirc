@@ -40,13 +40,15 @@ void main() {
       final MockTagProvider mockTagProvider = MockTagProvider();
       when(() => mockTagProvider.update(any())).thenAnswer((_) async => true);
 
-      await tester.pumpWidget(createApp(
-        home: UpdateTagPage(tag: dummyTag),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagProvider.overrideWithValue(mockTagProvider),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: UpdateTagPage(tag: dummyTag),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagProvider.overrideWithValue(mockTagProvider),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -59,13 +61,15 @@ void main() {
       final MockTagProvider mockTagProvider = MockTagProvider();
       when(() => mockTagProvider.update(any())).thenThrow(Exception());
 
-      await tester.pumpWidget(createApp(
-        home: UpdateTagPage(tag: dummyTag),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagProvider.overrideWithValue(mockTagProvider),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: UpdateTagPage(tag: dummyTag),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagProvider.overrideWithValue(mockTagProvider),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -81,13 +85,15 @@ extension on WidgetTester {
     await enterFields();
 
     verify(
-      () => tagProvider.update(const UpdateTagData(
-        id: '1',
-        path: 'path',
-        title: 'title',
-        description: 'description',
-        color: 0xFFFFFFFF,
-      )),
+      () => tagProvider.update(
+        const UpdateTagData(
+          id: '1',
+          path: 'path',
+          title: 'title',
+          description: 'description',
+          color: 0xFFFFFFFF,
+        ),
+      ),
     ).called(1);
   }
 }

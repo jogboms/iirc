@@ -88,7 +88,7 @@ class _Banner extends StatelessWidget {
   }
 }
 
-// TODO: intl_util generates a delegate that always sets the defaultLocale to a wrong value. This was the way to go until recently.
+// TODO(Jogboms): intl_util generates a delegate that always sets the defaultLocale to a wrong value. This was the way to go until recently.
 // This fix basically resets the defaultLocale and uses the one determined by findSystemLocale from intl found in main.dart
 // See
 // https://github.com/localizely/intl_utils/pull/18

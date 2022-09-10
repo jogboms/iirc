@@ -11,13 +11,16 @@ class SignOutUseCase {
     final Completer<void> completer = Completer<void>();
 
     late StreamSubscription<void> sub;
-    sub = _auth.onAuthStateChanged.where((String? id) => id == null).listen((_) {
-      completer.complete();
-      sub.cancel();
-    }, onError: (Object error, StackTrace st) {
-      completer.completeError(error, st);
-      sub.cancel();
-    });
+    sub = _auth.onAuthStateChanged.where((String? id) => id == null).listen(
+      (_) {
+        completer.complete();
+        sub.cancel();
+      },
+      onError: (Object error, StackTrace st) {
+        completer.completeError(error, st);
+        sub.cancel();
+      },
+    );
 
     await _auth.signOut();
 

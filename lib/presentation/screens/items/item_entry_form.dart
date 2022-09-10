@@ -151,10 +151,12 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                   children: <Widget>[
                     Expanded(
                       child: tags.length == 1
-                          ? Builder(builder: (_) {
-                              final TagViewModel tag = tags.first;
-                              return _TagItem(key: Key(tag.id), tag: tags.first);
-                            })
+                          ? Builder(
+                              builder: (_) {
+                                final TagViewModel tag = tags.first;
+                                return _TagItem(key: Key(tag.id), tag: tags.first);
+                              },
+                            )
                           : DropdownButtonFormField<String>(
                               key: tagsFieldKey,
                               value: dataNotifier.value.tag.isEmptyTag ? null : dataNotifier.value.tag.id,
@@ -235,15 +237,17 @@ class _TagItem extends StatelessWidget {
 }
 
 @visibleForTesting
-final TagViewModel emptyTagModel = TagViewModel.fromTag(TagModel(
-  id: 'EMPTY',
-  color: 0xF,
-  description: '',
-  title: '',
-  path: '',
-  createdAt: DateTime(0),
-  updatedAt: null,
-));
+final TagViewModel emptyTagModel = TagViewModel.fromTag(
+  TagModel(
+    id: 'EMPTY',
+    color: 0xF,
+    description: '',
+    title: '',
+    path: '',
+    createdAt: DateTime(0),
+    updatedAt: null,
+  ),
+);
 
 extension on TagViewModel {
   bool get isEmptyTag => this == emptyTagModel;

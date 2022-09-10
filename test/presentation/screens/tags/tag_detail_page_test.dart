@@ -40,21 +40,23 @@ void main() {
         (_) => ItemsMockImpl.generateNormalizedItem(tag: tag, date: now).asViewModel,
       );
 
-      await tester.pumpWidget(createApp(
-        home: TagDetailPage(id: tag.id),
-        overrides: <Override>[
-          selectedTagStateProvider(tag.id).overrideWithValue(
-            PreserveStateNotifier.withState<SelectedTagState>(
-              AsyncData<SelectedTagState>(
-                SelectedTagState(
-                  tag: tag.asViewModel,
-                  items: expectedItems,
+      await tester.pumpWidget(
+        createApp(
+          home: TagDetailPage(id: tag.id),
+          overrides: <Override>[
+            selectedTagStateProvider(tag.id).overrideWithValue(
+              PreserveStateNotifier.withState<SelectedTagState>(
+                AsyncData<SelectedTagState>(
+                  SelectedTagState(
+                    tag: tag.asViewModel,
+                    items: expectedItems,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -67,16 +69,18 @@ void main() {
     testWidgets('should show error if tags fetch fails', (WidgetTester tester) async {
       final Exception expectedError = Exception('an error');
 
-      await tester.pumpWidget(createApp(
-        home: const TagDetailPage(id: '1'),
-        overrides: <Override>[
-          selectedTagStateProvider('1').overrideWithValue(
-            PreserveStateNotifier.withState<SelectedTagState>(
-              AsyncError<SelectedTagState>(expectedError),
+      await tester.pumpWidget(
+        createApp(
+          home: const TagDetailPage(id: '1'),
+          overrides: <Override>[
+            selectedTagStateProvider('1').overrideWithValue(
+              PreserveStateNotifier.withState<SelectedTagState>(
+                AsyncError<SelectedTagState>(expectedError),
+              ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ),
+      );
 
       await tester.pump();
       await tester.pump();

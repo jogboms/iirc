@@ -21,12 +21,12 @@ Future<bool> showErrorChoiceBanner(
           ),
           actions: <Widget>[
             IconButton(
-              onPressed: () => scaffoldMessengerState.removeCurrentMaterialBanner(),
+              onPressed: scaffoldMessengerState.removeCurrentMaterialBanner,
               icon: const Icon(Icons.check_outlined),
               color: theme.colorScheme.onErrorContainer,
             ),
             IconButton(
-              onPressed: () => scaffoldMessengerState.hideCurrentMaterialBanner(),
+              onPressed: scaffoldMessengerState.hideCurrentMaterialBanner,
               icon: const Icon(Icons.close_outlined),
               color: theme.colorScheme.onErrorContainer,
             ),

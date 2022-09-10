@@ -29,11 +29,13 @@ void main() {
 
         expect(
           repo.fetch(),
-          completion(const AccountModel(
-            id: '1',
-            displayName: 'display name',
-            email: 'email',
-          )),
+          completion(
+            const AccountModel(
+              id: '1',
+              displayName: 'display name',
+              email: 'email',
+            ),
+          ),
         );
       });
 
@@ -41,7 +43,7 @@ void main() {
         when(() => auth.getUser).thenAnswer((_) => null);
 
         expect(
-          () => repo.fetch(),
+          repo.fetch,
           throwsA(isA<AuthExceptionUserNotFound>()),
         );
       });
@@ -49,7 +51,7 @@ void main() {
 
     group('Sign in', () {
       test('should return id', () {
-        when(() => auth.signInWithGoogle()).thenAnswer((_) async => '1');
+        when(auth.signInWithGoogle).thenAnswer((_) async => '1');
 
         expect(
           repo.signIn(),
@@ -59,56 +61,56 @@ void main() {
 
       group('Exceptions', () {
         test('should handle when canceled', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(isA<AuthExceptionCanceled>()),
           );
         });
 
         test('should handle when failed', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.failed, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(isA<AuthExceptionFailed>()),
           );
         });
 
         test('should handle when network unavailable', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.networkUnavailable, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(isA<AuthExceptionNetworkUnavailable>()),
           );
         });
 
         test('should handle when popup blocked by browser', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.popupBlockedByBrowser, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(isA<AuthExceptionPopupBlockedByBrowser>()),
           );
         });
 
         test('should handle when invalid email', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(
               isA<AuthExceptionInvalidEmail>().having((AuthExceptionInvalidEmail e) => e.email, 'email', 'email'),
             ),
@@ -116,12 +118,12 @@ void main() {
         });
 
         test('should handle when user not found', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.userNotFound, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(
               isA<AuthExceptionUserNotFound>().having((AuthExceptionUserNotFound e) => e.email, 'email', 'email'),
             ),
@@ -129,12 +131,12 @@ void main() {
         });
 
         test('should handle when too many requests', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.tooManyRequests, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(
               isA<AuthExceptionTooManyRequests>().having((AuthExceptionTooManyRequests e) => e.email, 'email', 'email'),
             ),
@@ -142,12 +144,12 @@ void main() {
         });
 
         test('should handle when user disabled', () {
-          when(() => auth.signInWithGoogle()).thenThrow(
+          when(auth.signInWithGoogle).thenThrow(
             const AppFirebaseAuthException(AppFirebaseAuthExceptionType.userDisabled, email: 'email'),
           );
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(
               isA<AuthExceptionUserDisabled>().having((AuthExceptionUserDisabled e) => e.email, 'email', 'email'),
             ),
@@ -155,10 +157,10 @@ void main() {
         });
 
         test('should handle when unknown', () {
-          when(() => auth.signInWithGoogle()).thenThrow(Exception());
+          when(auth.signInWithGoogle).thenThrow(Exception());
 
           expect(
-            () => repo.signIn(),
+            repo.signIn,
             throwsA(isA<AuthExceptionUnknown>()),
           );
         });
@@ -169,7 +171,7 @@ void main() {
       test('should emit id', () {
         final StreamController<FireUser> controller = StreamController<FireUser>();
         when(() => auth.onAuthStateChanged).thenAnswer((_) => controller.stream);
-        addTearDown(() => controller.close());
+        addTearDown(controller.close);
 
         controller.add(MockFireUser(uid: '1', email: 'email', displayName: 'display name'));
         controller.add(MockFireUser(uid: '2', email: 'email', displayName: 'display name'));
@@ -194,7 +196,7 @@ void main() {
     });
 
     test('Sign out', () {
-      when(() => auth.signOutWithGoogle()).thenAnswer((_) async {});
+      when(auth.signOutWithGoogle).thenAnswer((_) async {});
 
       expect(
         repo.signOut(),

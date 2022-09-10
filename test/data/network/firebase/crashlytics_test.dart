@@ -29,9 +29,6 @@ void main() {
           error,
           StackTrace.empty,
           information: <DiagnosticsNode>[],
-          reason: null,
-          printDetails: null,
-          fatal: false,
         ),
       ).called(1);
     });

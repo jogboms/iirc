@@ -15,14 +15,15 @@ void main() {
     tearDown(() => reset(authRepository));
 
     test('should fetch auth', () {
-      when(() => authRepository.fetch()).thenAnswer((_) async => dummyAccount);
+      when(authRepository.fetch).thenAnswer((_) async => dummyAccount);
 
       expect(useCase(), completion(dummyAccount));
     });
 
     test('should bubble fetch errors', () {
-      when(() => authRepository.fetch()).thenThrow(Exception('an error'));
+      when(authRepository.fetch).thenThrow(Exception('an error'));
 
+      // ignore: unnecessary_lambdas, causes the test to fail
       expect(() => useCase(), throwsException);
     });
   });

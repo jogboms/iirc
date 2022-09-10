@@ -50,7 +50,7 @@ void main() {
     test('should delete item', () {
       final MapDocumentReference reference = MockMapDocumentReference();
       when(() => db.doc('path/1')).thenAnswer((_) => reference);
-      when(() => reference.delete()).thenAnswer((_) async {});
+      when(reference.delete).thenAnswer((_) async {});
 
       expect(
         repo.delete('path/1'),
@@ -65,13 +65,15 @@ void main() {
       when(() => reference.update(any())).thenAnswer((_) async {});
 
       expect(
-        repo.update(UpdateItemData(
-          id: 'id',
-          path: 'path',
-          description: 'description',
-          date: now,
-          tag: const TagModelReference(id: 'id', path: 'path'),
-        )),
+        repo.update(
+          UpdateItemData(
+            id: 'id',
+            path: 'path',
+            description: 'description',
+            date: now,
+            tag: const TagModelReference(id: 'id', path: 'path'),
+          ),
+        ),
         completion(true),
       );
 

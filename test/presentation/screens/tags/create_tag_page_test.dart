@@ -31,13 +31,15 @@ void main() {
       final MockTagProvider mockTagProvider = MockTagProvider();
       when(() => mockTagProvider.create(any())).thenAnswer((_) async => '1');
 
-      await tester.pumpWidget(createApp(
-        home: const CreateTagPage(asModal: false),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagProvider.overrideWithValue(mockTagProvider),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateTagPage(asModal: false),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagProvider.overrideWithValue(mockTagProvider),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -50,13 +52,15 @@ void main() {
       final MockTagProvider mockTagProvider = MockTagProvider();
       when(() => mockTagProvider.create(any())).thenAnswer((_) async => '1');
 
-      await tester.pumpWidget(createApp(
-        home: const CreateTagPage(asModal: true),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagProvider.overrideWithValue(mockTagProvider),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateTagPage(asModal: true),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagProvider.overrideWithValue(mockTagProvider),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -69,13 +73,15 @@ void main() {
       final MockTagProvider mockTagProvider = MockTagProvider();
       when(() => mockTagProvider.create(any())).thenThrow(Exception());
 
-      await tester.pumpWidget(createApp(
-        home: const CreateTagPage(asModal: false),
-        observers: <NavigatorObserver>[navigatorObserver],
-        overrides: <Override>[
-          tagProvider.overrideWithValue(mockTagProvider),
-        ],
-      ));
+      await tester.pumpWidget(
+        createApp(
+          home: const CreateTagPage(asModal: false),
+          observers: <NavigatorObserver>[navigatorObserver],
+          overrides: <Override>[
+            tagProvider.overrideWithValue(mockTagProvider),
+          ],
+        ),
+      );
 
       await tester.pump();
 
@@ -91,11 +97,13 @@ extension on WidgetTester {
     await enterFields();
 
     verify(
-      () => tagProvider.create(const CreateTagData(
-        title: 'title',
-        description: 'description',
-        color: 0xFFFFFFFF,
-      )),
+      () => tagProvider.create(
+        const CreateTagData(
+          title: 'title',
+          description: 'description',
+          color: 0xFFFFFFFF,
+        ),
+      ),
     ).called(1);
   }
 }

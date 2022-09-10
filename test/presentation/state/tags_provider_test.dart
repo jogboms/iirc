@@ -11,9 +11,7 @@ Future<void> main() async {
   group('TagsProvider', () {
     final UserModel dummyUser = UsersMockImpl.user;
 
-    tearDown(() {
-      mockUseCases.reset();
-    });
+    tearDown(mockUseCases.reset);
 
     Stream<TagViewModelList> createProviderStream() {
       final ProviderContainer container = createProviderContainer(
@@ -21,7 +19,7 @@ Future<void> main() async {
           userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
         ],
       );
-      addTearDown(() => container.dispose());
+      addTearDown(container.dispose);
       return container.read(tagsProvider.stream);
     }
 

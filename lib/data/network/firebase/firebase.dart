@@ -26,7 +26,9 @@ class Firebase {
   }) async {
     await firebase.Firebase.initializeApp(name: name, options: options);
 
+    // coverage:ignore-start, somehow no way to cover this line
     final FirebaseAnalytics firebaseAnalytics = analytics ?? FirebaseAnalytics.instance;
+    // coverage:ignore-end
     await firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
 
     return Firebase._(

@@ -77,6 +77,7 @@ class MockFirebaseCrashlytics extends Mock implements FirebaseCrashlytics {
         fatal: any(named: 'fatal'),
       ),
     ).thenAnswer((_) async => true);
+    when(() => recordFlutterFatalError(any())).thenAnswer((_) async => true);
   }
 }
 

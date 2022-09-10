@@ -3,12 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
 import 'mocks.dart';
 
 void main() {
   group('Crashlytics', () {
     late MockFirebaseCrashlytics mockFirebaseCrashlytics;
     late Crashlytics crashlytics;
+
+    setUpAll(() {
+      registerFallbackValue(FakeFlutterErrorDetails());
+    });
 
     setUp(() {
       mockFirebaseCrashlytics = MockFirebaseCrashlytics();
@@ -29,6 +34,13 @@ void main() {
           fatal: false,
         ),
       ).called(1);
+    });
+
+    test('should report crash', () async {
+      final FlutterErrorDetails errorDetails = FlutterErrorDetails(exception: Exception());
+      await crashlytics.reportCrash(errorDetails);
+
+      verify(() => mockFirebaseCrashlytics.recordFlutterFatalError(errorDetails)).called(1);
     });
   });
 }

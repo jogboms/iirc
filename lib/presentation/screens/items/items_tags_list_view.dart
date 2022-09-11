@@ -13,6 +13,13 @@ class ItemsTagsListView extends StatelessWidget {
   final Iterable<TagViewModel> tags;
   final Analytics analytics;
 
+  @visibleForTesting
+  static const Key emptyTagsKey = Key('emptyTagsKey');
+  @visibleForTesting
+  static const Key tagsListKey = Key('tagsListKey');
+  @visibleForTesting
+  static const Key createTagButtonKey = Key('createTagButtonKey');
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -25,6 +32,7 @@ class ItemsTagsListView extends StatelessWidget {
         children: <Widget>[
           if (tags.isEmpty)
             Padding(
+              key: emptyTagsKey,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -35,6 +43,7 @@ class ItemsTagsListView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 24),
               child: ListView.separated(
+                key: tagsListKey,
                 padding: const EdgeInsets.only(left: 16, right: 40),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
@@ -60,6 +69,7 @@ class ItemsTagsListView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8),
             child: FloatingActionButton.small(
+              key: createTagButtonKey,
               onPressed: () {
                 analytics.log(AnalyticsEvent.buttonClick('create tag: items'));
                 Navigator.of(context).push(CreateTagPage.route());

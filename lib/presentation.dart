@@ -7,6 +7,7 @@ export 'presentation/screens/items/create_item_page.dart';
 export 'presentation/screens/items/item_detail_page.dart';
 export 'presentation/screens/items/item_entry_form.dart';
 export 'presentation/screens/items/items_page.dart';
+export 'presentation/screens/items/items_tags_list_view.dart';
 export 'presentation/screens/items/providers/filtered_items_state_provider.dart';
 export 'presentation/screens/items/providers/item_provider.dart';
 export 'presentation/screens/items/providers/selected_item_provider.dart';

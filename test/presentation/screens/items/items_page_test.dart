@@ -3,13 +3,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../../mocks.dart';
 import '../../../utils.dart';
 
 void main() {
   group('ItemsPage', () {
     final Finder itemsPage = find.byType(ItemsPage);
+    final NavigatorObserver navigatorObserver = MockNavigatorObserver();
+
+    setUpAll(() {
+      registerFallbackValue(FakeRoute());
+    });
 
     testWidgets('smoke test', (WidgetTester tester) async {
       await tester.pumpWidget(createApp(home: const ItemsPage()));
@@ -82,7 +89,9 @@ void main() {
       final TagModel tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
-        (_) => ItemsMockImpl.generateNormalizedItem(tag: tag).asViewModel,
+        (int index) =>
+            (index.isEven ? ItemsMockImpl.generateNormalizedItem() : ItemsMockImpl.generateNormalizedItem(tag: tag))
+                .asViewModel,
       );
       final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
@@ -110,6 +119,32 @@ void main() {
         expect(find.text(item.description), findsOneWidget);
         expect(find.text(item.tag.title.capitalize()), findsOneWidget);
       }
+    });
+
+    testWidgets('should navigate to tag detail screen on item tap', (WidgetTester tester) async {
+      final ItemViewModel item = ItemsMockImpl.generateNormalizedItem().asViewModel;
+
+      await tester.pumpWidget(
+        createApp(
+          home: const ItemsPage(),
+          overrides: <Override>[
+            tagsProvider.overrideWithValue(
+              AsyncData<TagViewModelList>(TagViewModelList.empty()),
+            ),
+            itemsProvider.overrideWithValue(
+              AsyncData<ItemViewModelList>(<ItemViewModel>[item]),
+            ),
+          ],
+          observers: <NavigatorObserver>[navigatorObserver],
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key(item.id)));
+
+      await tester.verifyPushNavigation<TagDetailPage>(navigatorObserver);
     });
 
     testWidgets('should show error if any', (WidgetTester tester) async {

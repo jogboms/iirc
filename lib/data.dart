@@ -7,6 +7,7 @@ export 'data/network/firebase/firebase.dart';
 export 'data/network/firebase/models.dart';
 export 'data/repositories/auth/auth_firebase_impl.dart';
 export 'data/repositories/auth/auth_mock_impl.dart';
+export 'data/repositories/extensions.dart';
 export 'data/repositories/items/items_firebase_impl.dart';
 export 'data/repositories/items/items_mock_impl.dart';
 export 'data/repositories/tags/tags_firebase_impl.dart';

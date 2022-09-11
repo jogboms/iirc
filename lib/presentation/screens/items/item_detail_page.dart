@@ -48,7 +48,7 @@ class ItemDetailPageState extends State<ItemDetailPage> {
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) =>
               ref.watch(selectedItemStateProvider(widget.id)).when(
-                    data: (ItemViewModel item) => _SelectedItemDataView(
+                    data: (ItemViewModel item) => SelectedItemDataView(
                       key: dataViewKey,
                       item: item,
                       analytics: ref.read(analyticsProvider),
@@ -63,11 +63,16 @@ class ItemDetailPageState extends State<ItemDetailPage> {
   }
 }
 
-class _SelectedItemDataView extends StatelessWidget {
-  const _SelectedItemDataView({super.key, required this.item, required this.analytics});
+@visibleForTesting
+class SelectedItemDataView extends StatelessWidget {
+  const SelectedItemDataView({super.key, required this.item, required this.analytics});
 
   final ItemViewModel item;
   final Analytics analytics;
+
+  static const Key createItemButtonKey = Key('createItemButtonKey');
+  static const Key updateItemButtonKey = Key('updateItemButtonKey');
+  static const Key deleteItemButtonKey = Key('deleteItemButtonKey');
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +84,7 @@ class _SelectedItemDataView extends StatelessWidget {
           title: Text(context.l10n.informationCaption),
           actions: <Widget>[
             IconButton(
+              key: createItemButtonKey,
               onPressed: () {
                 analytics.log(AnalyticsEvent.buttonClick('create item: ${AppRoutes.itemDetail}'));
                 Navigator.of(context).pushAndRemoveUntil(
@@ -91,6 +97,7 @@ class _SelectedItemDataView extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             IconButton(
+              key: updateItemButtonKey,
               onPressed: () {
                 analytics.log(AnalyticsEvent.buttonClick('edit item: ${item.id}'));
                 Navigator.of(context).push(UpdateItemPage.route(item: item));
@@ -101,6 +108,7 @@ class _SelectedItemDataView extends StatelessWidget {
             const SizedBox(width: 4),
             Consumer(
               builder: (BuildContext context, WidgetRef ref, _) => IconButton(
+                key: deleteItemButtonKey,
                 onPressed: () async {
                   final AppSnackBar snackBar = context.snackBar;
                   final L10n l10n = context.l10n;

@@ -60,8 +60,7 @@ extension FetchEntriesCloudDbCollectionExtensions on CloudDbCollection {
 }
 
 extension AppExceptionStreamExtension<T> on Stream<T> {
-  Stream<T> mapErrorToAppException(bool isDev) => onErrorResume((Object error, [StackTrace? stackTrace]) {
-        stackTrace ??= StackTrace.current;
+  Stream<T> mapErrorToAppException(bool isDev) => onErrorResume((Object error, StackTrace stackTrace) {
         if (error is AppFirebaseException) {
           if (error.code == 'permission-denied' && !isDev) {
             return Stream<T>.empty();

@@ -59,6 +59,7 @@ class TagDetailPage extends StatefulWidget {
 @visibleForTesting
 class TagDetailPageState extends State<TagDetailPage> {
   static const Key dataViewKey = Key('dataViewKey');
+  static const Key createItemButtonKey = Key('createItemButtonKey');
   final TagDetailPageController controller = TagDetailPageController();
 
   @override
@@ -94,6 +95,7 @@ class TagDetailPageState extends State<TagDetailPage> {
       ),
       floatingActionButton: Consumer(
         builder: (BuildContext context, WidgetRef ref, _) => FloatingActionButton(
+          key: createItemButtonKey,
           onPressed: () {
             ref.read(analyticsProvider).log(AnalyticsEvent.buttonClick('create item'));
             Navigator.of(context).push<void>(
@@ -126,10 +128,13 @@ class _SelectedTagDataView extends StatefulWidget {
   final ItemViewModelList items;
 
   @override
-  State<_SelectedTagDataView> createState() => _SelectedTagDataViewState();
+  State<_SelectedTagDataView> createState() => SelectedTagDataViewState();
 }
 
-class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
+@visibleForTesting
+class SelectedTagDataViewState extends State<_SelectedTagDataView> {
+  static const Key updateItemButtonKey = Key('updateItemButtonKey');
+
   late final ItemCalendarViewController itemCalendarViewController = ItemCalendarViewController(
     date: widget.items.firstOrNull?.date,
   );
@@ -194,6 +199,7 @@ class _SelectedTagDataViewState extends State<_SelectedTagDataView> {
             ),
             const SizedBox(width: 4),
             IconButton(
+              key: updateItemButtonKey,
               onPressed: () {
                 widget.analytics.log(AnalyticsEvent.buttonClick('edit tag: ${widget.tag.id}'));
                 Navigator.of(context).push(UpdateTagPage.route(tag: widget.tag));

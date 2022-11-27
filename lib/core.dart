@@ -1,3 +1,4 @@
+export 'core/app_device_information.dart';
 export 'core/app_exception.dart';
 export 'core/app_log.dart';
 export 'core/environment.dart';

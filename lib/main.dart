@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:sentry/sentry.dart';
 import 'package:universal_io/io.dart' as io;
 
 import 'core.dart';
@@ -12,6 +13,8 @@ import 'domain.dart';
 import 'firebase_options.dev.dart' as dev;
 import 'firebase_options.prod.dart' as prod;
 import 'presentation.dart';
+
+const String _sentryDns = String.fromEnvironment('env.sentryDns');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +33,12 @@ void main() async {
         options: isDev ? dev.DefaultFirebaseOptions.currentPlatform : prod.DefaultFirebaseOptions.currentPlatform,
         isAnalyticsEnabled: !isDev,
       );
-      reporterClient = _ReporterClient(firebase.crashlytics);
+      final DeviceInformation deviceInformation = await AppDeviceInformation.initialize();
+      reporterClient = _ReporterClient(
+        SentryClient(SentryOptions(dsn: _sentryDns)),
+        deviceInformation: deviceInformation,
+        environment: environment,
+      );
       repository = _Repository.firebase(firebase, isDev);
       navigationObserver = firebase.analytics.navigatorObserver;
       analytics = _Analytics(firebase.analytics);
@@ -131,16 +139,35 @@ class _Repository {
 }
 
 class _ReporterClient implements ReporterClient {
-  const _ReporterClient(this.client);
+  const _ReporterClient(
+    this.client, {
+    required this.deviceInformation,
+    required this.environment,
+  });
 
-  final Crashlytics client;
+  final SentryClient client;
+  final DeviceInformation deviceInformation;
+  final Environment environment;
 
   @override
-  async.FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) async =>
-      client.report(error, stackTrace);
+  async.FutureOr<void> report({required StackTrace stackTrace, required Object error, Object? extra}) async {
+    final SentryEvent event = SentryEvent(
+      throwable: error,
+      environment: environment.name.toUpperCase(),
+      release: deviceInformation.version,
+      tags: deviceInformation.toMap(),
+      user: SentryUser(
+        id: deviceInformation.deviceId,
+      ),
+      extra: extra is Map ? extra as Map<String, dynamic>? : <String, dynamic>{'extra': extra},
+    );
+
+    await client.captureEvent(event, stackTrace: stackTrace);
+  }
 
   @override
-  async.FutureOr<void> reportCrash(FlutterErrorDetails details) async => client.reportCrash(details);
+  async.FutureOr<void> reportCrash(FlutterErrorDetails details) =>
+      client.captureException(details.exception, stackTrace: details.stack);
 
   @override
   void log(Object object) => AppLog.i(object);

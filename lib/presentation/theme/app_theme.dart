@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'app_border_radius.dart';
-import 'app_colors.dart';
 import 'app_font.dart' if (dart.library.html) 'app_font_web.dart';
 import 'app_style.dart';
 
 const MaterialColor _kHintColor = Colors.grey;
+const Color _kErrorColor = Color(0xFFEB5757);
 const Color _kLightHintColor = Color(0xFFF5F5F5);
 const Color _kDarkHintColor = Color(0xFF616161);
 const Color _kBorderSideColor = Color(0x66D1D1D1);
-const Color _kBorderSideErrorColor = AppColors.danger;
+const Color _kBorderSideErrorColor = _kErrorColor;
 const MaterialColor _kWhiteColor = MaterialColor(
   0xFFFFFFFF,
   <int, Color>{
@@ -32,28 +32,49 @@ class _AppTextTheme {
   final TextStyle error = const TextStyle(fontSize: 12.0, color: _kBorderSideErrorColor);
 }
 
-class AppTheme {
-  const AppTheme._();
-
-  final _AppTextTheme text = const _AppTextTheme._();
+class _AppColorTheme {
+  const _AppColorTheme._();
 
   final MaterialColor primaryColor = Colors.indigo;
   final MaterialColor hintColor = _kHintColor;
-  final Color errorColor = AppColors.danger;
+  final Color errorColor = _kErrorColor;
 
   final Color splashBackgroundColor = const Color(0xFF100F1E);
-  final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
+
+  final Color success = const Color(0xFF239f77);
+  final Color onSuccess = const Color(0xFFFFFFFF);
+
+  final Color danger = const Color(0xFFEB5757);
+  final Color onDanger = const Color(0xFFFFFFFF);
 }
 
-ThemeData themeBuilder(ThemeData defaultTheme) {
+class AppTheme extends ThemeExtension<AppTheme> {
+  const AppTheme._();
+
+  final _AppTextTheme text = const _AppTextTheme._();
+  final _AppColorTheme color = const _AppColorTheme._();
+
+  final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
+
+  @override
+  ThemeExtension<AppTheme> copyWith() => this;
+
+  @override
+  ThemeExtension<AppTheme> lerp(ThemeExtension<AppTheme>? other, double t) => this;
+}
+
+ThemeData themeBuilder(
+  ThemeData defaultTheme, {
+  AppTheme appTheme = const AppTheme._(),
+}) {
   final Brightness brightness = defaultTheme.brightness;
   final bool isDark = brightness == Brightness.dark;
-  final Color backgroundColor = isDark ? _appTheme.splashBackgroundColor : _kWhiteColor;
-  final MaterialColor primaryColor = _appTheme.primaryColor;
+  final Color backgroundColor = isDark ? appTheme.color.splashBackgroundColor : _kWhiteColor;
+  final MaterialColor primaryColor = appTheme.color.primaryColor;
 
   final OutlineInputBorder textFieldBorder = OutlineInputBorder(
     borderSide: BorderSide.none,
-    borderRadius: _appTheme.textFieldBorderRadius,
+    borderRadius: appTheme.textFieldBorderRadius,
   );
   final OutlineInputBorder textFieldErrorBorder = textFieldBorder.copyWith(
     borderSide: const BorderSide(color: _kBorderSideErrorColor),
@@ -61,7 +82,7 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
 
   final TextTheme textTheme = defaultTheme.textTheme
       .merge(
-        TextTheme(button: _appTheme.text.button),
+        TextTheme(button: appTheme.text.button),
       )
       .apply(fontFamily: kAppFontFamily);
 
@@ -81,7 +102,7 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
     primary: primaryColor,
     onPrimary: _kWhiteColor,
     background: backgroundColor,
-    error: _appTheme.errorColor,
+    error: appTheme.color.errorColor,
   );
 
   return ThemeData(
@@ -106,12 +127,12 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
       enabledBorder: textFieldBorder,
       errorBorder: textFieldErrorBorder,
       focusedErrorBorder: textFieldErrorBorder,
-      hintStyle: _appTheme.text.textfieldHint,
-      labelStyle: _appTheme.text.textfieldLabel,
+      hintStyle: appTheme.text.textfieldHint,
+      labelStyle: appTheme.text.textfieldLabel,
       contentPadding: const EdgeInsets.all(12),
       fillColor: isDark ? backgroundColor : _kLightHintColor,
       filled: true,
-      errorStyle: _appTheme.text.error,
+      errorStyle: appTheme.text.error,
     ),
     dialogBackgroundColor: colorScheme.surface,
     textSelectionTheme: defaultTheme.textSelectionTheme.copyWith(
@@ -120,16 +141,17 @@ ThemeData themeBuilder(ThemeData defaultTheme) {
       selectionHandleColor: primaryColor,
     ),
     fontFamily: kAppFontFamily,
-    hintColor: _appTheme.hintColor,
-    disabledColor: _appTheme.hintColor,
+    hintColor: appTheme.color.hintColor,
+    disabledColor: appTheme.color.hintColor,
     dividerColor: _kBorderSideColor,
+    extensions: <ThemeExtension<dynamic>>{
+      appTheme,
+    },
   );
 }
 
-const AppTheme _appTheme = AppTheme._();
-
 extension AppThemeThemeDataExtensions on ThemeData {
-  AppTheme get appTheme => _appTheme;
+  AppTheme get appTheme => extension<AppTheme>()!;
 }
 
 extension BuildContextThemeExtensions on BuildContext {

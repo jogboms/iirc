@@ -20,34 +20,31 @@ class AppSnackBar {
   final BuildContext _context;
   final SnackBarProviderState? state;
 
-  FutureOr<void> success(String value, {Duration? duration, Alignment? alignment}) => _show(
+  FutureOr<void> success(String value, {Duration? duration, Alignment? alignment}) => _showForType(
         value,
         key: successKey,
-        leading: const Icon(Icons.check, color: Colors.white, size: 24),
+        icon: Icons.check,
+        type: SnackBarType.success,
         alignment: alignment,
         duration: duration,
-        color: Colors.white,
-        backgroundColor: AppColors.success,
       );
 
-  FutureOr<void> info(String value, {Duration? duration, Alignment? alignment}) => _show(
+  FutureOr<void> info(String value, {Duration? duration, Alignment? alignment}) => _showForType(
         value,
         key: infoKey,
-        leading: Icon(Icons.alarm, color: Theme.of(_context).primaryColor, size: 24),
+        icon: Icons.alarm,
+        type: SnackBarType.info,
         alignment: alignment,
         duration: duration,
-        backgroundColor: Colors.white,
-        color: Colors.black,
       );
 
-  FutureOr<void> error(String value, {Duration? duration, Alignment? alignment}) => _show(
+  FutureOr<void> error(String value, {Duration? duration, Alignment? alignment}) => _showForType(
         value,
         key: errorKey,
-        leading: const Icon(Icons.warning, color: Colors.white, size: 24),
+        icon: Icons.warning,
+        type: SnackBarType.error,
         alignment: alignment,
         duration: duration,
-        color: Colors.white,
-        backgroundColor: AppColors.danger,
       );
 
   FutureOr<void> loading({
@@ -67,6 +64,26 @@ class AppSnackBar {
         duration: const Duration(days: 1),
         leading: LoadingSpinner.circle(size: 24, color: color),
       );
+
+  FutureOr<void> _showForType(
+    String value, {
+    required Key key,
+    required SnackBarType type,
+    required IconData icon,
+    Duration? duration,
+    Alignment? alignment,
+  }) {
+    final Color foregroundColor = type.toForegroundColor(_context.theme);
+    return _show(
+      value,
+      key: key,
+      leading: Icon(icon, color: foregroundColor, size: 24),
+      alignment: alignment,
+      duration: duration,
+      color: foregroundColor,
+      backgroundColor: type.toBackgroundColor(_context.theme),
+    );
+  }
 
   FutureOr<void> _show(
     String? value, {
@@ -128,6 +145,34 @@ class _RowBar extends StatelessWidget {
         child: Row(children: children),
       ),
     );
+  }
+}
+
+enum SnackBarType {
+  info,
+  success,
+  error;
+
+  Color toForegroundColor(ThemeData theme) {
+    switch (this) {
+      case SnackBarType.info:
+        return theme.colorScheme.onSurface;
+      case SnackBarType.success:
+        return theme.appTheme.color.onSuccess;
+      case SnackBarType.error:
+        return theme.appTheme.color.onDanger;
+    }
+  }
+
+  Color toBackgroundColor(ThemeData theme) {
+    switch (this) {
+      case SnackBarType.info:
+        return theme.colorScheme.surface;
+      case SnackBarType.success:
+        return theme.appTheme.color.success;
+      case SnackBarType.error:
+        return theme.appTheme.color.danger;
+    }
   }
 }
 

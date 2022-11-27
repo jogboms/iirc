@@ -6,10 +6,10 @@ class AppLog {
   static final Logger _logger = Logger.root;
 
   static void init({
-    required _LogFilter logFilter,
-    required _ExceptionFilter exceptionFilter,
-    required _ExceptionLogger onException,
-    required _Logger onLog,
+    required LogFilter logFilter,
+    required ExceptionLogFilter exceptionFilter,
+    required ExceptionLogBuilder onException,
+    required LogBuilder onLog,
   }) {
     _logger.level = Level.ALL;
     _logger.onRecord.listen(_logListener(logFilter, exceptionFilter, onException, onLog));
@@ -25,19 +25,19 @@ class AppLog {
   static void i(Object message) => _logger.info(message);
 }
 
-typedef _LogFilter = bool Function();
-typedef _Logger = void Function(Object? message);
-typedef _ExceptionFilter = bool Function(Object error);
-typedef _ExceptionLogger = void Function(Object error, StackTrace stackTrace, Object extra);
+typedef LogFilter = bool Function();
+typedef LogBuilder = void Function(Object? message);
+typedef ExceptionLogFilter = bool Function(Object error);
+typedef ExceptionLogBuilder = void Function(Object error, StackTrace stackTrace, Object extra);
 
 void Function(LogRecord) _logListener(
-  _LogFilter logFilter,
-  _ExceptionFilter exceptionFilter,
-  _ExceptionLogger onException,
-  _Logger onLog,
+  LogFilter logFilter,
+  ExceptionLogFilter exceptionFilter,
+  ExceptionLogBuilder onException,
+  LogBuilder onLog,
 ) =>
     (LogRecord record) {
-      final _Logger logger = logFilter() ? onLog : (_) {};
+      final LogBuilder logger = logFilter() ? onLog : (_) {};
       if (record.level != Level.SEVERE) {
         logger(record.message);
         return;

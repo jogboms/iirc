@@ -1,6 +1,9 @@
 xcode:
 	open ios/Runner.xcworkspace
 
+install:
+	fvm flutter pub get
+
 ci:
 	make format && make analyze && make test_coverage
 

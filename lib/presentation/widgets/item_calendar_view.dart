@@ -211,7 +211,7 @@ class _ItemCalendarViewState extends State<ItemCalendarView> {
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: isDisabled ? AppFontWeight.regular : AppFontWeight.semibold,
                       color: isDisabled
-                          ? theme.appTheme.hintColor.shade400
+                          ? theme.appTheme.color.hintColor.shade400
                           : isToday
                               ? theme.colorScheme.onInverseSurface
                               : isSelected

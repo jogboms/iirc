@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
+          key: ${{ runner.os }}-flutter-install-cache-${{ env.FLUTTER_VERSION }}
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
@@ -42,7 +42,7 @@ jobs:
       - run: flutter pub get
       - run: flutter packages pub run intl_utils:generate
       - run: dart run ./.github/scripts/replace_client_id.dart ${{ secrets.PROD_CLIENT_ID }}
-      - run: flutter build web --release --dart-define=env.mode=prod
+      - run: flutter build web --release --dart-define=env.mode=prod --dart-define=env.sentryDns=${{ secrets.SENTRY_DNS }}
       - run: |
           cd build/web
 

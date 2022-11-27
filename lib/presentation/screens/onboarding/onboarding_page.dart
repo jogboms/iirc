@@ -90,7 +90,7 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 
   void _authStateListener(AuthState? _, AuthState state) {
     if (state is AuthErrorState) {
-      final AppSnackBar snackBar = AppSnackBar.of(context);
+      final AppSnackBar snackBar = context.snackBar;
       final String message = state.toPrettyMessage(context.l10n, environment.isProduction);
       if (state.reason != AuthErrorStateReason.popupBlockedByBrowser) {
         snackBar.error(message);

@@ -28,29 +28,9 @@ class BaseItemModel<T> with EquatableMixin {
   bool? get stringify => true;
 }
 
-class ItemModel extends BaseItemModel<TagModelReference> {
-  const ItemModel({
-    required super.id,
-    required super.path,
-    required super.description,
-    required super.date,
-    required super.tag,
-    required super.createdAt,
-    required super.updatedAt,
-  });
-}
+typedef ItemModel = BaseItemModel<TagModelReference>;
 
-class NormalizedItemModel extends BaseItemModel<TagModel> {
-  const NormalizedItemModel({
-    required super.id,
-    required super.path,
-    required super.description,
-    required super.date,
-    required super.tag,
-    required super.createdAt,
-    required super.updatedAt,
-  });
-}
+typedef NormalizedItemModel = BaseItemModel<TagModel>;
 
 class TagModelReference with EquatableMixin {
   const TagModelReference({required this.id, required this.path});

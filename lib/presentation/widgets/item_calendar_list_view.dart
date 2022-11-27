@@ -42,7 +42,7 @@ class ItemCalendarListView extends StatelessWidget {
                         style: theme.textTheme.labelSmall!.copyWith(
                           fontWeight: AppFontWeight.bold,
                           letterSpacing: 1,
-                          color: theme.appTheme.hintColor.shade600,
+                          color: theme.appTheme.color.hintColor.shade600,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -15,7 +15,7 @@ class TagColorBox extends StatelessWidget {
 
     return Material(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: context.theme.appTheme.hintColor.shade200),
+        side: BorderSide(color: context.theme.appTheme.color.hintColor.shade200),
       ),
       color: tagColorScheme.backgroundColor,
       child: FittedBox(

@@ -37,7 +37,7 @@ void main() {
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
         ).toString(),
-        'ItemModel(1, path, description, 0000-01-01 00:00:00.000, TagModelReference(1, path), 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
+        'BaseItemModel<TagModelReference>(1, path, description, 0000-01-01 00:00:00.000, TagModelReference(1, path), 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
       );
     });
   });

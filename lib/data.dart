@@ -1,7 +1,6 @@
 export 'data/network/firebase/analytics.dart';
 export 'data/network/firebase/auth.dart';
 export 'data/network/firebase/cloud_db.dart';
-export 'data/network/firebase/crashlytics.dart';
 export 'data/network/firebase/exception.dart';
 export 'data/network/firebase/firebase.dart';
 export 'data/network/firebase/models.dart';

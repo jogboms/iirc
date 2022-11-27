@@ -39,7 +39,6 @@ void main() {
           analytics: analytics,
           googleSignIn: MockGoogleSignIn(),
           auth: MockFirebaseAuth(),
-          crashlytics: MockFirebaseCrashlytics(),
           firestore: MockFirebaseFirestore(),
         ),
         completes,

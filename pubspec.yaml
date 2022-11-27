@@ -16,7 +16,6 @@ dependencies:
   firebase_analytics: ^9.3.4
   firebase_auth: ^3.8.0
   firebase_core: ^1.22.0
-  firebase_crashlytics: ^2.8.10
   flutter:
     sdk: flutter
   flutter_localizations:

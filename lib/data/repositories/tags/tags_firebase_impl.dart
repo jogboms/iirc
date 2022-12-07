@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../../network/firebase/cloud_db.dart';
 import '../../network/firebase/firebase.dart';
 import '../../network/firebase/models.dart';
-import '../derive_tag_model_from_json.dart';
 import '../extensions.dart';
 
 class TagsFirebaseImpl implements TagsRepository {
@@ -50,9 +49,9 @@ class TagsFirebaseImpl implements TagsRepository {
   }
 
   @override
-  Stream<TagModelList> fetch(String userId) =>
-      tags.fetchEntries(userId: userId, mapper: _deriveTagFromDocument, isDev: isDev);
+  Stream<TagModelList> fetch(String userId) => tags.fetchEntries(
+      userId: userId, mapper: _deriveTagFromDocument, isDev: isDev);
 }
 
 Future<TagModel> _deriveTagFromDocument(MapDocumentSnapshot document) async =>
-    deriveTagModelFromJson(document.id, document.reference.path, document.data()!);
+    TagModel.fromJson(document.id, document.reference.path, document.data()!);

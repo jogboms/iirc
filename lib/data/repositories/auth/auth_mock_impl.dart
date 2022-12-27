@@ -5,13 +5,13 @@ import 'package:rxdart/subjects.dart';
 class AuthMockImpl extends AuthRepository {
   static final String id = faker.guid.guid();
 
-  static AccountModel generateAccount() =>
-      AccountModel(id: id, displayName: faker.person.name(), email: faker.internet.email());
+  static AccountEntity generateAccount() =>
+      AccountEntity(id: id, displayName: faker.person.name(), email: faker.internet.email());
 
   final BehaviorSubject<String?> _authIdState$ = BehaviorSubject<String?>();
 
   @override
-  Future<AccountModel> fetch() async => generateAccount();
+  Future<AccountEntity> fetch() async => generateAccount();
 
   @override
   Stream<String?> get onAuthStateChanged => _authIdState$;

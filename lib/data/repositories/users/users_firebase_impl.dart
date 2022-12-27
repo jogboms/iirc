@@ -13,7 +13,7 @@ class UsersFirebaseImpl implements UsersRepository {
   final CloudDbCollection collection;
 
   @override
-  Future<String> create(AccountModel account) async {
+  Future<String> create(AccountEntity account) async {
     final List<String>? names = account.displayName?.split(' ');
     await collection.fetchOne(account.id).set(<String, Object>{
       'email': account.email,
@@ -34,7 +34,7 @@ class UsersFirebaseImpl implements UsersRepository {
   }
 
   @override
-  Future<UserModel?> fetch(String uid) async {
+  Future<UserEntity?> fetch(String uid) async {
     final MapDocumentSnapshot doc = await collection.fetchOne(uid).get();
     if (!doc.exists) {
       return null;
@@ -44,7 +44,7 @@ class UsersFirebaseImpl implements UsersRepository {
   }
 }
 
-Future<UserModel> _deriveUserModelFromJson(String id, String path, DynamicMap data) async => UserModel(
+Future<UserEntity> _deriveUserModelFromJson(String id, String path, DynamicMap data) async => UserEntity(
       id: id,
       path: path,
       email: data['email'] as String,

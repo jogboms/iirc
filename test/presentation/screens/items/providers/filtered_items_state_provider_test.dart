@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
-import 'package:iirc/domain/models/tag.dart';
+import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -97,7 +97,7 @@ Future<void> main() async {
 
       await container.pump();
 
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
         (int index) => ItemsMockImpl.generateNormalizedItem(tag: tag).asViewModel,
@@ -126,7 +126,7 @@ Future<void> main() async {
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
         (int index) {
-          final TagModel tag = TagsMockImpl.generateTag();
+          final TagEntity tag = TagsMockImpl.generateTag();
           return ItemsMockImpl.generateNormalizedItem(tag: tag.copyWith(title: 'Query-$index')).asViewModel;
         },
       );

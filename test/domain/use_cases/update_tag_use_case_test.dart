@@ -10,7 +10,7 @@ void main() {
     final TagsRepository tagsRepository = mockRepositories.tags;
     final UpdateTagUseCase useCase = UpdateTagUseCase(tags: tagsRepository);
 
-    final TagModel dummyTag = TagsMockImpl.generateTag();
+    final TagEntity dummyTag = TagsMockImpl.generateTag();
     final UpdateTagData dummyUpdateTagData = UpdateTagData(
       id: dummyTag.id,
       path: dummyTag.path,

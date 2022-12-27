@@ -50,9 +50,9 @@ class TagsFirebaseImpl implements TagsRepository {
   }
 
   @override
-  Stream<TagModelList> fetch(String userId) =>
+  Stream<TagEntityList> fetch(String userId) =>
       tags.fetchEntries(userId: userId, mapper: _deriveTagFromDocument, isDev: isDev);
 }
 
-Future<TagModel> _deriveTagFromDocument(MapDocumentSnapshot document) async =>
+Future<TagEntity> _deriveTagFromDocument(MapDocumentSnapshot document) async =>
     deriveTagModelFromJson(document.id, document.reference.path, document.data()!);

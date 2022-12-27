@@ -12,7 +12,7 @@ final searchTagModeStateProvider = StateProvider.autoDispose<SearchTagMode>((ref
 List<T> filterBySearchTagQuery<T>(
   AutoDisposeRef ref, {
   required List<T> elements,
-  required TagModel Function(T) byTag,
+  required TagEntity Function(T) byTag,
 }) {
   final String query = ref.watch(searchTagQueryStateProvider).trim().toLowerCase();
   final SearchTagMode mode = ref.watch(searchTagModeStateProvider);

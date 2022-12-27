@@ -9,14 +9,14 @@ void main() {
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
         ),
         UpdateItemData(
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
         ),
       );
@@ -28,10 +28,10 @@ void main() {
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
         ).toString(),
-        'UpdateItemData(1, path, description, 0000-01-01 00:00:00.000, TagModelReference(1, path))',
+        'UpdateItemData(1, path, description, 0000-01-01 00:00:00.000, TagReferenceEntity(1, path))',
       );
     });
   });

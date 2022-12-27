@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import 'tag_view_model.dart';
 
-class ItemViewModel extends BaseItemModel<TagViewModel> {
+class ItemViewModel extends BaseItemEntity<TagViewModel> {
   @visibleForTesting
   const ItemViewModel({
     required super.id,
@@ -15,7 +15,7 @@ class ItemViewModel extends BaseItemModel<TagViewModel> {
     required super.updatedAt,
   });
 
-  static ItemViewModel fromItem(NormalizedItemModel item) => ItemViewModel(
+  static ItemViewModel fromItem(NormalizedItemEntity item) => ItemViewModel(
         id: item.id,
         path: item.path,
         description: item.description,

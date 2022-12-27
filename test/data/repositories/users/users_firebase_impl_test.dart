@@ -24,7 +24,7 @@ void main() {
 
       expect(
         repo.create(
-          const AccountModel(
+          const AccountEntity(
             id: '1',
             displayName: 'display name',
             email: 'email',
@@ -91,7 +91,7 @@ void main() {
         expect(
           repo.fetch('1'),
           completion(
-            UserModel(
+            UserEntity(
               id: '1',
               path: 'path',
               firstName: '',
@@ -119,7 +119,7 @@ void main() {
         expect(
           repo.fetch('1'),
           completion(
-            UserModel(
+            UserEntity(
               id: '1',
               path: 'path',
               firstName: 'first',

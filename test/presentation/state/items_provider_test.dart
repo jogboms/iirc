@@ -9,14 +9,14 @@ import '../../utils.dart';
 
 Future<void> main() async {
   group('ItemsProvider', () {
-    final UserModel dummyUser = UsersMockImpl.user;
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     tearDown(mockUseCases.reset);
 
     Stream<ItemViewModelList> createProviderStream() {
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
+          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
         ],
       );
       addTearDown(container.dispose);
@@ -25,7 +25,7 @@ Future<void> main() async {
 
     test('should initialize with empty state', () {
       when(() => mockUseCases.fetchItemsUseCase.call(any()))
-          .thenAnswer((_) => const Stream<List<NormalizedItemModel>>.empty());
+          .thenAnswer((_) => const Stream<List<NormalizedItemEntity>>.empty());
 
       expect(
         createProviderStream(),
@@ -34,10 +34,10 @@ Future<void> main() async {
     });
 
     test('should emit fetched items', () async {
-      final List<NormalizedItemModel> expectedItems =
-          List<NormalizedItemModel>.filled(3, ItemsMockImpl.generateNormalizedItem());
+      final List<NormalizedItemEntity> expectedItems =
+          List<NormalizedItemEntity>.filled(3, ItemsMockImpl.generateNormalizedItem());
       when(() => mockUseCases.fetchItemsUseCase.call(any()))
-          .thenAnswer((_) => Stream<List<NormalizedItemModel>>.value(expectedItems));
+          .thenAnswer((_) => Stream<List<NormalizedItemEntity>>.value(expectedItems));
 
       expect(
         createProviderStream(),

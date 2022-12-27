@@ -10,7 +10,7 @@ void main() {
     final UsersRepository usersRepository = mockRepositories.users;
     final CreateUserUseCase useCase = CreateUserUseCase(users: usersRepository);
 
-    final AccountModel dummyAccountModel = AuthMockImpl.generateAccount();
+    final AccountEntity dummyAccountModel = AuthMockImpl.generateAccount();
 
     setUpAll(() {
       registerFallbackValue(dummyAccountModel);

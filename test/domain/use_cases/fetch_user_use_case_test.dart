@@ -10,7 +10,7 @@ void main() {
     final UsersRepository usersRepository = mockRepositories.users;
     final FetchUserUseCase useCase = FetchUserUseCase(users: usersRepository);
 
-    final UserModel dummyUser = UsersMockImpl.user;
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     tearDown(() => reset(usersRepository));
 

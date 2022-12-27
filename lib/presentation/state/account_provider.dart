@@ -5,7 +5,7 @@ import 'package:riverpod/riverpod.dart';
 
 import 'registry_provider.dart';
 
-final accountProvider = FutureProvider.autoDispose<AccountModel>((ref) {
+final accountProvider = FutureProvider.autoDispose<AccountEntity>((ref) {
   final registry = ref.read(registryProvider);
   return registry.get<GetAccountUseCase>().call();
 });

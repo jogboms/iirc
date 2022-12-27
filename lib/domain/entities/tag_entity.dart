@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-class TagModel with EquatableMixin {
-  const TagModel({
+import 'tag_reference_entity.dart';
+
+class TagEntity with EquatableMixin {
+  const TagEntity({
     required this.id,
     required this.path,
     required this.title,
@@ -26,4 +28,8 @@ class TagModel with EquatableMixin {
   bool? get stringify => true;
 }
 
-typedef TagModelList = List<TagModel>;
+extension TagReferenceEntityExtension on TagEntity {
+  TagReferenceEntity get reference => TagReferenceEntity(id: id, path: path);
+}
+
+typedef TagEntityList = List<TagEntity>;

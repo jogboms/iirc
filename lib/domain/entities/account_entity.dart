@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class AccountModel with EquatableMixin {
-  const AccountModel({
+class AccountEntity with EquatableMixin {
+  const AccountEntity({
     required this.id,
     required this.displayName,
     required this.email,

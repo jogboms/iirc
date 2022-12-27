@@ -238,7 +238,7 @@ class _TagItem extends StatelessWidget {
 
 @visibleForTesting
 final TagViewModel emptyTagModel = TagViewModel.fromTag(
-  TagModel(
+  TagEntity(
     id: 'EMPTY',
     color: 0xF,
     description: '',

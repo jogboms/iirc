@@ -10,8 +10,8 @@ import '../utils.dart';
 
 void main() {
   group('App', () {
-    final AccountModel dummyAccount = AuthMockImpl.generateAccount();
-    final UserModel dummyUser = UsersMockImpl.user;
+    final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     setUpAll(() {
       registerFallbackValue(dummyAccount);

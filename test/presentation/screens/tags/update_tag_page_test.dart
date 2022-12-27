@@ -13,7 +13,7 @@ void main() {
   group('UpdateTagPage', () {
     final Finder updateTagPage = find.byType(UpdateTagPage);
     final NavigatorObserver navigatorObserver = MockNavigatorObserver();
-    final TagViewModel dummyTag = TagModel(
+    final TagViewModel dummyTag = TagEntity(
       id: '1',
       color: 0xF,
       description: 'description',

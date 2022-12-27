@@ -33,7 +33,7 @@ void main() {
           CreateItemData(
             description: 'description',
             date: now,
-            tag: const TagModelReference(id: 'id', path: 'path'),
+            tag: const TagReferenceEntity(id: 'id', path: 'path'),
           ),
         ),
         completion('1'),
@@ -71,7 +71,7 @@ void main() {
             path: 'path',
             description: 'description',
             date: now,
-            tag: const TagModelReference(id: 'id', path: 'path'),
+            tag: const TagReferenceEntity(id: 'id', path: 'path'),
           ),
         ),
         completion(true),
@@ -111,21 +111,21 @@ void main() {
 
       expect(
         repo.fetch('1'),
-        emits(<ItemModel>[
-          ItemModel(
+        emits(<ItemEntity>[
+          ItemEntity(
             id: '1',
             path: 'path',
             description: 'description',
-            tag: const TagModelReference(id: 'id', path: 'path'),
+            tag: const TagReferenceEntity(id: 'id', path: 'path'),
             date: now,
             createdAt: now,
             updatedAt: now,
           ),
-          ItemModel(
+          ItemEntity(
             id: '2',
             path: 'path',
             description: 'description',
-            tag: const TagModelReference(id: 'id', path: 'path'),
+            tag: const TagReferenceEntity(id: 'id', path: 'path'),
             date: now,
             createdAt: now,
             updatedAt: null,

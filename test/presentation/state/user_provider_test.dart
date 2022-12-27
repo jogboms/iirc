@@ -10,15 +10,15 @@ import '../../utils.dart';
 
 Future<void> main() async {
   group('UserProvider', () {
-    final UserModel dummyUser = UsersMockImpl.user;
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     tearDown(mockUseCases.reset);
 
-    Future<UserModel> createProviderFuture() {
-      final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+    Future<UserEntity> createProviderFuture() {
+      final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          accountProvider.overrideWithValue(AsyncData<AccountModel>(dummyAccount)),
+          accountProvider.overrideWithValue(AsyncData<AccountEntity>(dummyAccount)),
         ],
       );
       addTearDown(container.dispose);

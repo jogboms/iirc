@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/domain.dart';
 
 void main() {
-  group('TagModel', () {
+  group('TagEntity', () {
     test('should be equal when equal', () {
       expect(
-        TagModel(
+        TagEntity(
           id: nonconst('1'),
           path: 'path',
           color: 0xF,
@@ -14,7 +14,7 @@ void main() {
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
         ),
-        TagModel(
+        TagEntity(
           id: nonconst('1'),
           path: 'path',
           color: 0xF,
@@ -28,7 +28,7 @@ void main() {
 
     test('should serialize to string', () {
       expect(
-        TagModel(
+        TagEntity(
           id: nonconst('1'),
           path: 'path',
           color: 0xF,
@@ -37,7 +37,7 @@ void main() {
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
         ).toString(),
-        'TagModel(1, path, title, description, 15, 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
+        'TagEntity(1, path, title, description, 15, 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
       );
     });
   });

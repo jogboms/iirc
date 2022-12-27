@@ -9,14 +9,14 @@ import '../../utils.dart';
 
 Future<void> main() async {
   group('TagsProvider', () {
-    final UserModel dummyUser = UsersMockImpl.user;
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     tearDown(mockUseCases.reset);
 
     Stream<TagViewModelList> createProviderStream() {
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
+          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
         ],
       );
       addTearDown(container.dispose);
@@ -24,7 +24,7 @@ Future<void> main() async {
     }
 
     test('should initialize with empty state', () {
-      when(() => mockUseCases.fetchTagsUseCase.call(any())).thenAnswer((_) => const Stream<List<TagModel>>.empty());
+      when(() => mockUseCases.fetchTagsUseCase.call(any())).thenAnswer((_) => const Stream<List<TagEntity>>.empty());
 
       expect(
         createProviderStream(),
@@ -33,9 +33,9 @@ Future<void> main() async {
     });
 
     test('should emit fetched tags', () async {
-      final List<TagModel> expectedTags = List<TagModel>.filled(3, TagsMockImpl.generateTag());
+      final List<TagEntity> expectedTags = List<TagEntity>.filled(3, TagsMockImpl.generateTag());
       when(() => mockUseCases.fetchTagsUseCase.call(any()))
-          .thenAnswer((_) => Stream<List<TagModel>>.value(expectedTags));
+          .thenAnswer((_) => Stream<List<TagEntity>>.value(expectedTags));
 
       expect(
         createProviderStream(),

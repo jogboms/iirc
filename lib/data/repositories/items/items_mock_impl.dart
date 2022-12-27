@@ -8,12 +8,12 @@ import '../extensions.dart';
 import '../tags/tags_mock_impl.dart';
 
 class ItemsMockImpl extends ItemsRepository {
-  static ItemModel generateItem({String? id, TagModel? tag, DateTime? date}) =>
+  static ItemEntity generateItem({String? id, TagEntity? tag, DateTime? date}) =>
       generateNormalizedItem(id: id, tag: tag, date: date).denormalize;
 
-  static NormalizedItemModel generateNormalizedItem({String? id, TagModel? tag, DateTime? date}) {
+  static NormalizedItemEntity generateNormalizedItem({String? id, TagEntity? tag, DateTime? date}) {
     id ??= faker.guid.guid();
-    return NormalizedItemModel(
+    return NormalizedItemEntity(
       id: id,
       path: '/items/${AuthMockImpl.id}/$id',
       description: faker.lorem.sentence(),
@@ -24,16 +24,16 @@ class ItemsMockImpl extends ItemsRepository {
     );
   }
 
-  static final Map<String, ItemModel> items = (faker.randomGenerator.amount((_) => generateItem(), 250, min: 50)
-        ..sort((ItemModel a, ItemModel b) => b.date.compareTo(a.date)))
-      .foldToMap((ItemModel element) => element.id);
+  static final Map<String, ItemEntity> items = (faker.randomGenerator.amount((_) => generateItem(), 250, min: 50)
+        ..sort((ItemEntity a, ItemEntity b) => b.date.compareTo(a.date)))
+      .foldToMap((ItemEntity element) => element.id);
 
-  final BehaviorSubject<Map<String, ItemModel>> _items$ = BehaviorSubject<Map<String, ItemModel>>.seeded(items);
+  final BehaviorSubject<Map<String, ItemEntity>> _items$ = BehaviorSubject<Map<String, ItemEntity>>.seeded(items);
 
   @override
   Future<String> create(String userId, CreateItemData item) async {
     final String id = faker.guid.guid();
-    final ItemModel newItem = ItemModel(
+    final ItemEntity newItem = ItemEntity(
       id: id,
       path: '/items/$userId/$id',
       description: item.description,
@@ -48,24 +48,24 @@ class ItemsMockImpl extends ItemsRepository {
 
   @override
   Future<bool> delete(String path) async {
-    final String id = items.values.firstWhere((ItemModel element) => element.path == path).id;
+    final String id = items.values.firstWhere((ItemEntity element) => element.path == path).id;
     _items$.add(items..remove(id));
     return true;
   }
 
   @override
   Future<bool> update(UpdateItemData item) async {
-    _items$.add(items..update(item.id, (ItemModel prev) => prev.update(item)));
+    _items$.add(items..update(item.id, (ItemEntity prev) => prev.update(item)));
     return true;
   }
 
   @override
-  Stream<ItemModelList> fetch(String userId) =>
-      _items$.stream.map((Map<String, ItemModel> event) => event.values.toList());
+  Stream<ItemEntityList> fetch(String userId) =>
+      _items$.stream.map((Map<String, ItemEntity> event) => event.values.toList());
 }
 
-extension on ItemModel {
-  ItemModel update(UpdateItemData update) => ItemModel(
+extension on ItemEntity {
+  ItemEntity update(UpdateItemData update) => ItemEntity(
         id: id,
         path: path,
         description: update.description,
@@ -76,8 +76,8 @@ extension on ItemModel {
       );
 }
 
-extension on NormalizedItemModel {
-  ItemModel get denormalize => ItemModel(
+extension on NormalizedItemEntity {
+  ItemEntity get denormalize => ItemEntity(
         id: id,
         path: path,
         description: description,

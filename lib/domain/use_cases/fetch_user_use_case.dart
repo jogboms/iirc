@@ -1,6 +1,6 @@
 import 'package:iirc/core.dart';
 
-import '../models/user.dart';
+import '../entities/user_entity.dart';
 import '../repositories/users.dart';
 
 class FetchUserUseCase {
@@ -8,7 +8,7 @@ class FetchUserUseCase {
 
   final UsersRepository _users;
 
-  Future<UserModel?> call(String uid) async {
+  Future<UserEntity?> call(String uid) async {
     try {
       return _users.fetch(uid);
     } catch (error, stackTrace) {

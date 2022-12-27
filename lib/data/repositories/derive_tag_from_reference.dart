@@ -1,15 +1,16 @@
-import '../../domain/models/tag.dart';
+import 'package:iirc/domain.dart';
+
 import '../network/firebase/models.dart';
 import 'derive_tag_model_from_json.dart';
 
-final Map<String, TagModel> _memoizedTags = <String, TagModel>{};
+final Map<String, TagEntity> _memoizedTags = <String, TagEntity>{};
 
-Future<TagModel> deriveTagFromReference(MapDocumentReference reference) async {
+Future<TagEntity> deriveTagFromReference(MapDocumentReference reference) async {
   if (_memoizedTags.containsKey(reference.id)) {
     return _memoizedTags[reference.id]!;
   }
   final MapDocumentSnapshot item = await reference.get();
-  final TagModel user = await deriveTagModelFromJson(reference.id, reference.path, item.data()!);
+  final TagEntity user = await deriveTagModelFromJson(reference.id, reference.path, item.data()!);
   _memoizedTags[reference.id] = user;
   return user;
 }

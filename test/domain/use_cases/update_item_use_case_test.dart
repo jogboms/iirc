@@ -10,7 +10,7 @@ void main() {
     final ItemsRepository itemsRepository = mockRepositories.items;
     final UpdateItemUseCase useCase = UpdateItemUseCase(items: itemsRepository);
 
-    final ItemModel dummyItem = ItemsMockImpl.generateItem();
+    final ItemEntity dummyItem = ItemsMockImpl.generateItem();
     final UpdateItemData dummyUpdateItemData = UpdateItemData(
       id: dummyItem.id,
       path: dummyItem.path,

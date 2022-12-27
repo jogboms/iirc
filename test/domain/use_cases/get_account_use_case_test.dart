@@ -10,7 +10,7 @@ void main() {
     final AuthRepository authRepository = mockRepositories.auth;
     final GetAccountUseCase useCase = GetAccountUseCase(auth: authRepository);
 
-    final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+    final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
 
     tearDown(() => reset(authRepository));
 

@@ -10,7 +10,7 @@ void main() {
     final ItemsRepository itemsRepository = mockRepositories.items;
     final CreateItemUseCase useCase = CreateItemUseCase(items: itemsRepository);
 
-    final ItemModel dummyItem = ItemsMockImpl.generateItem();
+    final ItemEntity dummyItem = ItemsMockImpl.generateItem();
     final CreateItemData dummyCreateItemData = CreateItemData(
       description: dummyItem.description,
       date: dummyItem.date,

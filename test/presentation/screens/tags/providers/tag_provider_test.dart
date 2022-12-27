@@ -10,13 +10,13 @@ import '../../../../utils.dart';
 
 Future<void> main() async {
   group('TagProvider', () {
-    final MockAsyncCallback<UserModel> mockFetchUser = MockAsyncCallback<UserModel>();
-    final UserModel dummyUser = UsersMockImpl.user;
+    final MockAsyncCallback<UserEntity> mockFetchUser = MockAsyncCallback<UserEntity>();
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     setUpAll(() {
       registerFallbackValue(FakeCreateTagData());
       registerFallbackValue(FakeUpdateTagData());
-      registerFallbackValue(FakeTagModel());
+      registerFallbackValue(FakeTagEntity());
     });
 
     tearDown(() {
@@ -44,7 +44,7 @@ Future<void> main() async {
 
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
+          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
         ],
       );
       addTearDown(container.dispose);
@@ -103,11 +103,11 @@ Future<void> main() async {
       test('should delete existing tag', () async {
         when(() => mockUseCases.deleteTagUseCase.call(any())).thenAnswer((_) async => true);
 
-        final TagModel tag = TagsMockImpl.generateTag();
+        final TagEntity tag = TagsMockImpl.generateTag();
         await createProvider().delete(tag);
 
-        final TagModel resultingTag =
-            verify(() => mockUseCases.deleteTagUseCase.call(captureAny())).captured.first as TagModel;
+        final TagEntity resultingTag =
+            verify(() => mockUseCases.deleteTagUseCase.call(captureAny())).captured.first as TagEntity;
         expect(resultingTag, tag);
       });
     });

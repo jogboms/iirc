@@ -10,7 +10,7 @@ void main() {
     final TagsRepository tagsRepository = mockRepositories.tags;
     final DeleteTagUseCase useCase = DeleteTagUseCase(tags: tagsRepository);
 
-    final TagModel dummyTag = TagsMockImpl.generateTag();
+    final TagEntity dummyTag = TagsMockImpl.generateTag();
 
     tearDown(() => reset(tagsRepository));
 

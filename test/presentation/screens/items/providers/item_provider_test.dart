@@ -10,8 +10,8 @@ import '../../../../utils.dart';
 
 Future<void> main() async {
   group('ItemProvider', () {
-    final MockAsyncCallback<UserModel> mockFetchUser = MockAsyncCallback<UserModel>();
-    final UserModel dummyUser = UsersMockImpl.user;
+    final MockAsyncCallback<UserEntity> mockFetchUser = MockAsyncCallback<UserEntity>();
+    final UserEntity dummyUser = UsersMockImpl.user;
 
     setUpAll(() {
       registerFallbackValue(FakeCreateItemData());
@@ -43,7 +43,7 @@ Future<void> main() async {
 
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserModel>(dummyUser)),
+          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
         ],
       );
       addTearDown(container.dispose);
@@ -54,7 +54,7 @@ Future<void> main() async {
         CreateItemData(
           description: 'description',
           date: DateTime(0),
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
         ),
       );
 
@@ -69,7 +69,7 @@ Future<void> main() async {
         final CreateItemData createItemData = CreateItemData(
           description: 'description',
           date: DateTime(0),
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
         );
         final String itemId = await createProvider().create(createItemData);
 
@@ -92,7 +92,7 @@ Future<void> main() async {
           path: 'path',
           description: 'description',
           date: DateTime(0),
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
         );
         await createProvider().update(updateItemData);
 

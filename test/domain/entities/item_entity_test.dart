@@ -2,23 +2,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/domain.dart';
 
 void main() {
-  group('ItemModel', () {
+  group('ItemEntity', () {
     test('should be equal when equal', () {
       expect(
-        ItemModel(
+        ItemEntity(
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
         ),
-        ItemModel(
+        ItemEntity(
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
@@ -28,16 +28,16 @@ void main() {
 
     test('should serialize to string', () {
       expect(
-        ItemModel(
+        ItemEntity(
           id: nonconst('1'),
           path: 'path',
           description: 'description',
-          tag: const TagModelReference(id: '1', path: 'path'),
+          tag: const TagReferenceEntity(id: '1', path: 'path'),
           date: DateTime(0),
           createdAt: DateTime(0),
           updatedAt: DateTime(0),
         ).toString(),
-        'BaseItemModel<TagModelReference>(1, path, description, 0000-01-01 00:00:00.000, TagModelReference(1, path), 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
+        'BaseItemEntity<TagReferenceEntity>(1, path, description, 0000-01-01 00:00:00.000, TagReferenceEntity(1, path), 0000-01-01 00:00:00.000, 0000-01-01 00:00:00.000)',
       );
     });
   });

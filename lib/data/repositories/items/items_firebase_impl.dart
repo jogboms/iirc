@@ -51,20 +51,20 @@ class ItemsFirebaseImpl implements ItemsRepository {
   }
 
   @override
-  Stream<ItemModelList> fetch(String userId) =>
+  Stream<ItemEntityList> fetch(String userId) =>
       items.fetchEntries(userId: userId, orderBy: 'date', mapper: _deriveItemFromDocument, isDev: isDev);
 }
 
-Future<ItemModel> _deriveItemFromDocument(MapDocumentSnapshot document) async {
+Future<ItemEntity> _deriveItemFromDocument(MapDocumentSnapshot document) async {
   final DynamicMap data = document.data()!;
   final MapDocumentReference tag = data['tag'] as MapDocumentReference;
 
-  return ItemModel(
+  return ItemEntity(
     id: document.id,
     path: document.reference.path,
     description: data['description'] as String,
     date: deriveDateFromTimestamp(data['date'] as CloudTimestamp),
-    tag: TagModelReference(id: tag.id, path: tag.path),
+    tag: TagReferenceEntity(id: tag.id, path: tag.path),
     createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as CloudTimestamp) : clock.now(),
     updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as CloudTimestamp) : null,
   );

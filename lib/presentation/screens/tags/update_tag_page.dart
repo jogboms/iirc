@@ -13,14 +13,14 @@ import 'tag_entry_form.dart';
 class UpdateTagPage extends StatelessWidget {
   const UpdateTagPage({super.key, required this.tag});
 
-  static PageRoute<void> route({required TagModel tag}) {
+  static PageRoute<void> route({required TagEntity tag}) {
     return MaterialPageRoute<void>(
       builder: (_) => UpdateTagPage(tag: tag),
       settings: const RouteSettings(name: AppRoutes.updateTag),
     );
   }
 
-  final TagModel tag;
+  final TagEntity tag;
 
   @override
   Widget build(BuildContext context) {

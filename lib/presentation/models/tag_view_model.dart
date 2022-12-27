@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../utils/tag_color_scheme.dart';
 
-class TagViewModel extends TagModel {
+class TagViewModel extends TagEntity {
   @visibleForTesting
   const TagViewModel({
     required super.id,
@@ -20,7 +20,7 @@ class TagViewModel extends TagModel {
     required this.backgroundColor,
   });
 
-  static TagViewModel fromTag(TagModel tag) {
+  static TagViewModel fromTag(TagEntity tag) {
     final TagColorScheme tagColorScheme = TagColorScheme.fromHex(tag.color);
 
     return TagViewModel(

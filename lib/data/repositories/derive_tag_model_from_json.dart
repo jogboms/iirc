@@ -1,10 +1,10 @@
 import 'package:clock/clock.dart';
+import 'package:iirc/domain.dart';
 
-import '../../domain/models/tag.dart';
 import '../network/firebase/models.dart';
 import 'derive_date_from_timestamp.dart';
 
-Future<TagModel> deriveTagModelFromJson(String id, String path, DynamicMap data) async => TagModel(
+Future<TagEntity> deriveTagModelFromJson(String id, String path, DynamicMap data) async => TagEntity(
       id: id,
       path: path,
       title: data['title'] as String,

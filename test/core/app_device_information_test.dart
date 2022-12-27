@@ -78,6 +78,7 @@ void main() {
       );
 
       expect(info.appName, 'App');
+      expect(info.appVersion, '1.0.0');
       expect(info.os, 'Android');
       expect(info.model, 'Nokia 2');
 
@@ -95,6 +96,7 @@ void main() {
       );
 
       expect(info.appName, 'App');
+      expect(info.appVersion, '1.0.0');
       expect(info.os, 'iPadOS');
       expect(info.model, 'iPhone XS Max');
 
@@ -112,6 +114,7 @@ void main() {
       );
 
       expect(info.appName, 'App');
+      expect(info.appVersion, '1.0.0');
       expect(info.os, 'firefox');
       expect(info.model, 'Windows');
 

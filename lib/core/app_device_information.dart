@@ -9,6 +9,8 @@ import 'app_log.dart';
 abstract class DeviceInformation {
   String get appName;
 
+  String get appVersion;
+
   String get buildNumber;
 
   String get packageName;
@@ -21,7 +23,7 @@ abstract class DeviceInformation {
 
   String? get model;
 
-  String? get version;
+  String? get deviceVersion;
 
   String? get sdk;
 
@@ -56,6 +58,9 @@ class AppDeviceInformation implements DeviceInformation {
   String get appName => _package.appName;
 
   @override
+  String get appVersion => _package.version;
+
+  @override
   String get buildNumber => _package.buildNumber;
 
   @override
@@ -74,7 +79,7 @@ class AppDeviceInformation implements DeviceInformation {
   String? get model => _device.model;
 
   @override
-  String? get version => _device.version;
+  String? get deviceVersion => _device.version;
 
   @override
   String? get sdk => _device.sdk;
@@ -85,6 +90,7 @@ class AppDeviceInformation implements DeviceInformation {
   @override
   Map<String, String> toMap() => <String, String>{
         'appName': appName,
+        'appVersion': appVersion,
         'buildNumber': buildNumber,
         'isPhysicalDevice': '$isPhysicalDevice',
         'packageName': packageName,
@@ -92,7 +98,7 @@ class AppDeviceInformation implements DeviceInformation {
         if (deviceId != null) 'deviceId': deviceId!,
         if (brand != null) 'brand': brand!,
         if (model != null) 'model': model!,
-        if (version != null) 'version': version!,
+        if (deviceVersion != null) 'deviceVersion': deviceVersion!,
         if (sdk != null) 'sdk': sdk!,
       };
 }

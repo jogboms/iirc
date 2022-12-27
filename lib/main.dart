@@ -154,7 +154,7 @@ class _ReporterClient implements ReporterClient {
     final SentryEvent event = SentryEvent(
       throwable: error,
       environment: environment.name.toUpperCase(),
-      release: deviceInformation.version,
+      release: deviceInformation.appVersion,
       tags: deviceInformation.toMap(),
       user: SentryUser(
         id: deviceInformation.deviceId,

@@ -1,10 +1,11 @@
+import 'package:clock/clock.dart';
 import 'package:iirc/domain.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../network/firebase/cloud_db.dart';
 import '../../network/firebase/firebase.dart';
 import '../../network/firebase/models.dart';
-import '../derive_tag_entity_from_json.dart';
+import '../derive_date_from_timestamp.dart';
 import '../extensions.dart';
 
 class TagsFirebaseImpl implements TagsRepository {
@@ -54,5 +55,16 @@ class TagsFirebaseImpl implements TagsRepository {
       tags.fetchEntries(userId: userId, mapper: _deriveTagFromDocument, isDev: isDev);
 }
 
-Future<TagEntity> _deriveTagFromDocument(MapDocumentSnapshot document) async =>
-    deriveTagModelFromJson(document.id, document.reference.path, document.data()!);
+Future<TagEntity> _deriveTagFromDocument(MapDocumentSnapshot document) async {
+  final DynamicMap data = document.data()!;
+
+  return TagEntity(
+    id: document.id,
+    path: document.reference.path,
+    title: data['title'] as String,
+    description: data['description'] as String,
+    color: data['color'] as int,
+    createdAt: data['createdAt'] != null ? deriveDateFromTimestamp(data['createdAt'] as CloudTimestamp) : clock.now(),
+    updatedAt: data['updatedAt'] != null ? deriveDateFromTimestamp(data['updatedAt'] as CloudTimestamp) : null,
+  );
+}

@@ -8,14 +8,14 @@ environment:
 
 dependencies:
   clock: ^1.1.1
-  cloud_firestore: ^4.1.0
+  cloud_firestore: ^4.3.0
   cupertino_icons: ^1.0.5
   device_info_plus: ^8.0.0
   equatable: ^2.0.5
-  faker: ^2.0.0
-  firebase_analytics: ^10.0.6
-  firebase_auth: ^4.1.4
-  firebase_core: ^2.3.0
+  faker: ^2.1.0
+  firebase_analytics: ^10.0.8
+  firebase_auth: ^4.2.3
+  firebase_core: ^2.4.0
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -28,7 +28,7 @@ dependencies:
   package_info_plus: ^3.0.2
   platform: ^3.1.0
   riverpod: ^1.0.3
-  rxdart: ^0.27.5
+  rxdart: ^0.27.7
   sentry: ^6.15.1
   sliver_tools: ^0.2.8
   table_calendar: ^3.0.8

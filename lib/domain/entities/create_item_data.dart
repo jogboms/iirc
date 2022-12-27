@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../models/item.dart';
+import 'tag_reference_entity.dart';
 
 class CreateItemData with EquatableMixin {
   const CreateItemData({
@@ -11,7 +11,7 @@ class CreateItemData with EquatableMixin {
 
   final String description;
   final DateTime date;
-  final TagModelReference tag;
+  final TagReferenceEntity tag;
 
   @override
   List<Object> get props => <Object>[description, date, tag];

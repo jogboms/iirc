@@ -13,7 +13,7 @@ void main() {
     tearDown(() => reset(authRepository));
 
     test('should sign in when auth state changes to valid value', () {
-      final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+      final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
 
       when(authRepository.signIn).thenAnswer((_) async => '1');
       when(() => mockRepositories.auth.onAuthStateChanged).thenAnswer((_) => Stream<String>.value('1'));

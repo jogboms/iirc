@@ -12,7 +12,7 @@ final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState,
   final ItemViewModelList items = await ref.watch(itemsProvider.future);
 
   return SelectedTagState(
-    tag: tags.firstWhere((TagModel element) => element.id == id),
+    tag: tags.firstWhere((TagEntity element) => element.id == id),
     items: items.where((ItemViewModel element) => element.tag.id == id).toList(),
   );
 });

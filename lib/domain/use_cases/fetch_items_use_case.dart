@@ -1,7 +1,7 @@
 import 'package:rxdart/streams.dart';
 
-import '../models/item.dart';
-import '../models/tag.dart';
+import '../entities/item_entity.dart';
+import '../entities/tag_entity.dart';
 import '../repositories/items.dart';
 import '../repositories/tags.dart';
 
@@ -13,18 +13,18 @@ class FetchItemsUseCase {
   final ItemsRepository _items;
   final TagsRepository _tags;
 
-  Stream<NormalizedItemModelList> call(String userId) =>
-      CombineLatestStream.combine2<ItemModelList, TagModelList, NormalizedItemModelList>(
+  Stream<NormalizedItemEntityList> call(String userId) =>
+      CombineLatestStream.combine2<ItemEntityList, TagEntityList, NormalizedItemEntityList>(
         _items.fetch(userId),
         _tags.fetch(userId),
-        (ItemModelList items, TagModelList tags) => items
+        (ItemEntityList items, TagEntityList tags) => items
             .map(
-              (ItemModel item) => NormalizedItemModel(
+              (ItemEntity item) => NormalizedItemEntity(
                 id: item.id,
                 path: item.path,
                 description: item.description,
                 date: item.date,
-                tag: tags.firstWhere((TagModel tag) => tag.id == item.tag.id),
+                tag: tags.firstWhere((TagEntity tag) => tag.id == item.tag.id),
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt,
               ),

@@ -1,4 +1,4 @@
-import '../models/account.dart';
+import '../entities/account_entity.dart';
 import '../repositories/users.dart';
 
 class CreateUserUseCase {
@@ -6,5 +6,5 @@ class CreateUserUseCase {
 
   final UsersRepository _users;
 
-  Future<String> call(AccountModel account) => _users.create(account);
+  Future<String> call(AccountEntity account) => _users.create(account);
 }

@@ -34,7 +34,7 @@ void main() {
       tester.binding.window.devicePixelRatioTestValue = .25;
       addTearDown(() => tester.binding.window.devicePixelRatioTestValue = devicePixelRatio);
 
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
       final DateTime now = clock.now();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,

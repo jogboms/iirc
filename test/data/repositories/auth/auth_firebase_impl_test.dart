@@ -30,7 +30,7 @@ void main() {
         expect(
           repo.fetch(),
           completion(
-            const AccountModel(
+            const AccountEntity(
               id: '1',
               displayName: 'display name',
               email: 'email',

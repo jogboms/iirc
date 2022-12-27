@@ -1,6 +1,6 @@
 import '../entities/create_item_data.dart';
+import '../entities/item_entity.dart';
 import '../entities/update_item_data.dart';
-import '../models/item.dart';
 
 abstract class ItemsRepository {
   Future<String> create(String userId, CreateItemData item);
@@ -9,5 +9,5 @@ abstract class ItemsRepository {
 
   Future<bool> delete(String path);
 
-  Stream<ItemModelList> fetch(String userId);
+  Stream<ItemEntityList> fetch(String userId);
 }

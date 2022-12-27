@@ -11,7 +11,7 @@ import '../../../mocks.dart';
 import '../../../utils.dart';
 
 void main() {
-  final TagViewModel dummyTagViewModel = TagModel(
+  final TagViewModel dummyTagViewModel = TagEntity(
     id: '1',
     color: 0xF,
     description: 'description',

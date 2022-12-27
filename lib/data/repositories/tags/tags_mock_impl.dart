@@ -7,9 +7,9 @@ import '../auth/auth_mock_impl.dart';
 import '../extensions.dart';
 
 class TagsMockImpl extends TagsRepository {
-  static TagModel generateTag({String? id, String? userId}) {
+  static TagEntity generateTag({String? id, String? userId}) {
     id ??= faker.guid.guid();
-    return TagModel(
+    return TagEntity(
       id: id,
       path: '/tags/${userId ?? AuthMockImpl.id}/$id',
       title: faker.lorem.words(1).join(' '),
@@ -20,16 +20,16 @@ class TagsMockImpl extends TagsRepository {
     );
   }
 
-  static final Map<String, TagModel> tags = (faker.randomGenerator.amount((_) => generateTag(), 10, min: 5)
-        ..sort((TagModel a, TagModel b) => b.createdAt.compareTo(a.createdAt)))
-      .foldToMap((TagModel element) => element.id);
+  static final Map<String, TagEntity> tags = (faker.randomGenerator.amount((_) => generateTag(), 10, min: 5)
+        ..sort((TagEntity a, TagEntity b) => b.createdAt.compareTo(a.createdAt)))
+      .foldToMap((TagEntity element) => element.id);
 
-  final BehaviorSubject<Map<String, TagModel>> _tags$ = BehaviorSubject<Map<String, TagModel>>.seeded(tags);
+  final BehaviorSubject<Map<String, TagEntity>> _tags$ = BehaviorSubject<Map<String, TagEntity>>.seeded(tags);
 
   @override
   Future<String> create(String userId, CreateTagData tag) async {
     final String id = faker.guid.guid();
-    final TagModel newTag = TagModel(
+    final TagEntity newTag = TagEntity(
       id: id,
       path: '/tags/$userId/$id',
       title: tag.title,
@@ -44,24 +44,24 @@ class TagsMockImpl extends TagsRepository {
 
   @override
   Future<bool> update(UpdateTagData tag) async {
-    _tags$.add(tags..update(tag.id, (TagModel prev) => prev.update(tag)));
+    _tags$.add(tags..update(tag.id, (TagEntity prev) => prev.update(tag)));
     return true;
   }
 
   @override
   Future<bool> delete(String path) async {
-    final String id = tags.values.firstWhere((TagModel element) => element.path == path).id;
+    final String id = tags.values.firstWhere((TagEntity element) => element.path == path).id;
     _tags$.add(tags..remove(id));
     return true;
   }
 
   @override
-  Stream<TagModelList> fetch(String userId) =>
-      _tags$.stream.map((Map<String, TagModel> event) => event.values.toList());
+  Stream<TagEntityList> fetch(String userId) =>
+      _tags$.stream.map((Map<String, TagEntity> event) => event.values.toList());
 }
 
-extension on TagModel {
-  TagModel update(UpdateTagData update) => TagModel(
+extension on TagEntity {
+  TagEntity update(UpdateTagData update) => TagEntity(
         id: id,
         path: path,
         title: update.title,

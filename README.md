@@ -34,7 +34,7 @@ fvm install
 
 ```bash
 fvm flutter pub get 
-fvm flutter packages pub run intl_utils:generate
+fvm flutter gen-l10n
 ```
 
 ## Running

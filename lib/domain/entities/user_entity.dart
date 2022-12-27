@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class UserModel with EquatableMixin {
-  const UserModel({
+class UserEntity with EquatableMixin {
+  const UserEntity({
     required this.id,
     required this.path,
     required this.email,

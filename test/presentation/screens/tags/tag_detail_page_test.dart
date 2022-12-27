@@ -40,7 +40,7 @@ void main() {
       tester.binding.window.devicePixelRatioTestValue = .25;
       addTearDown(() => tester.binding.window.devicePixelRatioTestValue = devicePixelRatio);
 
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
       final DateTime now = clock.now();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
@@ -74,7 +74,7 @@ void main() {
     });
 
     testWidgets('should navigate to create item screen on create button tap', (WidgetTester tester) async {
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
 
       await tester.pumpWidget(
         createApp(
@@ -104,7 +104,7 @@ void main() {
     });
 
     testWidgets('should navigate to update item screen on update button tap', (WidgetTester tester) async {
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
 
       await tester.pumpWidget(
         createApp(

@@ -59,11 +59,11 @@ class FakeUpdateTagData extends Fake implements UpdateTagData {}
 
 class FakeUpdateUserData extends Fake implements UpdateUserData {}
 
-class FakeAccountModel extends Fake implements AccountModel {}
+class FakeAccountEntity extends Fake implements AccountEntity {}
 
-class FakeItemModel extends Fake implements ItemModel {}
+class FakeItemEntity extends Fake implements ItemEntity {}
 
-class FakeTagModel extends Fake implements TagModel {}
+class FakeTagEntity extends Fake implements TagEntity {}
 
 class FakeRoute extends Fake implements Route<dynamic> {}
 

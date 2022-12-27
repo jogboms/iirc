@@ -15,13 +15,13 @@ class AuthFirebaseImpl extends AuthRepository {
   final bool isDev;
 
   @override
-  Future<AccountModel> fetch() async {
+  Future<AccountEntity> fetch() async {
     final FireUser? user = firebase.auth.getUser;
     if (user == null) {
       throw const AuthException.userNotFound();
     }
 
-    return AccountModel(email: user.email!, displayName: user.displayName, id: user.uid);
+    return AccountEntity(email: user.email!, displayName: user.displayName, id: user.uid);
   }
 
   @override

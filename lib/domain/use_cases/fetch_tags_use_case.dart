@@ -1,4 +1,4 @@
-import '../models/tag.dart';
+import '../entities/tag_entity.dart';
 import '../repositories/tags.dart';
 
 class FetchTagsUseCase {
@@ -6,5 +6,5 @@ class FetchTagsUseCase {
 
   final TagsRepository _tags;
 
-  Stream<TagModelList> call(String userId) => _tags.fetch(userId);
+  Stream<TagEntityList> call(String userId) => _tags.fetch(userId);
 }

@@ -2,15 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/domain.dart';
 
 void main() {
-  group('AccountModel', () {
+  group('AccountEntity', () {
     test('should be equal when equal', () {
       expect(
-        AccountModel(
+        AccountEntity(
           id: nonconst('1'),
           email: 'email',
           displayName: 'display name',
         ),
-        AccountModel(
+        AccountEntity(
           id: nonconst('1'),
           email: 'email',
           displayName: 'display name',
@@ -20,12 +20,12 @@ void main() {
 
     test('should serialize to string', () {
       expect(
-        AccountModel(
+        AccountEntity(
           id: nonconst('1'),
           email: 'email',
           displayName: 'display name',
         ).toString(),
-        'AccountModel(1, display name, email)',
+        'AccountEntity(1, display name, email)',
       );
     });
   });

@@ -108,8 +108,8 @@ void main() {
 
       expect(
         repo.fetch('1'),
-        emits(<TagModel>[
-          TagModel(
+        emits(<TagEntity>[
+          TagEntity(
             id: '1',
             path: 'path',
             title: 'title',
@@ -118,7 +118,7 @@ void main() {
             createdAt: now,
             updatedAt: now,
           ),
-          TagModel(
+          TagEntity(
             id: '2',
             path: 'path',
             title: 'title',

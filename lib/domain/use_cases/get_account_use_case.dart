@@ -1,4 +1,4 @@
-import '../models/account.dart';
+import '../entities/account_entity.dart';
 import '../repositories/auth.dart';
 
 class GetAccountUseCase {
@@ -6,5 +6,5 @@ class GetAccountUseCase {
 
   final AuthRepository _auth;
 
-  Future<AccountModel> call() => _auth.fetch();
+  Future<AccountEntity> call() => _auth.fetch();
 }

@@ -9,7 +9,7 @@ import '../../utils.dart';
 
 Future<void> main() async {
   group('AccountProvider', () {
-    final AccountModel dummyAccount = AuthMockImpl.generateAccount();
+    final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
 
     tearDown(mockUseCases.reset);
 

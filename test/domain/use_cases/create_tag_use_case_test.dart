@@ -10,7 +10,7 @@ void main() {
     final TagsRepository tagsRepository = mockRepositories.tags;
     final CreateTagUseCase useCase = CreateTagUseCase(tags: tagsRepository);
 
-    final TagModel dummyTag = TagsMockImpl.generateTag();
+    final TagEntity dummyTag = TagsMockImpl.generateTag();
     final CreateTagData dummyCreateTagData = CreateTagData(
       title: dummyTag.title,
       description: dummyTag.description,

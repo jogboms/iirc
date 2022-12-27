@@ -31,7 +31,7 @@ class TagProvider {
   });
 
   final Analytics analytics;
-  final Future<UserModel> Function() fetchUser;
+  final Future<UserEntity> Function() fetchUser;
   final CreateTagUseCase createTagUseCase;
   final UpdateTagUseCase updateTagUseCase;
   final DeleteTagUseCase deleteTagUseCase;
@@ -47,7 +47,7 @@ class TagProvider {
     return updateTagUseCase(data);
   }
 
-  Future<bool> delete(TagModel tag) async {
+  Future<bool> delete(TagEntity tag) async {
     unawaited(analytics.log(AnalyticsEvent.deleteTag(tag.path)));
     return deleteTagUseCase(tag);
   }

@@ -5,7 +5,7 @@ import 'package:iirc/domain.dart';
 import '../auth/auth_mock_impl.dart';
 
 class UsersMockImpl implements UsersRepository {
-  static final UserModel user = UserModel(
+  static final UserEntity user = UserEntity(
     id: AuthMockImpl.id,
     path: '/users/${AuthMockImpl.id}',
     email: faker.internet.disposableEmail(),
@@ -16,11 +16,11 @@ class UsersMockImpl implements UsersRepository {
   );
 
   @override
-  Future<String> create(AccountModel account) async => user.id;
+  Future<String> create(AccountEntity account) async => user.id;
 
   @override
   Future<bool> update(UpdateUserData user) async => true;
 
   @override
-  Future<UserModel?> fetch(String uid) async => user;
+  Future<UserEntity?> fetch(String uid) async => user;
 }

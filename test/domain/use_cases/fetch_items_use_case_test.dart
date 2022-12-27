@@ -14,14 +14,14 @@ void main() {
     tearDown(() => reset(itemsRepository));
 
     test('should fetch items', () {
-      final TagModel tag = TagsMockImpl.generateTag();
-      final NormalizedItemModelList expectedItems = <NormalizedItemModel>[
+      final TagEntity tag = TagsMockImpl.generateTag();
+      final NormalizedItemEntityList expectedItems = <NormalizedItemEntity>[
         ItemsMockImpl.generateNormalizedItem(tag: tag)
       ];
 
       when(() => itemsRepository.fetch(any()))
-          .thenAnswer((_) => Stream<ItemModelList>.value(expectedItems.asItemModelList));
-      when(() => tagsRepository.fetch(any())).thenAnswer((_) => Stream<TagModelList>.value(<TagModel>[tag]));
+          .thenAnswer((_) => Stream<ItemEntityList>.value(expectedItems.asItemEntityList));
+      when(() => tagsRepository.fetch(any())).thenAnswer((_) => Stream<TagEntityList>.value(<TagEntity>[tag]));
 
       expectLater(useCase('1'), emits(expectedItems));
     });
@@ -36,10 +36,10 @@ void main() {
       final Exception expectedError = Exception('an error');
 
       when(() => itemsRepository.fetch(any())).thenAnswer(
-        (_) => Stream<ItemModelList>.error(expectedError),
+        (_) => Stream<ItemEntityList>.error(expectedError),
       );
       when(() => tagsRepository.fetch(any())).thenAnswer(
-        (_) => Stream<TagModelList>.error(expectedError),
+        (_) => Stream<TagEntityList>.error(expectedError),
       );
 
       expect(useCase('1'), emitsError(expectedError));

@@ -14,7 +14,7 @@ void main() {
   group('UpdateItemPage', () {
     final Finder updateItemPage = find.byType(UpdateItemPage);
     final NavigatorObserver navigatorObserver = MockNavigatorObserver();
-    final TagViewModel dummyTag = TagModel(
+    final TagViewModel dummyTag = TagEntity(
       id: '1',
       color: 0xF,
       description: 'description',
@@ -99,7 +99,7 @@ extension on WidgetTester {
           path: item.path,
           description: 'description',
           date: DateTime(1),
-          tag: TagModelReference(id: tag.id, path: tag.path),
+          tag: TagReferenceEntity(id: tag.id, path: tag.path),
         ),
       ),
     ).called(1);

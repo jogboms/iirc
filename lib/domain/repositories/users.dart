@@ -1,11 +1,11 @@
+import '../entities/account_entity.dart';
 import '../entities/update_user_data.dart';
-import '../models/account.dart';
-import '../models/user.dart';
+import '../entities/user_entity.dart';
 
 abstract class UsersRepository {
-  Future<String> create(AccountModel account);
+  Future<String> create(AccountEntity account);
 
   Future<bool> update(UpdateUserData user);
 
-  Future<UserModel?> fetch(String uid);
+  Future<UserEntity?> fetch(String uid);
 }

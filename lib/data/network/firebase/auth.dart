@@ -90,10 +90,10 @@ class Auth {
     await _googleSignIn.signOut();
   }
 
-  FireUser? _mapFirebaseUserToUser(User? _user) {
-    if (_user == null) {
+  FireUser? _mapFirebaseUserToUser(User? user) {
+    if (user == null) {
       return null;
     }
-    return FireUser(_user);
+    return FireUser(user);
   }
 }

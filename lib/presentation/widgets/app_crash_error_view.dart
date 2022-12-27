@@ -1,6 +1,4 @@
-// app_crash_error_view
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 
 import '../theme.dart';
 import '../utils.dart';

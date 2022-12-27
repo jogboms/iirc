@@ -35,8 +35,8 @@ void main() {
     });
 
     testWidgets('should show details of item', (WidgetTester tester) async {
-      final TagModel tag = TagsMockImpl.generateTag();
-      final NormalizedItemModel item = ItemsMockImpl.generateNormalizedItem(tag: tag);
+      final TagEntity tag = TagsMockImpl.generateTag();
+      final NormalizedItemEntity item = ItemsMockImpl.generateNormalizedItem(tag: tag);
 
       await tester.pumpWidget(
         createApp(
@@ -58,7 +58,7 @@ void main() {
     });
 
     testWidgets('should navigate to create item screen on create button tap', (WidgetTester tester) async {
-      final NormalizedItemModel item = ItemsMockImpl.generateNormalizedItem();
+      final NormalizedItemEntity item = ItemsMockImpl.generateNormalizedItem();
 
       await tester.pumpWidget(
         createApp(
@@ -83,7 +83,7 @@ void main() {
     });
 
     testWidgets('should navigate to update item screen on update button tap', (WidgetTester tester) async {
-      final NormalizedItemModel item = ItemsMockImpl.generateNormalizedItem();
+      final NormalizedItemEntity item = ItemsMockImpl.generateNormalizedItem();
 
       await tester.pumpWidget(
         createApp(

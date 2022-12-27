@@ -15,7 +15,7 @@ Future<void> main() async {
 
     setUpAll(() {
       registerFallbackValue(FakeUpdateUserData());
-      registerFallbackValue(FakeAccountModel());
+      registerFallbackValue(FakeAccountEntity());
     });
 
     tearDown(mockUseCases.reset);
@@ -43,8 +43,8 @@ Future<void> main() async {
 
     group('AuthStateNotifier', () {
       group('Sign In', () {
-        final AccountModel dummyAccount = AuthMockImpl.generateAccount();
-        final UserModel dummyUser = UsersMockImpl.user;
+        final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
+        final UserEntity dummyUser = UsersMockImpl.user;
 
         setUp(() {
           when(mockUseCases.signInUseCase.call).thenAnswer((_) async => dummyAccount);

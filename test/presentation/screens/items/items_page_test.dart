@@ -81,19 +81,19 @@ void main() {
       // Find all tags
       for (final TagViewModel tag in expectedTags) {
         expect(find.byKey(Key(tag.id)).descendantOf(itemsPage), findsOneWidget);
-        expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
+        expect(find.text('#${tag.title.capitalize()}'), findsOneWidget);
       }
     });
 
     testWidgets('should show unique list of items', (WidgetTester tester) async {
-      final TagModel tag = TagsMockImpl.generateTag();
+      final TagEntity tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
         (int index) =>
             (index.isEven ? ItemsMockImpl.generateNormalizedItem() : ItemsMockImpl.generateNormalizedItem(tag: tag))
                 .asViewModel,
       );
-      final Set<TagModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
+      final Set<TagEntity> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
       await tester.pumpWidget(
         createApp(
@@ -113,7 +113,7 @@ void main() {
       await tester.pump();
 
       // Find all items
-      for (final TagModel tag in uniqueTags) {
+      for (final TagEntity tag in uniqueTags) {
         final ItemViewModel item = expectedItems.firstWhere((ItemViewModel element) => element.tag.id == tag.id);
         expect(find.byKey(Key(item.id)).descendantOf(itemsPage), findsOneWidget);
         expect(find.text(item.description), findsOneWidget);

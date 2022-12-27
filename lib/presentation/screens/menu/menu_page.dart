@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
 import '../../state.dart';
+import '../../utils.dart';
 import '../calendar/calendar_page.dart';
 import '../insights/insights_page.dart';
 import '../items/create_item_page.dart';
@@ -47,6 +47,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, _) => MenuPageDataView(
             key: dataViewKey,
+            l10n: context.l10n,
             analytics: ref.read(analyticsProvider),
             controller: ref.read(menuPageItemProvider),
           ),
@@ -56,8 +57,9 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
 
 @visibleForTesting
 class MenuPageDataView extends StatefulWidget {
-  const MenuPageDataView({super.key, required this.analytics, required this.controller});
+  const MenuPageDataView({super.key, required this.l10n, required this.analytics, required this.controller});
 
+  final L10n l10n;
   final Analytics analytics;
   final TabController controller;
 
@@ -71,22 +73,22 @@ class MenuPageDataViewState extends State<MenuPageDataView> {
 
   Map<MenuPageItem, TabRouteView> get tabRouteViews => <MenuPageItem, TabRouteView>{
         MenuPageItem.items: TabRouteView(
-          L10n.current.itemsCaption,
+          widget.l10n.itemsCaption,
           const Icon(Icons.list_outlined),
           const ItemsPage(key: PageStorageKey<String>('items')),
         ),
         MenuPageItem.calendar: TabRouteView(
-          L10n.current.calendarCaption,
+          widget.l10n.calendarCaption,
           const Icon(Icons.calendar_today_outlined),
           const CalendarPage(key: PageStorageKey<String>('calendar')),
         ),
         MenuPageItem.insights: TabRouteView(
-          L10n.current.insightsCaption,
+          widget.l10n.insightsCaption,
           const Icon(Icons.insights_outlined),
           const InsightsPage(key: PageStorageKey<String>('insights')),
         ),
         MenuPageItem.more: TabRouteView(
-          L10n.current.moreCaption,
+          widget.l10n.moreCaption,
           const Icon(Icons.more_horiz),
           const MorePage(key: PageStorageKey<String>('more')),
         ),

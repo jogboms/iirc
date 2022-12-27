@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../models/account.dart';
+import '../entities/account_entity.dart';
 import '../repositories/auth.dart';
 
 class SignInUseCase {
@@ -8,8 +8,8 @@ class SignInUseCase {
 
   final AuthRepository _auth;
 
-  Future<AccountModel> call() async {
-    final Completer<AccountModel> completer = Completer<AccountModel>();
+  Future<AccountEntity> call() async {
+    final Completer<AccountEntity> completer = Completer<AccountEntity>();
 
     late StreamSubscription<void> sub;
     sub = _auth.onAuthStateChanged.where((String? id) => id != null).listen(

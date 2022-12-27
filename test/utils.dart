@@ -176,13 +176,13 @@ extension UniqueByExtension<E> on Iterable<E> {
       fold(<U>{}, (Set<U> previousValue, E element) => <U>{...previousValue, fn(element)});
 }
 
-extension TagModelViewModelExtensions on TagModel {
+extension TagEntityViewModelExtensions on TagEntity {
   TagViewModel get asViewModel => TagViewModel.fromTag(this);
 }
 
-extension ItemModelListExtensions on ItemViewModelList {
-  ItemModelList get asItemModelList => map(
-        (ItemViewModel e) => ItemModel(
+extension ItemViewModelListExtensions on ItemViewModelList {
+  ItemEntityList get asItemEntityList => map(
+        (ItemViewModel e) => ItemEntity(
           id: e.id,
           path: e.path,
           description: e.description,
@@ -194,9 +194,9 @@ extension ItemModelListExtensions on ItemViewModelList {
       ).toList(growable: false);
 }
 
-extension NormalizedItemModelListExtensions on NormalizedItemModelList {
-  ItemModelList get asItemModelList => map(
-        (NormalizedItemModel e) => ItemModel(
+extension NormalizedItemEntityListExtensions on NormalizedItemEntityList {
+  ItemEntityList get asItemEntityList => map(
+        (NormalizedItemEntity e) => ItemEntity(
           id: e.id,
           path: e.path,
           description: e.description,
@@ -208,13 +208,13 @@ extension NormalizedItemModelListExtensions on NormalizedItemModelList {
       ).toList(growable: false);
 }
 
-extension NormalizedItemModelViewModelExtensions on NormalizedItemModel {
+extension NormalizedItemEntityViewModelExtensions on NormalizedItemEntity {
   ItemViewModel get asViewModel => ItemViewModel.fromItem(this);
 }
 
-extension TagModelCopyWith on TagModel {
-  TagModel copyWith({String? title, String? description}) {
-    return TagModel(
+extension TagEntityCopyWith on TagEntity {
+  TagEntity copyWith({String? title, String? description}) {
+    return TagEntity(
       id: id,
       path: path,
       title: title ?? this.title,

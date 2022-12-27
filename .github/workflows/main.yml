@@ -41,7 +41,7 @@ jobs:
       - run: flutter doctor
       - run: flutter pub get
       - run: flutter format --set-exit-if-changed -l 120 lib
-      - run: flutter packages pub run intl_utils:generate
+      - run: flutter gen-l10n
       - run: flutter analyze lib
       - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
 

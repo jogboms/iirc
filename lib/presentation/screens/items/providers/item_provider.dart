@@ -31,7 +31,7 @@ class ItemProvider {
   });
 
   final Analytics analytics;
-  final Future<UserModel> Function() fetchUser;
+  final Future<UserEntity> Function() fetchUser;
   final CreateItemUseCase createItemUseCase;
   final UpdateItemUseCase updateItemUseCase;
   final DeleteItemUseCase deleteItemUseCase;

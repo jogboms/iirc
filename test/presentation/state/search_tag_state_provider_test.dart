@@ -10,23 +10,23 @@ Future<void> main() async {
   group('SearchTagStateProvider', () {
     late ProviderContainer container;
 
-    final TagModel tag = TagsMockImpl.generateTag();
-    final List<NormalizedItemModel> expectedItems = <NormalizedItemModel>[
+    final TagEntity tag = TagsMockImpl.generateTag();
+    final List<NormalizedItemEntity> expectedItems = <NormalizedItemEntity>[
       ItemsMockImpl.generateNormalizedItem(tag: tag.copyWith(title: 'Alpha', description: 'Mango')),
       ItemsMockImpl.generateNormalizedItem(tag: tag.copyWith(title: 'Beta', description: 'Orange')),
     ];
 
     tearDown(mockUseCases.reset);
 
-    ProviderBase<List<NormalizedItemModel>> createProvider() {
+    ProviderBase<List<NormalizedItemEntity>> createProvider() {
       container = createProviderContainer();
       addTearDown(() => container.dispose());
 
-      final AutoDisposeProvider<List<NormalizedItemModel>> provider = Provider.autoDispose(
-        (AutoDisposeProviderRef<Object?> ref) => filterBySearchTagQuery<NormalizedItemModel>(
+      final AutoDisposeProvider<List<NormalizedItemEntity>> provider = Provider.autoDispose(
+        (AutoDisposeProviderRef<Object?> ref) => filterBySearchTagQuery<NormalizedItemEntity>(
           ref,
           elements: expectedItems,
-          byTag: (NormalizedItemModel item) => item.tag,
+          byTag: (NormalizedItemEntity item) => item.tag,
         ),
       );
 
@@ -38,7 +38,7 @@ Future<void> main() async {
     }
 
     test('should search by title', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = 'Alpha';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.title;
@@ -46,14 +46,14 @@ Future<void> main() async {
 
       expect(
         container.read(provider),
-        <NormalizedItemModel>[
+        <NormalizedItemEntity>[
           expectedItems[0],
         ],
       );
     });
 
     test('should search by title case-insensitive', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = 'alpha';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.title;
@@ -61,14 +61,14 @@ Future<void> main() async {
 
       expect(
         container.read(provider),
-        <NormalizedItemModel>[
+        <NormalizedItemEntity>[
           expectedItems[0],
         ],
       );
     });
 
     test('should search by description', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = 'Orange';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -76,14 +76,14 @@ Future<void> main() async {
 
       expect(
         container.read(provider),
-        <NormalizedItemModel>[
+        <NormalizedItemEntity>[
           expectedItems[1],
         ],
       );
     });
 
     test('should search by description case-insensitive', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = 'orange';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -91,14 +91,14 @@ Future<void> main() async {
 
       expect(
         container.read(provider),
-        <NormalizedItemModel>[
+        <NormalizedItemEntity>[
           expectedItems[1],
         ],
       );
     });
 
     test('should remove edge whitespaces', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = '  orange  ';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -106,14 +106,14 @@ Future<void> main() async {
 
       expect(
         container.read(provider),
-        <NormalizedItemModel>[
+        <NormalizedItemEntity>[
           expectedItems[1],
         ],
       );
     });
 
     test('should only search at specified length', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.state).state = '  o  ';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -126,10 +126,10 @@ Future<void> main() async {
     });
 
     test('should keep searching on query change', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
-      final ProviderListener<NormalizedItemModelList> listener = ProviderListener<NormalizedItemModelList>();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
+      final ProviderListener<NormalizedItemEntityList> listener = ProviderListener<NormalizedItemEntityList>();
 
-      container.listen<NormalizedItemModelList>(provider, listener);
+      container.listen<NormalizedItemEntityList>(provider, listener);
 
       container.read(searchTagQueryStateProvider.state).state = 'Orange';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.description;
@@ -140,18 +140,18 @@ Future<void> main() async {
 
       expect(
         listener.log,
-        <NormalizedItemModelList>[
-          <NormalizedItemModel>[expectedItems[1]],
-          <NormalizedItemModel>[expectedItems[0]],
+        <NormalizedItemEntityList>[
+          <NormalizedItemEntity>[expectedItems[1]],
+          <NormalizedItemEntity>[expectedItems[0]],
         ],
       );
     });
 
     test('should keep searching on mode change', () async {
-      final ProviderBase<List<NormalizedItemModel>> provider = createProvider();
-      final ProviderListener<NormalizedItemModelList> listener = ProviderListener<NormalizedItemModelList>();
+      final ProviderBase<List<NormalizedItemEntity>> provider = createProvider();
+      final ProviderListener<NormalizedItemEntityList> listener = ProviderListener<NormalizedItemEntityList>();
 
-      container.listen<NormalizedItemModelList>(provider, listener);
+      container.listen<NormalizedItemEntityList>(provider, listener);
 
       container.read(searchTagQueryStateProvider.state).state = 'Alpha';
       container.read(searchTagModeStateProvider.state).state = SearchTagMode.title;
@@ -162,9 +162,9 @@ Future<void> main() async {
 
       expect(
         listener.log,
-        <NormalizedItemModelList>[
-          <NormalizedItemModel>[expectedItems[0]],
-          <NormalizedItemModel>[],
+        <NormalizedItemEntityList>[
+          <NormalizedItemEntity>[expectedItems[0]],
+          <NormalizedItemEntity>[],
         ],
       );
     });

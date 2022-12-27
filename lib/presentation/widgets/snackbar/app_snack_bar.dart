@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:iirc/core.dart';
 
 import '../../theme.dart';
+import '../../utils.dart';
 import '../loading_spinner.dart';
 import 'snack_bar_provider.dart';
 
@@ -55,7 +55,7 @@ class AppSnackBar {
     bool dismissible = false,
   }) =>
       _show(
-        value ?? L10n.of(_context).loadingMessage,
+        value ?? _context.l10n.loadingMessage,
         key: loadingKey,
         color: color ?? Colors.black,
         alignment: alignment,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iirc/core.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
@@ -44,13 +43,10 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
         darkTheme: themeBuilder(ThemeData.dark()),
         onGenerateTitle: (BuildContext context) => context.l10n.appName,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          L10n.delegate,
+          ...L10n.localizationsDelegates,
           _ResetIntlUtilLocaleLocalizationDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: L10n.delegate.supportedLocales,
+        supportedLocales: L10n.supportedLocales,
         builder: (_, Widget? child) => SnackBarProvider(navigatorKey: navigatorKey, child: child!),
         home: widget.home ?? const OnboardingPage(isColdStart: true),
         navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],

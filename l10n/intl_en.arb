@@ -11,6 +11,13 @@
   "createItemCaption": "Create Item",
   "createTagCaption": "Create Tag",
   "itemsCountCaption": "{howMany, plural, one{1 item} other{{howMany} items}}",
+  "@itemsCountCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
   "selectTagColorCaption": "Select tag color",
   "submitCaption": "Submit",
   "titleLabel": "Title",

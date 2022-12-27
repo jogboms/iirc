@@ -17,7 +17,7 @@ test_coverage:
 	fvm flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
 clean_coverage:
-	lcov --remove coverage/lcov.info 'lib/generated/*' 'lib/**/*_mock_impl.dart' 'lib/presentation/theme/*' 'lib/presentation/constants/*' -o coverage/lcov.info
+	lcov --remove coverage/lcov.info 'lib/**/*_mock_impl.dart' 'lib/presentation/theme/*' 'lib/presentation/constants/*' -o coverage/lcov.info
 
 build_coverage:
 	make test_coverage && make clean_coverage && genhtml -o coverage coverage/lcov.info
@@ -26,7 +26,7 @@ open_coverage:
 	make build_coverage && open coverage/index.html
 
 generate_intl:
-	fvm flutter packages pub run intl_utils:generate
+	fvm flutter gen-l10n
 
 build_runner_build:
 	fvm flutter packages pub run build_runner build --delete-conflicting-outputs

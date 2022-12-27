@@ -23,7 +23,6 @@ dependencies:
   flutter_riverpod: ^1.0.4
   google_sign_in: ^5.4.2
   intl: ^0.17.0
-  intl_utils: ^2.7.0
   logging: ^1.1.0
   o_color_picker: ^1.0.2
   package_info_plus: ^3.0.2
@@ -47,6 +46,7 @@ dev_dependencies:
   mocktail: ^0.3.0
 
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
@@ -71,9 +71,3 @@ flutter_icons:
   ios: true
   image_path: "assets/ic_launcher.png"
   remove_alpha_ios: true
-
-flutter_intl:
-  enabled: true
-  class_name: L10n
-  main_locale: en
-  arb_dir: l10n

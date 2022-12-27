@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../network/firebase/cloud_db.dart';
 import '../../network/firebase/firebase.dart';
 import '../../network/firebase/models.dart';
-import '../derive_tag_model_from_json.dart';
+import '../derive_tag_entity_from_json.dart';
 import '../extensions.dart';
 
 class TagsFirebaseImpl implements TagsRepository {

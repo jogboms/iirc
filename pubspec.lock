@@ -163,7 +163,7 @@ packages:
     source: hosted
     version: "4.1.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -212,7 +212,7 @@ packages:
     source: hosted
     version: "8.0.0"
   device_info_plus_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: device_info_plus_platform_interface
       url: "https://pub.dartlang.org"
@@ -341,7 +341,7 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -482,7 +482,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.1"
   logging:
     dependency: "direct main"
     description:
@@ -505,7 +505,7 @@ packages:
     source: hosted
     version: "0.1.5"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       url: "https://pub.dartlang.org"
@@ -517,7 +517,7 @@ packages:
       name: mfsao
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   mime:
     dependency: transitive
     description:
@@ -561,7 +561,7 @@ packages:
     source: hosted
     version: "3.0.2"
   package_info_plus_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: package_info_plus_platform_interface
       url: "https://pub.dartlang.org"
@@ -589,7 +589,7 @@ packages:
     source: hosted
     version: "3.1.0"
   plugin_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"

@@ -20,8 +20,9 @@ const MaterialColor _kWhiteColor = MaterialColor(
 );
 const double _kIconSize = 28.0;
 
-class _AppTextTheme {
-  const _AppTextTheme._();
+@visibleForTesting
+class AppTextTheme {
+  const AppTextTheme._();
 
   final TextStyle body = const TextStyle(fontSize: 14.0, fontWeight: AppFontWeight.regular);
   final TextStyle button = const TextStyle(fontSize: 15.0, fontWeight: AppFontWeight.semibold);
@@ -32,8 +33,9 @@ class _AppTextTheme {
   final TextStyle error = const TextStyle(fontSize: 12.0, color: _kBorderSideErrorColor);
 }
 
-class _AppColorTheme {
-  const _AppColorTheme._();
+@visibleForTesting
+class AppColorTheme {
+  const AppColorTheme._();
 
   final MaterialColor primaryColor = Colors.indigo;
   final MaterialColor hintColor = _kHintColor;
@@ -51,8 +53,8 @@ class _AppColorTheme {
 class AppTheme extends ThemeExtension<AppTheme> {
   const AppTheme._();
 
-  final _AppTextTheme text = const _AppTextTheme._();
-  final _AppColorTheme color = const _AppColorTheme._();
+  final AppTextTheme text = const AppTextTheme._();
+  final AppColorTheme color = const AppColorTheme._();
 
   final BorderRadius textFieldBorderRadius = AppBorderRadius.c8;
 

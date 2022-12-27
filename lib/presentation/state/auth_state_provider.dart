@@ -115,23 +115,25 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 }
 
-enum _AuthStateType { idle, loading, error, complete }
+@visibleForTesting
+enum AuthStateType { idle, loading, error, complete }
 
 class AuthState with EquatableMixin {
-  const AuthState(this._type);
+  const AuthState(this.type);
 
   factory AuthState.error(String error, [AuthErrorStateReason reason]) = AuthErrorState;
 
   factory AuthState.reason(AuthErrorStateReason reason) => AuthState.error('', reason);
 
-  static const AuthState idle = AuthState(_AuthStateType.idle);
-  static const AuthState loading = AuthState(_AuthStateType.loading);
-  static const AuthState complete = AuthState(_AuthStateType.complete);
+  static const AuthState idle = AuthState(AuthStateType.idle);
+  static const AuthState loading = AuthState(AuthStateType.loading);
+  static const AuthState complete = AuthState(AuthStateType.complete);
 
-  final _AuthStateType _type;
+  @visibleForTesting
+  final AuthStateType type;
 
   @override
-  List<Object> get props => [_type];
+  List<Object> get props => [type];
 }
 
 enum AuthErrorStateReason {
@@ -144,7 +146,7 @@ enum AuthErrorStateReason {
 }
 
 class AuthErrorState extends AuthState {
-  const AuthErrorState(this.error, [this.reason = AuthErrorStateReason.message]) : super(_AuthStateType.error);
+  const AuthErrorState(this.error, [this.reason = AuthErrorStateReason.message]) : super(AuthStateType.error);
 
   final String error;
   final AuthErrorStateReason reason;

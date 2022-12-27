@@ -50,7 +50,7 @@ class ItemsTagsListView extends StatelessWidget {
                   final TagViewModel tag = tags.elementAt(index);
                   return ActionChip(
                     key: Key(tag.id),
-                    label: Text('#' + tag.title.capitalize()),
+                    label: Text('#${tag.title.capitalize()}'),
                     elevation: 0,
                     shape: const RoundedRectangleBorder(borderRadius: AppBorderRadius.c6),
                     visualDensity: VisualDensity.compact,

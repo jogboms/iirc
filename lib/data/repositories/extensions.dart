@@ -39,7 +39,7 @@ extension FetchEntriesCloudDbCollectionExtensions on CloudDbCollection {
   static const String entriesCollectionName = 'entries';
 
   String deriveEntriesPath(String userId, [String? id]) =>
-      '$path/$userId/$entriesCollectionName' + (id != null ? '/$id' : '');
+      '$path/$userId/$entriesCollectionName${id != null ? '/$id' : ''}';
 
   Stream<List<T>> fetchEntries<T>({
     required String userId,

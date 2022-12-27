@@ -81,7 +81,7 @@ void main() {
       // Find all tags
       for (final TagViewModel tag in expectedTags) {
         expect(find.byKey(Key(tag.id)).descendantOf(itemsPage), findsOneWidget);
-        expect(find.text('#' + tag.title.capitalize()), findsOneWidget);
+        expect(find.text('#${tag.title.capitalize()}'), findsOneWidget);
       }
     });
 

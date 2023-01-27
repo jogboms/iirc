@@ -27,7 +27,10 @@ void main() {
       dummyTag,
       ...TagViewModelList.generate(3, (_) => TagsMockImpl.generateTag().asViewModel),
     ];
-    final ItemViewModel dummyItem = ItemsMockImpl.generateNormalizedItem(id: '1', tag: dummyTag).asViewModel;
+    final ItemViewModel dummyItem = ItemsMockImpl.generateNormalizedItem(
+      id: '1',
+      tag: dummyTag.asTagEntity,
+    ).asViewModel;
 
     setUpAll(() {
       registerFallbackValue(FakeRoute());
@@ -99,7 +102,8 @@ extension on WidgetTester {
           path: item.path,
           description: 'description',
           date: DateTime(1),
-          tag: TagReferenceEntity(id: tag.id, path: tag.path),
+          tagId: tag.id,
+          tagPath: tag.path,
         ),
       ),
     ).called(1);

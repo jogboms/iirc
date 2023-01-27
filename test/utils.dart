@@ -180,18 +180,32 @@ extension TagEntityViewModelExtensions on TagEntity {
   TagViewModel get asViewModel => TagViewModel.fromTag(this);
 }
 
+extension TagViewModelExtensions on TagViewModel {
+  TagEntity get asTagEntity => TagEntity(
+        id: id,
+        path: path,
+        description: description,
+        color: color,
+        title: title,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
+extension ItemViewModelExtensions on ItemViewModel {
+  ItemEntity get asItemEntity => ItemEntity(
+        id: id,
+        path: path,
+        description: description,
+        date: date,
+        tag: TagReferenceEntity(id: tag.id, path: tag.path),
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
 extension ItemViewModelListExtensions on ItemViewModelList {
-  ItemEntityList get asItemEntityList => map(
-        (ItemViewModel e) => ItemEntity(
-          id: e.id,
-          path: e.path,
-          description: e.description,
-          date: e.date,
-          tag: e.tag.reference,
-          createdAt: e.createdAt,
-          updatedAt: e.updatedAt,
-        ),
-      ).toList(growable: false);
+  ItemEntityList get asItemEntityList => map((ItemViewModel e) => e.asItemEntity).toList(growable: false);
 }
 
 extension NormalizedItemEntityListExtensions on NormalizedItemEntityList {

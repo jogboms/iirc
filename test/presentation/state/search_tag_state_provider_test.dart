@@ -26,7 +26,8 @@ Future<void> main() async {
         (AutoDisposeProviderRef<Object?> ref) => filterBySearchTagQuery<NormalizedItemEntity>(
           ref,
           elements: expectedItems,
-          byTag: (NormalizedItemEntity item) => item.tag,
+          byTitle: (NormalizedItemEntity item) => item.tag.title,
+          byDescription: (NormalizedItemEntity item) => item.tag.description,
         ),
       );
 

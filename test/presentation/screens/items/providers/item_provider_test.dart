@@ -54,7 +54,8 @@ Future<void> main() async {
         CreateItemData(
           description: 'description',
           date: DateTime(0),
-          tag: const TagReferenceEntity(id: '1', path: 'path'),
+          tagId: '1',
+          tagPath: 'path',
         ),
       );
 
@@ -69,7 +70,8 @@ Future<void> main() async {
         final CreateItemData createItemData = CreateItemData(
           description: 'description',
           date: DateTime(0),
-          tag: const TagReferenceEntity(id: '1', path: 'path'),
+          tagId: '1',
+          tagPath: 'path',
         );
         final String itemId = await createProvider().create(createItemData);
 
@@ -92,7 +94,8 @@ Future<void> main() async {
           path: 'path',
           description: 'description',
           date: DateTime(0),
-          tag: const TagReferenceEntity(id: '1', path: 'path'),
+          tagId: '1',
+          tagPath: 'path',
         );
         await createProvider().update(updateItemData);
 

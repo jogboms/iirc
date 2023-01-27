@@ -14,7 +14,8 @@ void main() {
     final CreateItemData dummyCreateItemData = CreateItemData(
       description: dummyItem.description,
       date: dummyItem.date,
-      tag: dummyItem.tag,
+      tagId: dummyItem.tag.id,
+      tagPath: dummyItem.tag.path,
     );
 
     setUpAll(() {

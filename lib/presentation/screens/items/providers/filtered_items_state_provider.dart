@@ -15,7 +15,8 @@ final _filteredItemsProvider = FutureProvider.autoDispose<FilteredItemsState>((r
     items: filterBySearchTagQuery(
       ref,
       elements: items.uniqueByTag(),
-      byTag: (element) => element.tag,
+      byTitle: (element) => element.tag.title,
+      byDescription: (element) => element.tag.description,
     ),
   );
 });

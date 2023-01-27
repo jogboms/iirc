@@ -1,23 +1,24 @@
 import 'dart:ui';
 
+import 'package:equatable/equatable.dart';
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
 
 import '../utils/tag_color_scheme.dart';
 
-class TagViewModel extends TagEntity {
+class TagViewModel with EquatableMixin {
   @visibleForTesting
   const TagViewModel({
-    required super.id,
-    required super.path,
-    required super.title,
-    required super.description,
-    required super.color,
-    required super.createdAt,
-    required super.updatedAt,
+    required this.id,
+    required this.path,
+    required this.title,
+    required this.description,
+    required this.color,
     required this.brightness,
     required this.foregroundColor,
     required this.backgroundColor,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   static TagViewModel fromTag(TagEntity tag) {
@@ -29,17 +30,38 @@ class TagViewModel extends TagEntity {
       title: tag.title,
       description: tag.description,
       color: tag.color,
-      createdAt: tag.createdAt,
-      updatedAt: tag.updatedAt,
       brightness: tagColorScheme.brightness,
       foregroundColor: tagColorScheme.foregroundColor,
       backgroundColor: tagColorScheme.backgroundColor,
+      createdAt: tag.createdAt,
+      updatedAt: tag.updatedAt,
     );
   }
 
+  final String id;
+  final String path;
+  final String title;
+  final String description;
+  final int color;
   final Brightness brightness;
   final Color foregroundColor;
   final Color backgroundColor;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+
+  @override
+  List<Object?> get props => <Object?>[
+        id,
+        path,
+        title,
+        description,
+        color,
+        brightness,
+        foregroundColor,
+        backgroundColor,
+        createdAt,
+        updatedAt,
+      ];
 }
 
 typedef TagViewModelList = List<TagViewModel>;

@@ -1,4 +1,3 @@
-import '../entities/tag_entity.dart';
 import '../repositories/tags.dart';
 
 class DeleteTagUseCase {
@@ -6,5 +5,5 @@ class DeleteTagUseCase {
 
   final TagsRepository _tags;
 
-  Future<bool> call(TagEntity tag) => _tags.delete(tag.path);
+  Future<bool> call(String path) => _tags.delete(path);
 }

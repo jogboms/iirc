@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-import 'tag_reference_entity.dart';
-
 class UpdateItemData with EquatableMixin {
   const UpdateItemData({
     required this.id,
     required this.path,
     required this.description,
     required this.date,
-    required this.tag,
+    required this.tagId,
+    required this.tagPath,
   });
 
   final String id;
   final String path;
   final String description;
   final DateTime date;
-  final TagReferenceEntity tag;
+  final String tagId;
+  final String tagPath;
 
   @override
-  List<Object?> get props => <Object?>[id, path, description, date, tag];
+  List<Object?> get props => <Object?>[id, path, description, date, tagId, tagPath];
 }

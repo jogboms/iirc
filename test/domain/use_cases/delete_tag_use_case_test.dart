@@ -17,13 +17,13 @@ void main() {
     test('should delete a tag', () {
       when(() => tagsRepository.delete(any())).thenAnswer((_) async => true);
 
-      expect(useCase(dummyTag), completion(true));
+      expect(useCase(dummyTag.path), completion(true));
     });
 
     test('should bubble delete errors', () {
       when(() => tagsRepository.delete(any())).thenThrow(Exception('an error'));
 
-      expect(() => useCase(dummyTag), throwsException);
+      expect(() => useCase(dummyTag.path), throwsException);
     });
   });
 }

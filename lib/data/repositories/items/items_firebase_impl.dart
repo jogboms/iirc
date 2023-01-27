@@ -27,7 +27,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
     await items.db.doc(items.deriveEntriesPath(userId, id)).set(<String, dynamic>{
       'description': item.description,
       'date': CloudTimestamp.fromDate(item.date.toUtc()),
-      'tag': items.db.doc(item.tag.path),
+      'tag': items.db.doc(item.tagPath),
       'createdAt': CloudValue.serverTimestamp(),
     });
     return id;
@@ -44,7 +44,7 @@ class ItemsFirebaseImpl implements ItemsRepository {
     await items.db.doc(item.path).update(<String, dynamic>{
       'description': item.description,
       'date': CloudTimestamp.fromDate(item.date.toUtc()),
-      'tag': items.db.doc(item.tag.path),
+      'tag': items.db.doc(item.tagPath),
       'updatedAt': CloudValue.serverTimestamp(),
     });
     return true;

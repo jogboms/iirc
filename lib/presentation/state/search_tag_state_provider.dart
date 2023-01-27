@@ -1,6 +1,5 @@
 // ignore_for_file: always_specify_types
 
-import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
 enum SearchTagMode { title, description }
@@ -12,19 +11,19 @@ final searchTagModeStateProvider = StateProvider.autoDispose<SearchTagMode>((ref
 List<T> filterBySearchTagQuery<T>(
   AutoDisposeRef ref, {
   required List<T> elements,
-  required TagEntity Function(T) byTag,
+  required String Function(T) byTitle,
+  required String Function(T) byDescription,
 }) {
   final String query = ref.watch(searchTagQueryStateProvider).trim().toLowerCase();
   final SearchTagMode mode = ref.watch(searchTagModeStateProvider);
 
   return elements.where((element) {
     if (query.length > 1) {
-      final tag = byTag(element);
       switch (mode) {
         case SearchTagMode.title:
-          return tag.title.toLowerCase().contains(query);
+          return byTitle(element).toLowerCase().contains(query);
         case SearchTagMode.description:
-          return tag.description.toLowerCase().contains(query);
+          return byDescription(element).toLowerCase().contains(query);
       }
     }
 

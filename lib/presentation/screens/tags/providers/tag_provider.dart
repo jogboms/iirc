@@ -6,6 +6,7 @@ import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../../models.dart';
 import '../../../state.dart';
 
 final tagProvider = Provider.autoDispose<TagProvider>((ref) {
@@ -47,8 +48,8 @@ class TagProvider {
     return updateTagUseCase(data);
   }
 
-  Future<bool> delete(TagEntity tag) async {
+  Future<bool> delete(TagViewModel tag) async {
     unawaited(analytics.log(AnalyticsEvent.deleteTag(tag.path)));
-    return deleteTagUseCase(tag);
+    return deleteTagUseCase(tag.path);
   }
 }

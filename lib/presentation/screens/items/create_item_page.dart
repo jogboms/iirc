@@ -65,7 +65,8 @@ class CreateItemPageState extends State<CreateItemPage> {
               CreateItemData(
                 description: data.description,
                 date: data.date,
-                tag: data.tag.reference,
+                tagId: data.tag.id,
+                tagPath: data.tag.path,
               ),
             );
 

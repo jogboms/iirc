@@ -4,6 +4,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 
 import '../../constants/app_routes.dart';
+import '../../models.dart';
 import '../../state.dart';
 import '../../utils.dart';
 import '../../widgets.dart';
@@ -13,14 +14,14 @@ import 'tag_entry_form.dart';
 class UpdateTagPage extends StatelessWidget {
   const UpdateTagPage({super.key, required this.tag});
 
-  static PageRoute<void> route({required TagEntity tag}) {
+  static PageRoute<void> route({required TagViewModel tag}) {
     return MaterialPageRoute<void>(
       builder: (_) => UpdateTagPage(tag: tag),
       settings: const RouteSettings(name: AppRoutes.updateTag),
     );
   }
 
-  final TagEntity tag;
+  final TagViewModel tag;
 
   @override
   Widget build(BuildContext context) {

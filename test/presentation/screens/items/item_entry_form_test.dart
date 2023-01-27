@@ -76,7 +76,7 @@ void main() {
           date: DateTime(0),
           tag: dummyTagViewModel,
         ).toString(),
-        'ItemEntryData(description, 0000-01-01 00:00:00.000, TagViewModel(1, path, title, description, 15, 0000-01-01 00:00:00.000, null))',
+        'ItemEntryData(description, 0000-01-01 00:00:00.000, TagViewModel(1, path, title, description, 15, Brightness.dark, Color(0xffffffff), Color(0x0000000f), 0000-01-01 00:00:00.000, null))',
       );
     });
   });

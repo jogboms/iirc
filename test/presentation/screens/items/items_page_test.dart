@@ -93,7 +93,7 @@ void main() {
             (index.isEven ? ItemsMockImpl.generateNormalizedItem() : ItemsMockImpl.generateNormalizedItem(tag: tag))
                 .asViewModel,
       );
-      final Set<TagEntity> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
+      final Set<TagViewModel> uniqueTags = expectedItems.uniqueBy((ItemViewModel element) => element.tag);
 
       await tester.pumpWidget(
         createApp(
@@ -113,7 +113,7 @@ void main() {
       await tester.pump();
 
       // Find all items
-      for (final TagEntity tag in uniqueTags) {
+      for (final TagViewModel tag in uniqueTags) {
         final ItemViewModel item = expectedItems.firstWhere((ItemViewModel element) => element.tag.id == tag.id);
         expect(find.byKey(Key(item.id)).descendantOf(itemsPage), findsOneWidget);
         expect(find.text(item.description), findsOneWidget);

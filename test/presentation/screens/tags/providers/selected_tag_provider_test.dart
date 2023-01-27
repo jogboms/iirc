@@ -15,7 +15,7 @@ Future<void> main() async {
     );
     late final ItemViewModelList expectedItems = ItemViewModelList.generate(
       3,
-      (_) => ItemsMockImpl.generateNormalizedItem(tag: expectedTags.first).asViewModel,
+      (_) => ItemsMockImpl.generateNormalizedItem(tag: expectedTags.first.asTagEntity).asViewModel,
     );
 
     late ProviderContainer container;

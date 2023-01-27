@@ -16,7 +16,8 @@ void main() {
       path: dummyItem.path,
       description: dummyItem.description,
       date: dummyItem.date,
-      tag: dummyItem.tag,
+      tagId: dummyItem.tag.id,
+      tagPath: dummyItem.tag.path,
     );
 
     setUpAll(() {

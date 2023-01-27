@@ -1,7 +1,6 @@
 // ignore_for_file: always_specify_types
 
 import 'package:equatable/equatable.dart';
-import 'package:iirc/domain.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../../models.dart';
@@ -12,7 +11,7 @@ final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState,
   final ItemViewModelList items = await ref.watch(itemsProvider.future);
 
   return SelectedTagState(
-    tag: tags.firstWhere((TagEntity element) => element.id == id),
+    tag: tags.firstWhere((TagViewModel element) => element.id == id),
     items: items.where((ItemViewModel element) => element.tag.id == id).toList(),
   );
 });

@@ -38,7 +38,7 @@ class ItemsMockImpl extends ItemsRepository {
       path: '/items/$userId/$id',
       description: item.description,
       date: item.date,
-      tag: item.tag,
+      tag: TagReferenceEntity(id: item.tagId, path: item.tagPath),
       createdAt: clock.now(),
       updatedAt: null,
     );
@@ -70,7 +70,7 @@ extension on ItemEntity {
         path: path,
         description: update.description,
         date: update.date,
-        tag: update.tag,
+        tag: TagReferenceEntity(id: update.tagId, path: update.tagPath),
         createdAt: createdAt,
         updatedAt: clock.now(),
       );

@@ -104,11 +104,11 @@ Future<void> main() async {
         when(() => mockUseCases.deleteTagUseCase.call(any())).thenAnswer((_) async => true);
 
         final TagEntity tag = TagsMockImpl.generateTag();
-        await createProvider().delete(tag);
+        await createProvider().delete(tag.asViewModel);
 
-        final TagEntity resultingTag =
-            verify(() => mockUseCases.deleteTagUseCase.call(captureAny())).captured.first as TagEntity;
-        expect(resultingTag, tag);
+        final String resultingTagPath =
+            verify(() => mockUseCases.deleteTagUseCase.call(captureAny())).captured.first as String;
+        expect(resultingTagPath, tag.path);
       });
     });
   });

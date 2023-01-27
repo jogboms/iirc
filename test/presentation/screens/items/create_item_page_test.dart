@@ -119,7 +119,8 @@ extension on WidgetTester {
         CreateItemData(
           description: 'description',
           date: DateTime(1),
-          tag: const TagReferenceEntity(id: '1', path: 'path'),
+          tagId: '1',
+          tagPath: 'path',
         ),
       ),
     ).called(1);

@@ -38,7 +38,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
               borderRadius: context.theme.appTheme.textFieldBorderRadius,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            style: context.theme.textTheme.subtitle1,
+            style: context.theme.textTheme.titleMedium,
             clearButtonMode: OverlayVisibilityMode.editing,
             placeholder: context.l10n.searchByTagCaption,
             placeholderStyle: context.theme.inputDecorationTheme.hintStyle?.copyWith(height: 1.35),

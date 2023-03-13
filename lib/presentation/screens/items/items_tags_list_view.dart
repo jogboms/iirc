@@ -54,7 +54,7 @@ class ItemsTagsListView extends StatelessWidget {
                     elevation: 0,
                     shape: const RoundedRectangleBorder(borderRadius: AppBorderRadius.c6),
                     visualDensity: VisualDensity.compact,
-                    labelStyle: theme.textTheme.bodyText1?.copyWith(color: tag.foregroundColor),
+                    labelStyle: theme.textTheme.bodyLarge?.copyWith(color: tag.foregroundColor),
                     backgroundColor: tag.backgroundColor,
                     onPressed: () {
                       analytics.log(AnalyticsEvent.itemClick('view tag: ${tag.id}'));

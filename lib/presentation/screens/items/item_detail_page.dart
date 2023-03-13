@@ -148,13 +148,13 @@ class SelectedItemDataView extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     DateFormat.yMMMEd().format(item.date),
-                    style: theme.textTheme.subtitle2,
+                    style: theme.textTheme.titleSmall,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   item.description,
-                  style: theme.textTheme.headline6,
+                  style: theme.textTheme.titleLarge,
                 ),
               ],
             ),

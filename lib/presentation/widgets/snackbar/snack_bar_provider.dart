@@ -22,9 +22,10 @@ class SnackBarProvider extends StatefulWidget with DiagnosticableTreeMixin {
     throw FlutterError.fromParts(<DiagnosticsNode>[
       ErrorSummary('SnackBarProvider.of() called with a context that does not contain a SnackBarProvider.'),
       ErrorDescription(
-          'No App ancestor could be found starting from the context that was passed to SnackBarProvider.of(). '
-          'This usually happens when the context provided is from the same StatefulWidget as that '
-          'whose build function actually creates the App widget being sought.'),
+        'No App ancestor could be found starting from the context that was passed to SnackBarProvider.of(). '
+        'This usually happens when the context provided is from the same StatefulWidget as that '
+        'whose build function actually creates the App widget being sought.',
+      ),
       context.describeElement('The context used was')
     ]);
   }

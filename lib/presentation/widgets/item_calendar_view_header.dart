@@ -15,7 +15,7 @@ class ItemCalendarViewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
-    final ScrollPosition scrollPosition = Scrollable.of(context)!.position;
+    final ScrollPosition scrollPosition = Scrollable.of(context).position;
     final double safeArea = primary ? MediaQuery.of(context).padding.top : 0;
     final double height = kToolbarHeight + safeArea;
 

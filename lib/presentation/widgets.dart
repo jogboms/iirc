@@ -17,4 +17,3 @@ export 'widgets/snackbar/app_snack_bar.dart';
 export 'widgets/snackbar/snack_bar_provider.dart';
 export 'widgets/tag_color_box.dart';
 export 'widgets/tag_color_label.dart';
-export 'widgets/tag_color_label.dart';

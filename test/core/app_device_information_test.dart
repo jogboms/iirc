@@ -65,6 +65,7 @@ void main() {
           'tags': '',
           'type': '',
           'isPhysicalDevice': true,
+          'serialNumber': '',
           'displayMetrics': <String, dynamic>{
             'widthPx': 0.0,
             'heightPx': 0.0,

@@ -28,7 +28,7 @@ class LogoutListTile extends ConsumerWidget {
       tileColor: theme.canvasColor,
       title: Text(
         context.l10n.logoutCaption,
-        style: context.theme.textTheme.button?.copyWith(color: color),
+        style: context.theme.textTheme.labelLarge?.copyWith(color: color),
       ),
       leading: Icon(
         Icons.power_settings_new_outlined,

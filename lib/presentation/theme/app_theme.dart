@@ -84,7 +84,7 @@ ThemeData themeBuilder(
 
   final TextTheme textTheme = defaultTheme.textTheme
       .merge(
-        TextTheme(button: appTheme.text.button),
+        TextTheme(labelLarge: appTheme.text.button),
       )
       .apply(fontFamily: kAppFontFamily);
 
@@ -93,7 +93,7 @@ ThemeData themeBuilder(
   );
   final ButtonStyle buttonStyle = ButtonStyle(
     shape: MaterialStateProperty.all(buttonShape),
-    textStyle: MaterialStateProperty.all(textTheme.button),
+    textStyle: MaterialStateProperty.all(textTheme.labelLarge),
     elevation: MaterialStateProperty.all(0),
   );
 

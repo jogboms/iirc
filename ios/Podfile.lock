@@ -5,7 +5,7 @@ PODS:
   - AppAuth/Core (1.6.0)
   - AppAuth/ExternalUserAgent (1.6.0):
     - AppAuth/Core
-  - cloud_firestore (4.3.0):
+  - cloud_firestore (4.4.4):
     - Firebase/Firestore (= 10.3.0)
     - firebase_core
     - Flutter
@@ -25,15 +25,15 @@ PODS:
   - Firebase/Firestore (10.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.3.0)
-  - firebase_analytics (10.0.8):
+  - firebase_analytics (10.1.5):
     - Firebase/Analytics (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_auth (4.2.3):
+  - firebase_auth (4.2.10):
     - Firebase/Auth (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.4.0):
+  - firebase_core (2.7.1):
     - Firebase/CoreOnly (= 10.3.0)
     - Flutter
   - FirebaseAnalytics (10.3.0):
@@ -194,12 +194,12 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
-  cloud_firestore: e6d4d16c6af7ecebd7254f12c3c1bb9bc87e5aca
+  cloud_firestore: 612a89fe1210990e2ba642b850e8faf7d393eedd
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
-  firebase_analytics: b55d5b87440d85c7850067c2fec4e49748aa3291
-  firebase_auth: 7ad9a5c696d502d5bda096ea8dc996761456dc7d
-  firebase_core: 6f2f753e316765799d88568232ed59e300ff53db
+  firebase_analytics: e409b2098cace68b28209f9238cce19fce542c1b
+  firebase_auth: e94093901bee37bdba241fd8647c1d3ea6f55c8b
+  firebase_core: 1ae9f9aa76e6e1edc14fb181637ad466fd6c6fa4
   FirebaseAnalytics: 036232b6a1e2918e5f67572417be1173576245f3
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
   FirebaseCore: 988754646ab3bd4bdcb740f1bfe26b9f6c0d5f2a
@@ -207,7 +207,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: f16ed5e8e5b024eff4928bc33605df9526bda650
   FirebaseInstallations: e2f26126089dcf41e215f7b8925af8d953c7d602
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  google_sign_in_ios: 4f85eb9f937450765c8573bb85fd8cd6a5af675c
+  google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
   GoogleAppMeasurement: c7d6fff39bf2d829587d74088d582e32d75133c3
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95

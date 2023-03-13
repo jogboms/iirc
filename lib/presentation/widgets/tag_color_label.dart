@@ -16,7 +16,7 @@ class TagColorLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = context.theme;
     final TextStyle? textStyle =
-        variant == TagColorLabelVariant.normal ? theme.textTheme.caption : theme.textTheme.bodyLarge;
+        variant == TagColorLabelVariant.normal ? theme.textTheme.bodySmall : theme.textTheme.bodyLarge;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

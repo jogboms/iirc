@@ -61,5 +61,11 @@ prod_android_bundle:
 mock_web:
 	fvm flutter build web --release --dart-define=env.mode=mock
 
+dev_web:
+	fvm flutter build web --release --dart-define=env.mode=dev
+
+prod_web:
+	fvm flutter build web --release --dart-define=env.mode=prod
+
 serve_web:
 	python3 -m http.server 8000 -d ./build/web/

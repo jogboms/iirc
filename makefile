@@ -61,5 +61,11 @@ prod_android_bundle:
 mock_web:
 	fvm flutter build web --release --dart-define=env.mode=mock
 
+dev_web:
+	fvm flutter build web --release --dart-define=env.mode=dev
+
+prod_web:
+	fvm flutter build web --release --dart-define=env.mode=prod --dart-define=env.sentryDns=https://d43858cda08b4cbead5a526768575749@o1364586.ingest.sentry.io/6659048
+
 serve_web:
 	python3 -m http.server 8000 -d ./build/web/

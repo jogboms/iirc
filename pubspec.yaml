@@ -22,7 +22,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^1.0.4
-  google_sign_in: ^6.0.2
+  google_sign_in: ^5.4.2
   intl: ^0.17.0
   logging: ^1.1.1
   meta: ^1.8.0

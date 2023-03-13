@@ -118,7 +118,18 @@ class _DeviceInfo {
     DeviceInfoPlugin info, {
     DevicePlatform? platformOverride,
   }) async {
-    if (io.Platform.isAndroid || platformOverride == DevicePlatform.android) {
+    if (identical(0, 0.0) || platformOverride == DevicePlatform.web) {
+      final WebBrowserInfo web = await info.webBrowserInfo;
+      return _DeviceInfo(
+        id: web.userAgent,
+        isPhysicalDevice: true,
+        os: web.browserName.name,
+        brand: web.vendor,
+        model: web.vendorSub,
+        version: web.appVersion,
+        sdk: web.product,
+      );
+    } else if (io.Platform.isAndroid || platformOverride == DevicePlatform.android) {
       final AndroidDeviceInfo android = await info.androidInfo;
       return _DeviceInfo(
         id: android.id,
@@ -139,17 +150,6 @@ class _DeviceInfo {
         model: ios.name,
         version: ios.systemVersion,
         sdk: ios.utsname.machine,
-      );
-    } else if (identical(0, 0.0) || platformOverride == DevicePlatform.web) {
-      final WebBrowserInfo web = await info.webBrowserInfo;
-      return _DeviceInfo(
-        id: web.userAgent,
-        isPhysicalDevice: true,
-        os: web.browserName.name,
-        brand: web.vendor,
-        model: web.vendorSub,
-        version: web.appVersion,
-        sdk: web.product,
       );
     }
 

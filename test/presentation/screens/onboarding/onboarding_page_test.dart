@@ -29,7 +29,7 @@ void main() {
         createApp(
           home: const OnboardingPage(isColdStart: true),
           overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+            authStateProvider.overrideWith((_) => mockAuthStateNotifier..setState(AuthState.loading)),
           ],
         ),
       );
@@ -48,7 +48,7 @@ void main() {
         createApp(
           home: const OnboardingPage(isColdStart: false),
           overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+            authStateProvider.overrideWith((_) => mockAuthStateNotifier),
           ],
         ),
       );
@@ -69,7 +69,7 @@ void main() {
           home: const OnboardingPage(isColdStart: true),
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier..setState(AuthState.loading)),
+            authStateProvider.overrideWith((_) => mockAuthStateNotifier..setState(AuthState.loading)),
           ],
         ),
       );
@@ -92,7 +92,7 @@ void main() {
           home: const OnboardingPage(isColdStart: false),
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
-            authStateProvider.overrideWithValue(mockAuthStateNotifier),
+            authStateProvider.overrideWith((_) => mockAuthStateNotifier),
           ],
         ),
       );
@@ -117,7 +117,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
             ],
           ),
         );
@@ -139,7 +139,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
             ],
           ),
         );
@@ -161,7 +161,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWithValue(mockAuthStateNotifier),
+              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
             ],
           ),
         );

@@ -44,7 +44,7 @@ Future<void> main() async {
 
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
+          userProvider.overrideWith((_) async => dummyUser),
         ],
       );
       addTearDown(container.dispose);

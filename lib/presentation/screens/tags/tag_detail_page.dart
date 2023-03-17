@@ -79,7 +79,8 @@ class TagDetailPageState extends State<TagDetailPage> {
         },
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) =>
-              ref.watch(selectedTagStateProvider(widget.id)).when(
+              ref.watch(selectedTagProvider(widget.id)).when(
+                    skipLoadingOnReload: true,
                     data: (SelectedTagState state) => _SelectedTagDataView(
                       key: dataViewKey,
                       analytics: ref.read(analyticsProvider),

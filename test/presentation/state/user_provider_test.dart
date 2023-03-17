@@ -18,7 +18,7 @@ Future<void> main() async {
       final AccountEntity dummyAccount = AuthMockImpl.generateAccount();
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          accountProvider.overrideWithValue(AsyncData<AccountEntity>(dummyAccount)),
+          accountProvider.overrideWith((_) async => dummyAccount),
         ],
       );
       addTearDown(container.dispose);

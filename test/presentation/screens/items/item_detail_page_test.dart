@@ -42,10 +42,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) => item.asViewModel,
             ),
           ],
         ),
@@ -64,10 +62,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) => item.asViewModel,
             ),
           ],
           observers: <NavigatorObserver>[navigatorObserver],
@@ -89,12 +85,12 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) async => item.asViewModel,
             ),
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
+            tagsProvider.overrideWith(
+              (_) => Stream<TagViewModelList>.value(TagViewModelList.empty()),
+            ),
           ],
           observers: <NavigatorObserver>[navigatorObserver],
         ),
@@ -115,10 +111,8 @@ void main() {
         createApp(
           home: const ItemDetailPage(id: '1'),
           overrides: <Override>[
-            selectedItemStateProvider('1').overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncError<ItemViewModel>(expectedError),
-              ),
+            selectedItemProvider('1').overrideWith(
+              (_) async => throw expectedError,
             ),
           ],
         ),

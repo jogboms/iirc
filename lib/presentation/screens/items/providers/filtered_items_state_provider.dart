@@ -6,7 +6,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../../models.dart';
 import '../../../state.dart';
 
-final _filteredItemsProvider = FutureProvider.autoDispose<FilteredItemsState>((ref) async {
+final filteredItemsProvider = FutureProvider.autoDispose<FilteredItemsState>((ref) async {
   final tags = await ref.watch(tagsProvider.future);
   final items = await ref.watch(itemsProvider.future);
 
@@ -20,11 +20,6 @@ final _filteredItemsProvider = FutureProvider.autoDispose<FilteredItemsState>((r
     ),
   );
 });
-
-final filteredItemsStateProvider =
-    StateNotifierProvider.autoDispose<PreserveStateNotifier<FilteredItemsState>, AsyncValue<FilteredItemsState>>(
-  (ref) => PreserveStateNotifier(_filteredItemsProvider, ref),
-);
 
 class FilteredItemsState with EquatableMixin {
   const FilteredItemsState({required this.tags, required this.items});

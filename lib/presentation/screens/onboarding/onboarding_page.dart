@@ -65,7 +65,7 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
     super.initState();
 
     if (widget.isColdStart) {
-      auth.signIn();
+      Future<void>.microtask(auth.signIn);
     }
   }
 

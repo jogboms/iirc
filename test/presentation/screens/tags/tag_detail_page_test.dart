@@ -51,20 +51,17 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
-                AsyncData<SelectedTagState>(
-                  SelectedTagState(
-                    tag: tag.asViewModel,
-                    items: expectedItems,
-                  ),
-                ),
+            selectedTagProvider(tag.id).overrideWith(
+              (_) async => SelectedTagState(
+                tag: tag.asViewModel,
+                items: expectedItems,
               ),
             ),
           ],
         ),
       );
 
+      await tester.pump();
       await tester.pump();
 
       for (final ItemViewModel item in expectedItems) {
@@ -80,14 +77,10 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
-                AsyncData<SelectedTagState>(
-                  SelectedTagState(
-                    tag: tag.asViewModel,
-                    items: ItemViewModelList.empty(),
-                  ),
-                ),
+            selectedTagProvider(tag.id).overrideWith(
+              (_) async => SelectedTagState(
+                tag: tag.asViewModel,
+                items: ItemViewModelList.empty(),
               ),
             ),
           ],
@@ -110,14 +103,10 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
-                AsyncData<SelectedTagState>(
-                  SelectedTagState(
-                    tag: tag.asViewModel,
-                    items: ItemViewModelList.empty(),
-                  ),
-                ),
+            selectedTagProvider(tag.id).overrideWith(
+              (_) async => SelectedTagState(
+                tag: tag.asViewModel,
+                items: ItemViewModelList.empty(),
               ),
             ),
           ],
@@ -140,10 +129,8 @@ void main() {
         createApp(
           home: const TagDetailPage(id: '1'),
           overrides: <Override>[
-            selectedTagStateProvider('1').overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
-                AsyncError<SelectedTagState>(expectedError),
-              ),
+            selectedTagProvider('1').overrideWith(
+              (_) async => throw expectedError,
             ),
           ],
         ),

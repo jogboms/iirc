@@ -18,7 +18,7 @@ Future<void> main() async {
 
     tearDown(mockUseCases.reset);
 
-    ProviderBase<NormalizedItemEntityList> createProvider() {
+    AutoDisposeProvider<NormalizedItemEntityList> createProvider() {
       container = createProviderContainer();
       addTearDown(() => container.dispose());
 
@@ -39,7 +39,7 @@ Future<void> main() async {
     }
 
     test('should search by title', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = 'Alpha';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.title;
@@ -53,7 +53,7 @@ Future<void> main() async {
     });
 
     test('should search by title case-insensitive', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = 'alpha';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.title;
@@ -67,7 +67,7 @@ Future<void> main() async {
     });
 
     test('should search by description', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = 'Orange';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
@@ -81,7 +81,7 @@ Future<void> main() async {
     });
 
     test('should search by description case-insensitive', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = 'orange';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
@@ -95,7 +95,7 @@ Future<void> main() async {
     });
 
     test('should remove edge whitespaces', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = '  orange  ';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
@@ -109,7 +109,7 @@ Future<void> main() async {
     });
 
     test('should only search at specified length', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
       container.read(searchTagQueryStateProvider.notifier).state = '  o  ';
       container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
@@ -122,7 +122,7 @@ Future<void> main() async {
     });
 
     test('should keep searching on query change', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
       final ProviderListener<NormalizedItemEntityList> listener = ProviderListener<NormalizedItemEntityList>();
 
       container.listen<NormalizedItemEntityList>(provider, listener);
@@ -144,7 +144,7 @@ Future<void> main() async {
     });
 
     test('should keep searching on mode change', () async {
-      final ProviderBase<NormalizedItemEntityList> provider = createProvider();
+      final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
       final ProviderListener<NormalizedItemEntityList> listener = ProviderListener<NormalizedItemEntityList>();
 
       container.listen<NormalizedItemEntityList>(provider, listener);

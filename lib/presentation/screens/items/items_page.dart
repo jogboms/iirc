@@ -25,7 +25,8 @@ class ItemsPageState extends State<ItemsPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsStateProvider).when(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(filteredItemsProvider).when(
+            skipLoadingOnReload: true,
             data: (FilteredItemsState state) => _ItemsDataView(
               key: dataViewKey,
               tags: state.tags,

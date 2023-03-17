@@ -27,7 +27,7 @@ Future<void> main() async {
       addTearDown(container.dispose);
       addTearDown(listener.reset);
 
-      container.listen<AsyncValue<ItemViewModel>>(selectedItemStateProvider(testId), listener);
+      container.listen<AsyncValue<ItemViewModel>>(selectedItemProvider(testId), listener);
 
       return controller;
     }

@@ -6,7 +6,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../../models.dart';
 import '../../../state.dart';
 
-final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState, String>((ref, id) async {
+final selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState, String>((ref, id) async {
   final TagViewModelList tags = await ref.watch(tagsProvider.future);
   final ItemViewModelList items = await ref.watch(itemsProvider.future);
 
@@ -15,11 +15,6 @@ final _selectedTagProvider = FutureProvider.autoDispose.family<SelectedTagState,
     items: items.where((ItemViewModel element) => element.tag.id == id).toList(),
   );
 });
-
-final selectedTagStateProvider = StateNotifierProvider.autoDispose
-    .family<PreserveStateNotifier<SelectedTagState>, AsyncValue<SelectedTagState>, String>(
-  (ref, id) => PreserveStateNotifier(_selectedTagProvider(id), ref),
-);
 
 class SelectedTagState with EquatableMixin {
   const SelectedTagState({required this.tag, required this.items});

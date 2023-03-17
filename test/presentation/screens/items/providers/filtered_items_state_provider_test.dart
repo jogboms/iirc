@@ -31,7 +31,7 @@ Future<void> main() async {
       addTearDown(container.dispose);
       addTearDown(listener.reset);
 
-      container.listen<AsyncValue<FilteredItemsState>>(filteredItemsStateProvider, listener);
+      container.listen<AsyncValue<FilteredItemsState>>(filteredItemsProvider, listener);
 
       return controller;
     }

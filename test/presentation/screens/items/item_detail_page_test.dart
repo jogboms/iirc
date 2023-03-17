@@ -42,10 +42,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWith(
-              (_) => PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) => item.asViewModel,
             ),
           ],
         ),
@@ -64,10 +62,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWith(
-              (_) => PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) => item.asViewModel,
             ),
           ],
           observers: <NavigatorObserver>[navigatorObserver],
@@ -89,10 +85,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWith(
-              (_) => PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncData<ItemViewModel>(item.asViewModel),
-              ),
+            selectedItemProvider(item.id).overrideWith(
+              (_) async => item.asViewModel,
             ),
             tagsProvider.overrideWith(
               (_) => Stream<TagViewModelList>.value(TagViewModelList.empty()),
@@ -117,10 +111,8 @@ void main() {
         createApp(
           home: const ItemDetailPage(id: '1'),
           overrides: <Override>[
-            selectedItemStateProvider('1').overrideWith(
-              (_) => PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncError<ItemViewModel>(expectedError, StackTrace.empty),
-              ),
+            selectedItemProvider('1').overrideWith(
+              (_) async => throw expectedError,
             ),
           ],
         ),

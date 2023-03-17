@@ -47,7 +47,8 @@ class ItemDetailPageState extends State<ItemDetailPage> {
         },
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) =>
-              ref.watch(selectedItemStateProvider(widget.id)).when(
+              ref.watch(selectedItemProvider(widget.id)).when(
+                    skipLoadingOnReload: true,
                     data: (ItemViewModel item) => SelectedItemDataView(
                       key: dataViewKey,
                       item: item,

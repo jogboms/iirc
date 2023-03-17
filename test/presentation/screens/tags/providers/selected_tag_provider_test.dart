@@ -32,7 +32,7 @@ Future<void> main() async {
       addTearDown(container.dispose);
       addTearDown(listener.reset);
 
-      container.listen<AsyncValue<SelectedTagState>>(selectedTagStateProvider(testId), listener);
+      container.listen<AsyncValue<SelectedTagState>>(selectedTagProvider(testId), listener);
 
       return controller;
     }

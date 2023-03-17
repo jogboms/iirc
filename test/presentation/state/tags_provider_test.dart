@@ -13,33 +13,31 @@ Future<void> main() async {
 
     tearDown(mockUseCases.reset);
 
-    Stream<TagViewModelList> createProviderStream() {
+    Future<TagViewModelList> createProviderStream() {
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
+          userProvider.overrideWith((_) async => dummyUser),
         ],
       );
       addTearDown(container.dispose);
-      return container.read(tagsProvider.stream);
+      return container.read(tagsProvider.future);
     }
 
     test('should initialize with empty state', () {
-      when(() => mockUseCases.fetchTagsUseCase.call(any())).thenAnswer((_) => const Stream<List<TagEntity>>.empty());
+      when(() => mockUseCases.fetchTagsUseCase.call(any()))
+          .thenAnswer((_) => Stream<TagEntityList>.value(<TagEntity>[]));
 
-      expect(
-        createProviderStream(),
-        emitsDone,
-      );
+      expect(createProviderStream(), completes);
     });
 
-    test('should emit fetched tags', () async {
+    test('should emit fetched tags', () {
       final List<TagEntity> expectedTags = List<TagEntity>.filled(3, TagsMockImpl.generateTag());
       when(() => mockUseCases.fetchTagsUseCase.call(any()))
           .thenAnswer((_) => Stream<List<TagEntity>>.value(expectedTags));
 
       expect(
         createProviderStream(),
-        emits(expectedTags.map(TagViewModel.fromTag).toList()),
+        completion(expectedTags.map(TagViewModel.fromTag).toList()),
       );
     });
   });

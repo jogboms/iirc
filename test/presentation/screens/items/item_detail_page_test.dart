@@ -42,8 +42,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
+            selectedItemStateProvider(item.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<ItemViewModel>(
                 AsyncData<ItemViewModel>(item.asViewModel),
               ),
             ),
@@ -64,8 +64,8 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
+            selectedItemStateProvider(item.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<ItemViewModel>(
                 AsyncData<ItemViewModel>(item.asViewModel),
               ),
             ),
@@ -89,12 +89,14 @@ void main() {
         createApp(
           home: ItemDetailPage(id: item.id),
           overrides: <Override>[
-            selectedItemStateProvider(item.id).overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
+            selectedItemStateProvider(item.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<ItemViewModel>(
                 AsyncData<ItemViewModel>(item.asViewModel),
               ),
             ),
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
+            tagsProvider.overrideWith(
+              (_) => Stream<TagViewModelList>.value(TagViewModelList.empty()),
+            ),
           ],
           observers: <NavigatorObserver>[navigatorObserver],
         ),
@@ -115,9 +117,9 @@ void main() {
         createApp(
           home: const ItemDetailPage(id: '1'),
           overrides: <Override>[
-            selectedItemStateProvider('1').overrideWithValue(
-              PreserveStateNotifier.withState<ItemViewModel>(
-                AsyncError<ItemViewModel>(expectedError),
+            selectedItemStateProvider('1').overrideWith(
+              (_) => PreserveStateNotifier.withState<ItemViewModel>(
+                AsyncError<ItemViewModel>(expectedError, StackTrace.empty),
               ),
             ),
           ],

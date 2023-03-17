@@ -19,13 +19,13 @@ Future<void> main() async {
     StateController<ItemViewModelList> createProvider() {
       final StateController<ItemViewModelList> controller =
           StateController<ItemViewModelList>(ItemViewModelList.empty());
-      final AutoDisposeStreamProvider<ItemViewModelList> provider =
-          StreamProvider.autoDispose((_) => controller.stream);
 
       container = createProviderContainer(
         overrides: <Override>[
-          itemsProvider.overrideWithProvider(provider),
-          tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(expectedTags)),
+          itemsProvider.overrideWith((_) => controller.stream),
+          tagsProvider.overrideWith(
+            (_) => Stream<TagViewModelList>.value(expectedTags),
+          ),
         ],
       );
       addTearDown(container.dispose);
@@ -41,6 +41,7 @@ Future<void> main() async {
 
       expect(listener.log, isEmpty);
 
+      await container.pump();
       await container.pump();
 
       controller.state = ItemViewModelList.empty();
@@ -62,6 +63,7 @@ Future<void> main() async {
 
       expect(listener.log, isEmpty);
 
+      await container.pump();
       await container.pump();
 
       final ItemViewModelList expectedItems1 = ItemViewModelList.generate(
@@ -96,6 +98,7 @@ Future<void> main() async {
       expect(listener.log, isEmpty);
 
       await container.pump();
+      await container.pump();
 
       final TagEntity tag = TagsMockImpl.generateTag();
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
@@ -122,6 +125,7 @@ Future<void> main() async {
       expect(listener.log, isEmpty);
 
       await container.pump();
+      await container.pump();
 
       final ItemViewModelList expectedItems = ItemViewModelList.generate(
         3,
@@ -131,7 +135,7 @@ Future<void> main() async {
         },
       );
       controller.state = expectedItems;
-      container.read(searchTagQueryStateProvider.state).state = 'Query-2';
+      container.read(searchTagQueryStateProvider.notifier).state = 'Query-2';
 
       await container.pump();
       await container.pump();

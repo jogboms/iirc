@@ -51,8 +51,8 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
+            selectedTagStateProvider(tag.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<SelectedTagState>(
                 AsyncData<SelectedTagState>(
                   SelectedTagState(
                     tag: tag.asViewModel,
@@ -80,8 +80,8 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
+            selectedTagStateProvider(tag.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<SelectedTagState>(
                 AsyncData<SelectedTagState>(
                   SelectedTagState(
                     tag: tag.asViewModel,
@@ -110,8 +110,8 @@ void main() {
         createApp(
           home: TagDetailPage(id: tag.id),
           overrides: <Override>[
-            selectedTagStateProvider(tag.id).overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
+            selectedTagStateProvider(tag.id).overrideWith(
+              (_) => PreserveStateNotifier.withState<SelectedTagState>(
                 AsyncData<SelectedTagState>(
                   SelectedTagState(
                     tag: tag.asViewModel,
@@ -140,9 +140,9 @@ void main() {
         createApp(
           home: const TagDetailPage(id: '1'),
           overrides: <Override>[
-            selectedTagStateProvider('1').overrideWithValue(
-              PreserveStateNotifier.withState<SelectedTagState>(
-                AsyncError<SelectedTagState>(expectedError),
+            selectedTagStateProvider('1').overrideWith(
+              (_) => PreserveStateNotifier.withState<SelectedTagState>(
+                AsyncError<SelectedTagState>(expectedError, StackTrace.empty),
               ),
             ),
           ],

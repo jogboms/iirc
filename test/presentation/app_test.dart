@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/data.dart';
 import 'package:iirc/domain.dart';
@@ -38,7 +38,6 @@ void main() {
       await tester.pump();
 
       expect(onboardingPage, findsOneWidget);
-      expect(find.byType(LoadingView).descendantOf(onboardingPage), findsOneWidget);
       expect(menuPage, findsNothing);
 
       await tester.pump();

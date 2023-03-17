@@ -18,12 +18,10 @@ Future<void> main() async {
     StateController<ItemViewModelList> createProvider() {
       final StateController<ItemViewModelList> controller =
           StateController<ItemViewModelList>(ItemViewModelList.empty());
-      final AutoDisposeStreamProvider<ItemViewModelList> provider =
-          StreamProvider.autoDispose((_) => controller.stream);
 
       container = createProviderContainer(
         overrides: <Override>[
-          itemsProvider.overrideWithProvider(provider),
+          itemsProvider.overrideWith((_) => controller.stream),
         ],
       );
       addTearDown(container.dispose);

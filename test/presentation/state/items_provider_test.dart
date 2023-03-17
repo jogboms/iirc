@@ -13,35 +13,32 @@ Future<void> main() async {
 
     tearDown(mockUseCases.reset);
 
-    Stream<ItemViewModelList> createProviderStream() {
+    Future<ItemViewModelList> createProviderStream() {
       final ProviderContainer container = createProviderContainer(
         overrides: <Override>[
-          userProvider.overrideWithValue(AsyncData<UserEntity>(dummyUser)),
+          userProvider.overrideWith((_) async => dummyUser),
         ],
       );
       addTearDown(container.dispose);
-      return container.read(itemsProvider.stream);
+      return container.read(itemsProvider.future);
     }
 
     test('should initialize with empty state', () {
       when(() => mockUseCases.fetchItemsUseCase.call(any()))
-          .thenAnswer((_) => const Stream<List<NormalizedItemEntity>>.empty());
+          .thenAnswer((_) => Stream<NormalizedItemEntityList>.value(<NormalizedItemEntity>[]));
 
-      expect(
-        createProviderStream(),
-        emitsDone,
-      );
+      expect(createProviderStream(), completes);
     });
 
-    test('should emit fetched items', () async {
-      final List<NormalizedItemEntity> expectedItems =
+    test('should emit fetched items', () {
+      final NormalizedItemEntityList expectedItems =
           List<NormalizedItemEntity>.filled(3, ItemsMockImpl.generateNormalizedItem());
       when(() => mockUseCases.fetchItemsUseCase.call(any()))
           .thenAnswer((_) => Stream<List<NormalizedItemEntity>>.value(expectedItems));
 
       expect(
         createProviderStream(),
-        emits(expectedItems.map(ItemViewModel.fromItem).toList()),
+        completion(expectedItems.map(ItemViewModel.fromItem).toList()),
       );
     });
   });

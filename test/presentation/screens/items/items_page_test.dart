@@ -39,12 +39,8 @@ void main() {
         createApp(
           home: const ItemsPage(),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(
-              AsyncData<TagViewModelList>(TagViewModelList.empty()),
-            ),
-            itemsProvider.overrideWithValue(
-              AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
-            ),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(ItemViewModelList.empty())),
           ],
         ),
       );
@@ -65,12 +61,8 @@ void main() {
         createApp(
           home: const ItemsPage(),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(
-              AsyncData<TagViewModelList>(expectedTags),
-            ),
-            itemsProvider.overrideWithValue(
-              AsyncData<ItemViewModelList>(ItemViewModelList.empty()),
-            ),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(expectedTags)),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(ItemViewModelList.empty())),
           ],
         ),
       );
@@ -99,12 +91,8 @@ void main() {
         createApp(
           home: const ItemsPage(),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(
-              AsyncData<TagViewModelList>(TagViewModelList.empty()),
-            ),
-            itemsProvider.overrideWithValue(
-              AsyncData<ItemViewModelList>(expectedItems),
-            ),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(expectedItems)),
           ],
         ),
       );
@@ -128,12 +116,8 @@ void main() {
         createApp(
           home: const ItemsPage(),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(
-              AsyncData<TagViewModelList>(TagViewModelList.empty()),
-            ),
-            itemsProvider.overrideWithValue(
-              AsyncData<ItemViewModelList>(<ItemViewModel>[item]),
-            ),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(<ItemViewModel>[item])),
           ],
           observers: <NavigatorObserver>[navigatorObserver],
         ),
@@ -154,12 +138,8 @@ void main() {
         createApp(
           home: const ItemsPage(),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(
-              AsyncData<TagViewModelList>(TagViewModelList.empty()),
-            ),
-            itemsProvider.overrideWithValue(
-              AsyncError<ItemViewModelList>(expectedError),
-            ),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.error(expectedError)),
           ],
         ),
       );

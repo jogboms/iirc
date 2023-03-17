@@ -22,12 +22,11 @@ Future<void> main() async {
 
     StateController<TagViewModelList> createProvider() {
       final StateController<TagViewModelList> controller = StateController<TagViewModelList>(TagViewModelList.empty());
-      final AutoDisposeStreamProvider<TagViewModelList> provider = StreamProvider.autoDispose((_) => controller.stream);
 
       container = createProviderContainer(
         overrides: <Override>[
-          tagsProvider.overrideWithProvider(provider),
-          itemsProvider.overrideWithValue(AsyncData<ItemViewModelList>(expectedItems)),
+          tagsProvider.overrideWith((_) => controller.stream),
+          itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(expectedItems)),
         ],
       );
       addTearDown(container.dispose);
@@ -48,6 +47,7 @@ Future<void> main() async {
       await container.pump();
       await container.pump();
       await container.pump();
+      await container.pump();
 
       expect(
         listener.log.last.value,
@@ -63,6 +63,7 @@ Future<void> main() async {
       final TagViewModel expectedTag = expectedTags[0].copyWith(description: 'description');
       controller.state = <TagViewModel>[expectedTag, ...expectedTags.sublist(1)];
 
+      await container.pump();
       await container.pump();
       await container.pump();
       await container.pump();

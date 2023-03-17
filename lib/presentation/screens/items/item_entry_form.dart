@@ -108,7 +108,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
     super.dispose();
   }
 
-  void onCreateTag(BuildContext context, Reader read) async {
+  void onCreateTag(BuildContext context) async {
     unawaited(widget.analytics.log(AnalyticsEvent.buttonClick('create tag: form')));
     final String? tagId = await Navigator.of(context).push<String>(CreateTagPage.route(asModal: true));
     tagsFieldKey.currentState?.didChange(tagId);
@@ -140,7 +140,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
                       key: createTagButtonKey,
-                      onPressed: () => onCreateTag(context, ref.read),
+                      onPressed: () => onCreateTag(context),
                       icon: const Icon(Icons.tag),
                       label: Text(context.l10n.createNewTagCaption),
                     ),
@@ -181,7 +181,7 @@ class ItemEntryFormState extends State<ItemEntryForm> {
                     const SizedBox(width: 8),
                     IconButton(
                       key: createTagButtonKey,
-                      onPressed: () => onCreateTag(context, ref.read),
+                      onPressed: () => onCreateTag(context),
                       icon: const Icon(Icons.add),
                     ),
                   ],

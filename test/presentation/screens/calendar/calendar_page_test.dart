@@ -45,13 +45,14 @@ void main() {
         createApp(
           home: const CalendarPage(),
           overrides: <Override>[
-            itemsProvider.overrideWithValue(
-              AsyncData<ItemViewModelList>(expectedItems),
+            itemsProvider.overrideWith(
+              (_) => Stream<ItemViewModelList>.value(expectedItems),
             ),
           ],
         ),
       );
 
+      await tester.pump();
       await tester.pump();
 
       for (final ItemViewModel item in expectedItems) {
@@ -69,8 +70,8 @@ void main() {
         createApp(
           home: const CalendarPage(),
           overrides: <Override>[
-            itemsProvider.overrideWithValue(
-              AsyncError<ItemViewModelList>(expectedError),
+            itemsProvider.overrideWith(
+              (_) => Stream<ItemViewModelList>.error(expectedError),
             ),
           ],
         ),

@@ -67,8 +67,8 @@ extension on WidgetTester {
           home: MenuPage(initialPage: initialPage),
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
-            itemsProvider.overrideWithValue(AsyncData<ItemViewModelList>(ItemViewModelList.empty())),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
+            itemsProvider.overrideWith((_) => Stream<ItemViewModelList>.value(ItemViewModelList.empty())),
           ],
         ),
       ).then((_) => pump());

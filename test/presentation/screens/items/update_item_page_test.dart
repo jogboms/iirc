@@ -55,7 +55,7 @@ void main() {
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
             itemProvider.overrideWithValue(mockItemProvider),
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
           ],
         ),
       );
@@ -77,7 +77,7 @@ void main() {
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
             itemProvider.overrideWithValue(mockItemProvider),
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
           ],
         ),
       );

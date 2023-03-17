@@ -4,10 +4,10 @@ import 'package:riverpod/riverpod.dart';
 class PreserveStateNotifier<T> extends StateNotifier<AsyncValue<T>> {
   factory PreserveStateNotifier(
     ProviderListenable<AsyncValue<T>> provider,
-    AutoDisposeRef ref,
+    AutoDisposeStateNotifierProviderRef<PreserveStateNotifier<T>, AsyncValue<T>> ref,
   ) {
     final PreserveStateNotifier<T> notifier = PreserveStateNotifier<T>._();
-    ref.onDispose(ref.listen(provider, notifier._onData));
+    ref.onDispose(ref.listen(provider, notifier._onData).close);
     return notifier;
   }
 

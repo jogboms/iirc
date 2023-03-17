@@ -130,12 +130,12 @@ void main() {
             onSaved: (_) {},
           ),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
           ],
         ),
       );
 
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(tester.textFieldControllerByKey(ItemEntryFormState.descriptionFieldKey)?.text, initialValue.description);
       expect(
@@ -219,7 +219,7 @@ void main() {
             onSaved: (_) {},
           ),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(TagViewModelList.empty())),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(TagViewModelList.empty())),
           ],
         ),
       );
@@ -246,7 +246,7 @@ void main() {
             onSaved: (_) {},
           ),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
           ],
         ),
       );
@@ -272,12 +272,12 @@ void main() {
             onSaved: (_) {},
           ),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList.sublist(0, 1))),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList.sublist(0, 1))),
           ],
         ),
       );
 
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key(dummyTagsList.first.id)), findsOneWidget);
     });
@@ -295,12 +295,12 @@ void main() {
               onSaved: (_) {},
             ),
             overrides: <Override>[
-              tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+              tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
             ],
           ),
         );
 
-        await tester.pump();
+        await tester.pumpAndSettle();
       });
 
       expect(tester.textFieldControllerByKey(ItemEntryFormState.descriptionFieldKey)?.text, '');
@@ -322,7 +322,7 @@ void main() {
             onSaved: onSubmit,
           ),
           overrides: <Override>[
-            tagsProvider.overrideWithValue(AsyncData<TagViewModelList>(dummyTagsList)),
+            tagsProvider.overrideWith((_) => Stream<TagViewModelList>.value(dummyTagsList)),
           ],
         ),
       );

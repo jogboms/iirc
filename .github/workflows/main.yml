@@ -42,6 +42,7 @@ jobs:
       - run: flutter pub get
       - run: flutter format --set-exit-if-changed -l 120 lib
       - run: flutter gen-l10n
+      - run: flutter pub run build_runner build
       - run: flutter analyze lib
       - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
 

@@ -41,6 +41,7 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter gen-l10n
+      - run: flutter pub run build_runner build
       - run: dart run ./.github/scripts/replace_client_id.dart ${{ secrets.PROD_CLIENT_ID }}
       - run: flutter build web --release --dart-define=env.mode=prod --dart-define=env.sentryDns=${{ secrets.SENTRY_DNS }}
       - run: |

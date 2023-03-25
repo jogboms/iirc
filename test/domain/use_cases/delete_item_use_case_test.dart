@@ -7,7 +7,7 @@ import '../../utils.dart';
 void main() {
   group('DeleteItemUseCase', () {
     final ItemsRepository itemsRepository = mockRepositories.items;
-    final DeleteItemUseCase useCase = DeleteItemUseCase(items: itemsRepository);
+    final DeleteItemUseCase useCase = DeleteItemUseCase(items: itemsRepository, analytics: const NoopAnalytics());
 
     tearDown(() => reset(itemsRepository));
 

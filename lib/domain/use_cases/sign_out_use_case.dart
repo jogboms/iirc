@@ -1,11 +1,18 @@
 import 'dart:async';
 
+import '../analytics/analytics.dart';
+import '../analytics/analytics_event.dart';
 import '../repositories/auth.dart';
 
 class SignOutUseCase {
-  const SignOutUseCase({required AuthRepository auth}) : _auth = auth;
+  const SignOutUseCase({
+    required AuthRepository auth,
+    required Analytics analytics,
+  })  : _auth = auth,
+        _analytics = analytics;
 
   final AuthRepository _auth;
+  final Analytics _analytics;
 
   Future<void> call() async {
     final Completer<void> completer = Completer<void>();
@@ -24,6 +31,9 @@ class SignOutUseCase {
 
     await _auth.signOut();
 
-    return completer.future;
+    return completer.future.then((_) {
+      unawaited(_analytics.log(AnalyticsEvent.logout));
+      unawaited(_analytics.removeUserId());
+    });
   }
 }

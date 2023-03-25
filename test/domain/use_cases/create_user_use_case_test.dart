@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('CreateUserUseCase', () {
     final UsersRepository usersRepository = mockRepositories.users;
-    final CreateUserUseCase useCase = CreateUserUseCase(users: usersRepository);
+    final CreateUserUseCase useCase = CreateUserUseCase(users: usersRepository, analytics: const NoopAnalytics());
 
     final AccountEntity dummyAccountModel = AuthMockImpl.generateAccount();
 

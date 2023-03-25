@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('UpdateTagUseCase', () {
     final TagsRepository tagsRepository = mockRepositories.tags;
-    final UpdateTagUseCase useCase = UpdateTagUseCase(tags: tagsRepository);
+    final UpdateTagUseCase useCase = UpdateTagUseCase(tags: tagsRepository, analytics: const NoopAnalytics());
 
     final TagEntity dummyTag = TagsMockImpl.generateTag();
     final UpdateTagData dummyUpdateTagData = UpdateTagData(

@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('SignInUseCase', () {
     final AuthRepository authRepository = mockRepositories.auth;
-    final SignInUseCase useCase = SignInUseCase(auth: authRepository);
+    final SignInUseCase useCase = SignInUseCase(auth: authRepository, analytics: const NoopAnalytics());
 
     tearDown(() => reset(authRepository));
 

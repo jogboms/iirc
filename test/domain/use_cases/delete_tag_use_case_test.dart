@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('DeleteTagUseCase', () {
     final TagsRepository tagsRepository = mockRepositories.tags;
-    final DeleteTagUseCase useCase = DeleteTagUseCase(tags: tagsRepository);
+    final DeleteTagUseCase useCase = DeleteTagUseCase(tags: tagsRepository, analytics: const NoopAnalytics());
 
     final TagEntity dummyTag = TagsMockImpl.generateTag();
 

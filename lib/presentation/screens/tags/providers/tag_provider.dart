@@ -15,7 +15,6 @@ TagProvider tag(TagRef ref) {
   final RegistryFactory di = ref.read(registryProvider).get;
 
   return TagProvider(
-    analytics: di(),
     fetchUser: () => ref.read(userProvider.future),
     createTagUseCase: di(),
     deleteTagUseCase: di(),
@@ -26,14 +25,12 @@ TagProvider tag(TagRef ref) {
 @visibleForTesting
 class TagProvider {
   const TagProvider({
-    required this.analytics,
     required this.fetchUser,
     required this.createTagUseCase,
     required this.updateTagUseCase,
     required this.deleteTagUseCase,
   });
 
-  final Analytics analytics;
   final Future<UserEntity> Function() fetchUser;
   final CreateTagUseCase createTagUseCase;
   final UpdateTagUseCase updateTagUseCase;
@@ -41,17 +38,10 @@ class TagProvider {
 
   Future<String> create(CreateTagData data) async {
     final String userId = (await fetchUser()).id;
-    unawaited(analytics.log(AnalyticsEvent.createTag(userId)));
     return createTagUseCase(userId, data);
   }
 
-  Future<bool> update(UpdateTagData data) async {
-    unawaited(analytics.log(AnalyticsEvent.updateTag(data.path)));
-    return updateTagUseCase(data);
-  }
+  Future<bool> update(UpdateTagData data) async => updateTagUseCase(data);
 
-  Future<bool> delete(TagViewModel tag) async {
-    unawaited(analytics.log(AnalyticsEvent.deleteTag(tag.path)));
-    return deleteTagUseCase(tag.path);
-  }
+  Future<bool> delete(TagViewModel tag) async => deleteTagUseCase(tag.path);
 }

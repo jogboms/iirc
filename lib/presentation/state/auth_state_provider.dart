@@ -1,15 +1,13 @@
-// ignore_for_file: always_specify_types
-
 import 'package:clock/clock.dart';
 import 'package:equatable/equatable.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
-import 'package:iirc/presentation.dart';
-import 'package:iirc/presentation/state/state_notifier_mixin.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../registry.dart';
 import 'registry_provider.dart';
+import 'state_notifier_mixin.dart';
 
 part 'auth_state_provider.g.dart';
 
@@ -19,22 +17,18 @@ class AuthStateNotifier extends _$AuthStateNotifier with StateNotifierMixin {
   AuthState build() => AuthState.idle;
 
   void signIn() async {
-    final di = ref.read(registryProvider).get;
-    final analytics = di<Analytics>();
+    final RegistryFactory di = ref.read(registryProvider).get;
 
     setState(AuthState.loading);
 
     try {
-      final account = await di<SignInUseCase>()();
-      final user = await di<FetchUserUseCase>()(account.id);
+      final AccountEntity account = await di<SignInUseCase>()();
+      final UserEntity? user = await di<FetchUserUseCase>()(account.id);
       if (user == null) {
         await di<CreateUserUseCase>()(account);
       } else {
         await di<UpdateUserUseCase>()(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
       }
-
-      await analytics.setUserId(account.id);
-      await analytics.log(AnalyticsEvent.login(account.email, account.id));
 
       setState(AuthState.complete);
     } on AuthException catch (error, stackTrace) {
@@ -45,13 +39,10 @@ class AuthStateNotifier extends _$AuthStateNotifier with StateNotifierMixin {
       } else if (error is AuthExceptionPopupBlockedByBrowser) {
         setState(AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser));
       } else if (error is AuthExceptionTooManyRequests) {
-        await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
         setState(AuthState.reason(AuthErrorStateReason.tooManyRequests));
       } else if (error is AuthExceptionUserDisabled) {
-        await analytics.log(AnalyticsEvent.userDisabled(error.email));
         setState(AuthState.reason(AuthErrorStateReason.userDisabled));
       } else if (error is AuthExceptionFailed) {
-        AppLog.e(error, stackTrace);
         setState(AuthState.reason(AuthErrorStateReason.failed));
       } else {
         _handleError(error, stackTrace);
@@ -63,16 +54,10 @@ class AuthStateNotifier extends _$AuthStateNotifier with StateNotifierMixin {
   }
 
   void signOut() async {
-    final di = ref.read(registryProvider).get;
-    final analytics = di<Analytics>();
-
     setState(AuthState.loading);
 
     try {
-      await di<SignOutUseCase>()();
-      await analytics.log(AnalyticsEvent.logout);
-      await analytics.removeUserId();
-
+      await ref.read(registryProvider).get<SignOutUseCase>()();
       setState(AuthState.complete);
     } catch (error, stackTrace) {
       _handleError(error, stackTrace);
@@ -104,7 +89,7 @@ class AuthState with EquatableMixin {
   final AuthStateType type;
 
   @override
-  List<Object> get props => [type];
+  List<Object> get props => <Object>[type];
 }
 
 enum AuthErrorStateReason {

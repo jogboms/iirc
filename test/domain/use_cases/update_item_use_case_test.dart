@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('UpdateItemUseCase', () {
     final ItemsRepository itemsRepository = mockRepositories.items;
-    final UpdateItemUseCase useCase = UpdateItemUseCase(items: itemsRepository);
+    final UpdateItemUseCase useCase = UpdateItemUseCase(items: itemsRepository, analytics: const NoopAnalytics());
 
     final ItemEntity dummyItem = ItemsMockImpl.generateItem();
     final UpdateItemData dummyUpdateItemData = UpdateItemData(

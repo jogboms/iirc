@@ -15,7 +15,7 @@ class LogoutListTile extends ConsumerWidget {
     final ThemeData theme = context.theme;
     final Color color = theme.colorScheme.error;
 
-    ref.listen<AuthState>(authStateProvider, (_, AuthState state) {
+    ref.listen<AuthState>(authStateNotifierProvider, (_, AuthState state) {
       if (state == AuthState.complete) {
         Navigator.of(context).pushAndRemoveUntil(
           OnboardingPage.route(isColdStart: false),
@@ -37,7 +37,7 @@ class LogoutListTile extends ConsumerWidget {
       horizontalTitleGap: 0,
       onTap: () => ref
         ..read(analyticsProvider).log(AnalyticsEvent.itemClick('logout'))
-        ..read(authStateProvider.notifier).signOut(),
+        ..read(authStateNotifierProvider.notifier).signOut(),
     );
   }
 }

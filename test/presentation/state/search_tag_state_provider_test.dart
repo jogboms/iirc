@@ -23,7 +23,7 @@ Future<void> main() async {
       addTearDown(() => container.dispose());
 
       final AutoDisposeProvider<NormalizedItemEntityList> provider = Provider.autoDispose(
-        (AutoDisposeProviderRef<Object?> ref) => filterBySearchTagQuery<NormalizedItemEntity>(
+        (AutoDisposeProviderRef<Object?> ref) => filterBySearchTagQuery(
           ref,
           elements: expectedItems,
           byTitle: (NormalizedItemEntity item) => item.tag.title,
@@ -41,8 +41,8 @@ Future<void> main() async {
     test('should search by title', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'Alpha';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.title;
+      container.read(searchTagQueryStateProvider.notifier).setState('Alpha');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.title);
 
       expect(
         container.read(provider),
@@ -55,8 +55,8 @@ Future<void> main() async {
     test('should search by title case-insensitive', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'alpha';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.title;
+      container.read(searchTagQueryStateProvider.notifier).setState('alpha');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.title);
 
       expect(
         container.read(provider),
@@ -69,8 +69,8 @@ Future<void> main() async {
     test('should search by description', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'Orange';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagQueryStateProvider.notifier).setState('Orange');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
 
       expect(
         container.read(provider),
@@ -83,8 +83,8 @@ Future<void> main() async {
     test('should search by description case-insensitive', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'orange';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagQueryStateProvider.notifier).setState('orange');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
 
       expect(
         container.read(provider),
@@ -97,8 +97,8 @@ Future<void> main() async {
     test('should remove edge whitespaces', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = '  orange  ';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagQueryStateProvider.notifier).setState('  orange  ');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
 
       expect(
         container.read(provider),
@@ -111,8 +111,8 @@ Future<void> main() async {
     test('should only search at specified length', () async {
       final AutoDisposeProvider<NormalizedItemEntityList> provider = createProvider();
 
-      container.read(searchTagQueryStateProvider.notifier).state = '  o  ';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagQueryStateProvider.notifier).setState('  o  ');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
       await container.pump();
 
       expect(
@@ -127,11 +127,11 @@ Future<void> main() async {
 
       container.listen<NormalizedItemEntityList>(provider, listener);
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'Orange';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagQueryStateProvider.notifier).setState('Orange');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
       await container.pump();
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'Mango';
+      container.read(searchTagQueryStateProvider.notifier).setState('Mango');
       await container.pump();
 
       expect(
@@ -149,11 +149,11 @@ Future<void> main() async {
 
       container.listen<NormalizedItemEntityList>(provider, listener);
 
-      container.read(searchTagQueryStateProvider.notifier).state = 'Alpha';
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.title;
+      container.read(searchTagQueryStateProvider.notifier).setState('Alpha');
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.title);
       await container.pump();
 
-      container.read(searchTagModeStateProvider.notifier).state = SearchTagMode.description;
+      container.read(searchTagModeStateProvider.notifier).setState(SearchTagMode.description);
       await container.pump();
 
       expect(

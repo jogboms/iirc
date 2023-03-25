@@ -14,8 +14,8 @@ class SearchBar extends ConsumerStatefulWidget {
 }
 
 class _SearchBarState extends ConsumerState<SearchBar> {
-  late final StateController<String> queryProvider = ref.read(searchTagQueryStateProvider.notifier);
-  late final TextEditingController controller = TextEditingController(text: queryProvider.state);
+  late final SearchTagQueryState queryProvider = ref.read(searchTagQueryStateProvider.notifier);
+  late final TextEditingController controller = TextEditingController(text: queryProvider.currentState);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
             clearButtonMode: OverlayVisibilityMode.editing,
             placeholder: context.l10n.searchByTagCaption,
             placeholderStyle: context.theme.inputDecorationTheme.hintStyle?.copyWith(height: 1.35),
-            onChanged: (String value) => queryProvider.state = value,
+            onChanged: queryProvider.setState,
           ),
         ),
         const SizedBox(width: 8),
@@ -58,7 +58,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
                 child: Text(item.name),
               ),
           ],
-          onChanged: (SearchTagMode? value) => ref.read(searchTagModeStateProvider.notifier).state = value!,
+          onChanged: (SearchTagMode? value) => ref.read(searchTagModeStateProvider.notifier).setState(value!),
         ),
       ],
     );

@@ -51,7 +51,7 @@ class _ItemsDataViewState extends ConsumerState<_ItemsDataView> {
     super.initState();
 
     itemCalendarViewController.addListener(() {
-      ref.read(calendarStateProvider.notifier).state = itemCalendarViewController.selectedDate;
+      ref.read(calendarStateProvider.notifier).setState(itemCalendarViewController.selectedDate);
     });
   }
 

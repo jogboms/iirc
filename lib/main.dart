@@ -101,15 +101,15 @@ void main() async {
     ..set(environment);
 
   runApp(
-    ErrorBoundary(
-      isReleaseMode: !environment.isDebugging,
-      errorViewBuilder: (_) => const AppCrashErrorView(),
-      onException: AppLog.e,
-      onCrash: errorReporter.reportCrash,
-      child: ProviderScope(
-        overrides: <Override>[
-          registryProvider.overrideWithValue(registry),
-        ],
+    ProviderScope(
+      overrides: <Override>[
+        registryProvider.overrideWithValue(registry),
+      ],
+      child: ErrorBoundary(
+        isReleaseMode: !environment.isDebugging,
+        errorViewBuilder: (_) => const AppCrashErrorView(),
+        onException: AppLog.e,
+        onCrash: errorReporter.reportCrash,
         child: App(
           registry: registry,
           navigatorObservers: <NavigatorObserver>[navigationObserver],

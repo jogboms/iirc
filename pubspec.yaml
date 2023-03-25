@@ -29,7 +29,8 @@ dependencies:
   o_color_picker: ^1.0.2
   package_info_plus: ^3.0.3
   platform: ^3.1.0
-  riverpod: ^2.3.1
+  riverpod: ^2.3.2
+  riverpod_annotation: ^2.0.2
   rxdart: ^0.27.7
   sentry: ^6.15.1
   sliver_tools: ^0.2.9
@@ -49,6 +50,7 @@ dev_dependencies:
   mocktail: ^0.3.0
   package_info_plus_platform_interface: ^2.0.1
   plugin_platform_interface: ^2.1.4
+  riverpod_generator:
   riverpod_lint:
 
 flutter:

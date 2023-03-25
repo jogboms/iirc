@@ -17,7 +17,7 @@ test_coverage:
 	fvm flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
 clean_coverage:
-	lcov --remove coverage/lcov.info 'lib/**/*_mock_impl.dart' 'lib/presentation/theme/*' 'lib/presentation/constants/*' -o coverage/lcov.info
+	lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*_mock_impl.dart' 'lib/presentation/theme/*' 'lib/presentation/constants/*' -o coverage/lcov.info
 
 build_coverage:
 	make test_coverage && make clean_coverage && genhtml -o coverage coverage/lcov.info

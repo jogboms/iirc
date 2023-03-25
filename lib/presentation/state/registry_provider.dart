@@ -1,9 +1,10 @@
-// ignore_for_file: always_specify_types
-
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../registry.dart';
 
+part 'registry_provider.g.dart';
+
 /// Container for Registry/Service locator
 /// Should be overridden per [ProviderScope]
-final registryProvider = Provider<Registry>((_) => throw UnimplementedError());
+@Riverpod(dependencies: <Object>[])
+Registry registry(RegistryRef ref) => throw UnimplementedError();

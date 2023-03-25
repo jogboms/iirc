@@ -1,15 +1,17 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../registry.dart';
 import '../../../state.dart';
 
-final itemProvider = Provider.autoDispose<ItemProvider>((ref) {
-  final di = ref.read(registryProvider).get;
+part 'item_provider.g.dart';
+
+@Riverpod(dependencies: <Object>[registry, user])
+ItemProvider item(ItemRef ref) {
+  final RegistryFactory di = ref.read(registryProvider).get;
 
   return ItemProvider(
     analytics: di(),
@@ -18,7 +20,7 @@ final itemProvider = Provider.autoDispose<ItemProvider>((ref) {
     deleteItemUseCase: di(),
     updateItemUseCase: di(),
   );
-});
+}
 
 @visibleForTesting
 class ItemProvider {
@@ -37,7 +39,7 @@ class ItemProvider {
   final DeleteItemUseCase deleteItemUseCase;
 
   Future<String> create(CreateItemData data) async {
-    final userId = (await fetchUser()).id;
+    final String userId = (await fetchUser()).id;
     unawaited(analytics.log(AnalyticsEvent.createItem(userId)));
     return createItemUseCase(userId, data);
   }

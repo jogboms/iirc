@@ -135,7 +135,7 @@ Future<void> main() async {
         },
       );
       controller.state = expectedItems;
-      container.read(searchTagQueryStateProvider.notifier).state = 'Query-2';
+      container.read(searchTagQueryStateProvider.notifier).setState('Query-2');
 
       await container.pump();
       await container.pump();

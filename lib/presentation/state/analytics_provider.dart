@@ -1,8 +1,10 @@
-// ignore_for_file: always_specify_types
-
 import 'package:iirc/domain.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'registry_provider.dart';
 
-final analyticsProvider = Provider<Analytics>((ref) => ref.watch(registryProvider).get());
+part 'analytics_provider.g.dart';
+
+/// Should only be used from the UI
+@Riverpod(dependencies: <Object>[registry])
+Analytics analytics(AnalyticsRef ref) => ref.watch(registryProvider).get();

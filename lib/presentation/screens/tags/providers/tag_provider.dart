@@ -1,16 +1,18 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../models.dart';
+import '../../../registry.dart';
 import '../../../state.dart';
 
-final tagProvider = Provider.autoDispose<TagProvider>((ref) {
-  final di = ref.read(registryProvider).get;
+part 'tag_provider.g.dart';
+
+@Riverpod(dependencies: <Object>[registry, user])
+TagProvider tag(TagRef ref) {
+  final RegistryFactory di = ref.read(registryProvider).get;
 
   return TagProvider(
     analytics: di(),
@@ -19,7 +21,7 @@ final tagProvider = Provider.autoDispose<TagProvider>((ref) {
     deleteTagUseCase: di(),
     updateTagUseCase: di(),
   );
-});
+}
 
 @visibleForTesting
 class TagProvider {
@@ -38,7 +40,7 @@ class TagProvider {
   final DeleteTagUseCase deleteTagUseCase;
 
   Future<String> create(CreateTagData data) async {
-    final userId = (await fetchUser()).id;
+    final String userId = (await fetchUser()).id;
     unawaited(analytics.log(AnalyticsEvent.createTag(userId)));
     return createTagUseCase(userId, data);
   }

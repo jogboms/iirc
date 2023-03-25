@@ -5,113 +5,84 @@ import 'package:equatable/equatable.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
+import 'package:iirc/presentation/state/state_notifier_mixin.dart';
 import 'package:meta/meta.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'registry_provider.dart';
 
-final authStateProvider = StateNotifierProvider.autoDispose<AuthStateNotifier, AuthState>((ref) {
-  final di = ref.read(registryProvider).get;
+part 'auth_state_provider.g.dart';
 
-  return AuthStateNotifier(
-    analytics: di(),
-    signInUseCase: di(),
-    signOutUseCase: di(),
-    fetchUserUseCase: di(),
-    createUserUseCase: di(),
-    updateUserUseCase: di(),
-  );
-});
-
-class AuthStateNotifier extends StateNotifier<AuthState> {
-  @visibleForTesting
-  AuthStateNotifier({
-    required this.analytics,
-    required this.signInUseCase,
-    required this.signOutUseCase,
-    required this.fetchUserUseCase,
-    required this.createUserUseCase,
-    required this.updateUserUseCase,
-  }) : super(AuthState.idle);
-
-  @visibleForTesting
-  final Analytics analytics;
-  @visibleForTesting
-  final SignInUseCase signInUseCase;
-  @visibleForTesting
-  final SignOutUseCase signOutUseCase;
-  @visibleForTesting
-  final FetchUserUseCase fetchUserUseCase;
-  @visibleForTesting
-  final CreateUserUseCase createUserUseCase;
-  @visibleForTesting
-  final UpdateUserUseCase updateUserUseCase;
+@riverpod
+class AuthStateNotifier extends _$AuthStateNotifier with StateNotifierMixin {
+  @override
+  AuthState build() => AuthState.idle;
 
   void signIn() async {
-    _setState(AuthState.loading);
+    final di = ref.read(registryProvider).get;
+    final analytics = di<Analytics>();
+
+    setState(AuthState.loading);
 
     try {
-      final account = await signInUseCase();
-      final user = await fetchUserUseCase(account.id);
+      final account = await di<SignInUseCase>()();
+      final user = await di<FetchUserUseCase>()(account.id);
       if (user == null) {
-        await createUserUseCase(account);
+        await di<CreateUserUseCase>()(account);
       } else {
-        await updateUserUseCase(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
+        await di<UpdateUserUseCase>()(UpdateUserData(id: user.id, lastSeenAt: clock.now()));
       }
 
       await analytics.setUserId(account.id);
       await analytics.log(AnalyticsEvent.login(account.email, account.id));
 
-      _setState(AuthState.complete);
+      setState(AuthState.complete);
     } on AuthException catch (error, stackTrace) {
       if (error is AuthExceptionCanceled) {
-        _setState(AuthState.idle);
+        setState(AuthState.idle);
       } else if (error is AuthExceptionNetworkUnavailable) {
-        _setState(AuthState.reason(AuthErrorStateReason.networkUnavailable));
+        setState(AuthState.reason(AuthErrorStateReason.networkUnavailable));
       } else if (error is AuthExceptionPopupBlockedByBrowser) {
-        _setState(AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser));
+        setState(AuthState.reason(AuthErrorStateReason.popupBlockedByBrowser));
       } else if (error is AuthExceptionTooManyRequests) {
         await analytics.log(AnalyticsEvent.tooManyRequests(error.email));
-        _setState(AuthState.reason(AuthErrorStateReason.tooManyRequests));
+        setState(AuthState.reason(AuthErrorStateReason.tooManyRequests));
       } else if (error is AuthExceptionUserDisabled) {
         await analytics.log(AnalyticsEvent.userDisabled(error.email));
-        _setState(AuthState.reason(AuthErrorStateReason.userDisabled));
+        setState(AuthState.reason(AuthErrorStateReason.userDisabled));
       } else if (error is AuthExceptionFailed) {
         AppLog.e(error, stackTrace);
-        _setState(AuthState.reason(AuthErrorStateReason.failed));
+        setState(AuthState.reason(AuthErrorStateReason.failed));
       } else {
         _handleError(error, stackTrace);
       }
     } catch (error, stackTrace) {
-      await signOutUseCase();
+      await di<SignOutUseCase>()();
       _handleError(error, stackTrace);
     }
   }
 
   void signOut() async {
-    _setState(AuthState.loading);
+    final di = ref.read(registryProvider).get;
+    final analytics = di<Analytics>();
+
+    setState(AuthState.loading);
 
     try {
-      await signOutUseCase();
+      await di<SignOutUseCase>()();
       await analytics.log(AnalyticsEvent.logout);
       await analytics.removeUserId();
 
-      _setState(AuthState.complete);
+      setState(AuthState.complete);
     } catch (error, stackTrace) {
       _handleError(error, stackTrace);
-    }
-  }
-
-  void _setState(AuthState newState) {
-    if (mounted) {
-      state = newState;
     }
   }
 
   void _handleError(Object error, StackTrace stackTrace) {
     final String message = error.toString();
     AppLog.e(error, stackTrace);
-    _setState(AuthState.error(message));
+    setState(AuthState.error(message));
   }
 }
 

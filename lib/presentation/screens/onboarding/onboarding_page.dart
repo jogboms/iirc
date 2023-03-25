@@ -58,7 +58,7 @@ class _OnboardingDataView extends ConsumerStatefulWidget {
 @visibleForTesting
 class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
   static const Key signInButtonKey = Key('signInButtonKey');
-  late final AuthStateNotifier auth = ref.read(authStateProvider.notifier);
+  late final AuthStateNotifier auth = ref.read(authStateNotifierProvider.notifier);
 
   @override
   void initState() {
@@ -71,11 +71,11 @@ class OnboardingDataViewState extends ConsumerState<_OnboardingDataView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AuthState>(authStateProvider, _authStateListener);
+    ref.listen<AuthState>(authStateNotifierProvider, _authStateListener);
 
     return AnimatedSwitcher(
       duration: kThemeAnimationDuration,
-      child: ref.watch(authStateProvider) == AuthState.loading
+      child: ref.watch(authStateNotifierProvider) == AuthState.loading
           ? const LoadingView()
           : ElevatedButton(
               key: signInButtonKey,

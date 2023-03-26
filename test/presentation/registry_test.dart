@@ -36,6 +36,15 @@ void main() {
           throwsAssertionError,
         );
       });
+
+      test('throws an assertion error when lazy factory is registered when normal exists', () {
+        expect(
+          () => Registry()
+            ..set(1)
+            ..lazy((_) => 2),
+          throwsAssertionError,
+        );
+      });
     });
 
     group('replace', () {
@@ -73,6 +82,39 @@ void main() {
           ..set(1);
 
         expect(registry.get<String>(), '1 != 1.0');
+      });
+    });
+
+    group('lazy', () {
+      test('works as expected', () {
+        int callCount = 0;
+        final Registry registry = Registry()
+          ..set(1)
+          ..factory((RegistryFactory i) => i<int>() * 1.0)
+          ..lazy((RegistryFactory i) {
+            callCount++;
+            return i<int>() == i<double>();
+          });
+
+        expect(registry.get<bool>(), true);
+        expect(registry.get<bool>(), true);
+        expect(registry.get<bool>(), true);
+        expect(callCount, 1);
+      });
+
+      test('supports late initialization', () {
+        int callCount = 0;
+        final Registry registry = Registry()
+          ..lazy((RegistryFactory i) {
+            callCount++;
+            return i<int>() * 1.0;
+          })
+          ..set(1);
+
+        expect(registry.get<double>(), 1.0);
+        expect(registry.get<double>(), 1.0);
+        expect(registry.get<double>(), 1.0);
+        expect(callCount, 1);
       });
     });
 

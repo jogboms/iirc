@@ -5,6 +5,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
 import 'package:mocktail/mocktail.dart' as mt;
+import 'package:registry/registry.dart';
 
 import 'mocks.dart';
 
@@ -67,16 +68,16 @@ Registry createRegistry({
       ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
       ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
       ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
-      ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
-      ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+      ..factory((RegistryFactory di) => CreateItemUseCase(items: di(), analytics: di()))
+      ..factory((RegistryFactory di) => CreateTagUseCase(tags: di(), analytics: di()))
       ..factory((RegistryFactory di) => UpdateUserUseCase(users: di()))
-      ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
-      ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
-      ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
-      ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di()))
-      ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
-      ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
-      ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
+      ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di(), analytics: di()))
+      ..factory((RegistryFactory di) => UpdateItemUseCase(items: di(), analytics: di()))
+      ..factory((RegistryFactory di) => DeleteItemUseCase(items: di(), analytics: di()))
+      ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di(), analytics: di()))
+      ..factory((RegistryFactory di) => SignInUseCase(auth: di(), analytics: di()))
+      ..factory((RegistryFactory di) => SignOutUseCase(auth: di(), analytics: di()))
+      ..factory((RegistryFactory di) => CreateUserUseCase(users: di(), analytics: di()))
       ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
       ..set(environment);
 

@@ -1,25 +1,26 @@
-// ignore_for_file: always_specify_types
-
 import 'package:equatable/equatable.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../models.dart';
 import '../../../state.dart';
 
-final filteredItemsProvider = FutureProvider.autoDispose<FilteredItemsState>((ref) async {
-  final tags = await ref.watch(tagsProvider.future);
-  final items = await ref.watch(itemsProvider.future);
+part 'filtered_items_state_provider.g.dart';
+
+@Riverpod(dependencies: <Object>[tags, items])
+Future<FilteredItemsState> filteredItems(FilteredItemsRef ref) async {
+  final List<TagViewModel> tags = await ref.watch(tagsProvider.future);
+  final List<ItemViewModel> items = await ref.watch(itemsProvider.future);
 
   return FilteredItemsState(
     tags: tags,
     items: filterBySearchTagQuery(
       ref,
       elements: items.uniqueByTag(),
-      byTitle: (element) => element.tag.title,
-      byDescription: (element) => element.tag.description,
+      byTitle: (ItemViewModel element) => element.tag.title,
+      byDescription: (ItemViewModel element) => element.tag.description,
     ),
   );
-});
+}
 
 class FilteredItemsState with EquatableMixin {
   const FilteredItemsState({required this.tags, required this.items});

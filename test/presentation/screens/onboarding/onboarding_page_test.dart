@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iirc/presentation.dart';
+import 'package:iirc/presentation/state/state_notifier_mixin.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -23,13 +24,13 @@ void main() {
     });
 
     testWidgets('should auto-login w/ cold start', (WidgetTester tester) async {
-      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier(AuthState.loading);
 
       await tester.pumpWidget(
         createApp(
           home: const OnboardingPage(isColdStart: true),
           overrides: <Override>[
-            authStateProvider.overrideWith((_) => mockAuthStateNotifier..setState(AuthState.loading)),
+            authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
           ],
         ),
       );
@@ -48,7 +49,7 @@ void main() {
         createApp(
           home: const OnboardingPage(isColdStart: false),
           overrides: <Override>[
-            authStateProvider.overrideWith((_) => mockAuthStateNotifier),
+            authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
           ],
         ),
       );
@@ -62,14 +63,14 @@ void main() {
     });
 
     testWidgets('should navigate to MenuPage on successful login', (WidgetTester tester) async {
-      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier();
+      final MockAuthStateNotifier mockAuthStateNotifier = MockAuthStateNotifier(AuthState.loading);
 
       await tester.pumpWidget(
         createApp(
           home: const OnboardingPage(isColdStart: true),
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
-            authStateProvider.overrideWith((_) => mockAuthStateNotifier..setState(AuthState.loading)),
+            authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
           ],
         ),
       );
@@ -92,7 +93,7 @@ void main() {
           home: const OnboardingPage(isColdStart: false),
           observers: <NavigatorObserver>[navigatorObserver],
           overrides: <Override>[
-            authStateProvider.overrideWith((_) => mockAuthStateNotifier),
+            authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
           ],
         ),
       );
@@ -117,7 +118,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
+              authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
             ],
           ),
         );
@@ -139,7 +140,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
+              authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
             ],
           ),
         );
@@ -161,7 +162,7 @@ void main() {
           createApp(
             home: const OnboardingPage(isColdStart: false),
             overrides: <Override>[
-              authStateProvider.overrideWith((_) => mockAuthStateNotifier),
+              authStateNotifierProvider.overrideWith(() => mockAuthStateNotifier),
             ],
           ),
         );
@@ -202,9 +203,13 @@ void main() {
   });
 }
 
-class MockAuthStateNotifier extends StateNotifier<AuthState> with Mock implements AuthStateNotifier {
-  MockAuthStateNotifier([super.state = AuthState.idle]);
+class MockAuthStateNotifier extends AutoDisposeNotifier<AuthState>
+    with Mock, StateNotifierMixin
+    implements AuthStateNotifier {
+  MockAuthStateNotifier([this._initialState = AuthState.idle]);
 
-  // ignore: use_setters_to_change_properties
-  void setState(AuthState newState) => state = newState;
+  final AuthState _initialState;
+
+  @override
+  AuthState build() => _initialState;
 }

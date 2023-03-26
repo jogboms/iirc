@@ -1,15 +1,21 @@
-// ignore_for_file: always_specify_types
-
 import 'package:iirc/domain.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:registry/registry.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models.dart';
+import 'account_provider.dart';
 import 'registry_provider.dart';
 import 'user_provider.dart';
 
-final tagsProvider = StreamProvider.autoDispose<TagViewModelList>((ref) async* {
-  final registry = ref.read(registryProvider);
-  final user = await ref.watch(userProvider.future);
+part 'tags_provider.g.dart';
 
-  yield* registry.get<FetchTagsUseCase>().call(user.id).map((element) => element.map(TagViewModel.fromTag).toList());
-});
+@Riverpod(dependencies: <Object>[registry, user])
+Stream<TagViewModelList> tags(TagsRef ref) async* {
+  final Registry registry = ref.read(registryProvider);
+  final UserEntity user = await ref.watch(userProvider.future);
+
+  yield* registry
+      .get<FetchTagsUseCase>()
+      .call(user.id)
+      .map((TagEntityList element) => element.map(TagViewModel.fromTag).toList());
+}

@@ -25,7 +25,6 @@ Future<void> main() async {
     });
 
     TagProvider createProvider() => TagProvider(
-          analytics: const NoopAnalytics(),
           fetchUser: mockFetchUser,
           createTagUseCase: mockUseCases.createTagUseCase,
           updateTagUseCase: mockUseCases.updateTagUseCase,

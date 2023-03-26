@@ -17,6 +17,9 @@ class AnalyticsEvent {
   static AnalyticsEvent userDisabled(String? email) =>
       AnalyticsEvent._('user_disabled', <String, dynamic>{'email': email});
 
+  static AnalyticsEvent createUser(String userId) =>
+      AnalyticsEvent._('create_user', <String, dynamic>{'user_id': userId});
+
   static AnalyticsEvent itemClick(String action) => AnalyticsEvent._('item_click', <String, dynamic>{'action': action});
 
   static AnalyticsEvent buttonClick(String action) =>

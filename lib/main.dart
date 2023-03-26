@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:registry/registry.dart';
 import 'package:sentry/sentry.dart';
 import 'package:universal_io/io.dart' as io;
 
@@ -85,31 +86,31 @@ void main() async {
     ..factory((RegistryFactory di) => FetchItemsUseCase(items: di(), tags: di()))
     ..factory((RegistryFactory di) => FetchTagsUseCase(tags: di()))
     ..factory((RegistryFactory di) => GetAccountUseCase(auth: di()))
-    ..factory((RegistryFactory di) => CreateItemUseCase(items: di()))
-    ..factory((RegistryFactory di) => CreateTagUseCase(tags: di()))
+    ..factory((RegistryFactory di) => CreateItemUseCase(items: di(), analytics: di()))
+    ..factory((RegistryFactory di) => CreateTagUseCase(tags: di(), analytics: di()))
     ..factory((RegistryFactory di) => UpdateUserUseCase(users: di()))
-    ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di()))
-    ..factory((RegistryFactory di) => UpdateItemUseCase(items: di()))
-    ..factory((RegistryFactory di) => DeleteItemUseCase(items: di()))
-    ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di()))
-    ..factory((RegistryFactory di) => SignInUseCase(auth: di()))
-    ..factory((RegistryFactory di) => SignOutUseCase(auth: di()))
-    ..factory((RegistryFactory di) => CreateUserUseCase(users: di()))
+    ..factory((RegistryFactory di) => UpdateTagUseCase(tags: di(), analytics: di()))
+    ..factory((RegistryFactory di) => UpdateItemUseCase(items: di(), analytics: di()))
+    ..factory((RegistryFactory di) => DeleteItemUseCase(items: di(), analytics: di()))
+    ..factory((RegistryFactory di) => DeleteTagUseCase(tags: di(), analytics: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(auth: di(), analytics: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(auth: di(), analytics: di()))
+    ..factory((RegistryFactory di) => CreateUserUseCase(users: di(), analytics: di()))
     ..factory((RegistryFactory di) => FetchUserUseCase(users: di()))
 
     /// Environment.
     ..set(environment);
 
   runApp(
-    ErrorBoundary(
-      isReleaseMode: !environment.isDebugging,
-      errorViewBuilder: (_) => const AppCrashErrorView(),
-      onException: AppLog.e,
-      onCrash: errorReporter.reportCrash,
-      child: ProviderScope(
-        overrides: <Override>[
-          registryProvider.overrideWithValue(registry),
-        ],
+    ProviderScope(
+      overrides: <Override>[
+        registryProvider.overrideWithValue(registry),
+      ],
+      child: ErrorBoundary(
+        isReleaseMode: !environment.isDebugging,
+        errorViewBuilder: (_) => const AppCrashErrorView(),
+        onException: AppLog.e,
+        onCrash: errorReporter.reportCrash,
         child: App(
           registry: registry,
           navigatorObservers: <NavigatorObserver>[navigationObserver],

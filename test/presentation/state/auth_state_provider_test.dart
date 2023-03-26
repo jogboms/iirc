@@ -21,15 +21,13 @@ Future<void> main() async {
     tearDown(mockUseCases.reset);
 
     AuthStateNotifier createProvider() {
-      final AuthStateNotifier provider = AuthStateNotifier(
-        analytics: const NoopAnalytics(),
-        signInUseCase: mockUseCases.signInUseCase,
-        createUserUseCase: mockUseCases.createUserUseCase,
-        fetchUserUseCase: mockUseCases.fetchUserUseCase,
-        signOutUseCase: mockUseCases.signOutUseCase,
-        updateUserUseCase: mockUseCases.updateUserUseCase,
-      )..addListener(log.add);
-      addTearDown(provider.dispose);
+      final ProviderContainer container = createProviderContainer();
+
+      final AuthStateNotifier provider = container.read(authStateNotifierProvider.notifier);
+      container.listen(authStateNotifierProvider, (_, AuthState next) => log.add(next));
+      log.add(provider.currentState);
+
+      addTearDown(container.dispose);
       addTearDown(log.clear);
       return provider;
     }
@@ -38,7 +36,7 @@ Future<void> main() async {
       final ProviderContainer container = createProviderContainer();
       addTearDown(container.dispose);
 
-      expect(container.read(authStateProvider), AuthState.idle);
+      expect(container.read(authStateNotifierProvider), AuthState.idle);
     });
 
     group('AuthStateNotifier', () {

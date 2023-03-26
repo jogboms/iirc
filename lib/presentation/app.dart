@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iirc/core.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:registry/registry.dart';
 
-import 'registry.dart';
 import 'screens/onboarding/onboarding_page.dart';
 import 'theme.dart';
 import 'utils.dart';

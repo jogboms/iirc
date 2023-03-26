@@ -1,11 +1,19 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart' show TabController;
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'menu_page_item_provider.g.dart';
 
 /// Container for MenuPageItem controller
 /// Should be overridden per [ProviderScope]
-final menuPageItemProvider = Provider.autoDispose<TabController>((_) => throw UnimplementedError());
+@Riverpod(dependencies: <Object>[])
+MenuPageController menuPageItem(MenuPageItemRef ref) => throw UnimplementedError();
+
+/// This wrapper class only exists because riverpod generator doesn't support ChangeNotifiers (TabController) directly
+class MenuPageController {
+  const MenuPageController(this.tabController);
+
+  final TabController tabController;
+}
 
 enum MenuPageItem {
   items,

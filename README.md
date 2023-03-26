@@ -30,11 +30,12 @@ Install local `flutter` version.
 fvm install
 ```
 
-### Install & L10n code generation
+### Install, L10n & Riverpod code generation
 
 ```bash
 fvm flutter pub get 
 fvm flutter gen-l10n
+fvm flutter pub run build_runner build
 ```
 
 ## Running

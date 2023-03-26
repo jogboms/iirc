@@ -8,7 +8,7 @@ import '../../utils.dart';
 void main() {
   group('CreateItemUseCase', () {
     final ItemsRepository itemsRepository = mockRepositories.items;
-    final CreateItemUseCase useCase = CreateItemUseCase(items: itemsRepository);
+    final CreateItemUseCase useCase = CreateItemUseCase(items: itemsRepository, analytics: const NoopAnalytics());
 
     final ItemEntity dummyItem = ItemsMockImpl.generateItem();
     final CreateItemData dummyCreateItemData = CreateItemData(

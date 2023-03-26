@@ -33,23 +33,25 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin {
   static const Key dataViewKey = Key('dataViewKey');
-  late final TabController tabController = TabController(
-    vsync: this,
-    length: MenuPageItem.values.length,
-    initialIndex: widget.initialPage.index,
+  late final MenuPageController controller = MenuPageController(
+    TabController(
+      vsync: this,
+      length: MenuPageItem.values.length,
+      initialIndex: widget.initialPage.index,
+    ),
   );
 
   @override
   Widget build(BuildContext context) => ProviderScope(
         overrides: <Override>[
-          menuPageItemProvider.overrideWithValue(tabController),
+          menuPageItemProvider.overrideWithValue(controller),
         ],
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, _) => MenuPageDataView(
             key: dataViewKey,
             l10n: context.l10n,
             analytics: ref.read(analyticsProvider),
-            controller: ref.read(menuPageItemProvider),
+            controller: ref.read(menuPageItemProvider).tabController,
           ),
         ),
       );

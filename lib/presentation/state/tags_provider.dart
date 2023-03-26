@@ -1,8 +1,8 @@
 import 'package:iirc/domain.dart';
+import 'package:registry/registry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models.dart';
-import '../registry.dart';
 import 'account_provider.dart';
 import 'registry_provider.dart';
 import 'user_provider.dart';

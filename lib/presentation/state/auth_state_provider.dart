@@ -3,9 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
+import 'package:registry/registry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../registry.dart';
 import 'registry_provider.dart';
 import 'state_notifier_mixin.dart';
 

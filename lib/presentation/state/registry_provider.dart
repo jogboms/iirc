@@ -1,6 +1,5 @@
+import 'package:registry/registry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../registry.dart';
 
 part 'registry_provider.g.dart';
 

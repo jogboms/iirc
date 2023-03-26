@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:iirc/domain.dart';
 import 'package:meta/meta.dart';
+import 'package:registry/registry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../registry.dart';
 import '../../../state.dart';
 
 part 'item_provider.g.dart';

@@ -765,6 +765,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  registry:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "5dd4e7fdfb9b0d6848602a86fd8bef3b072b8d2f"
+      url: "https://github.com/jogboms/registry.dart.git"
+    source: git
+    version: "0.1.0"
   riverpod:
     dependency: "direct main"
     description:

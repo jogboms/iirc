@@ -29,6 +29,8 @@ dependencies:
   o_color_picker: ^1.0.2
   package_info_plus: ^3.0.3
   platform: ^3.1.0
+  registry:
+    git: https://github.com/jogboms/registry.dart.git
   riverpod: ^2.3.2
   riverpod_annotation: ^2.0.2
   rxdart: ^0.27.7

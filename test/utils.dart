@@ -5,6 +5,7 @@ import 'package:iirc/core.dart';
 import 'package:iirc/domain.dart';
 import 'package:iirc/presentation.dart';
 import 'package:mocktail/mocktail.dart' as mt;
+import 'package:registry/registry.dart';
 
 import 'mocks.dart';
 

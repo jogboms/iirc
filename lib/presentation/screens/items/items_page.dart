@@ -53,7 +53,7 @@ class _ItemsDataView extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         const CustomAppBar(
-          title: SearchBar(),
+          title: AppSearchBar(),
           asSliver: true,
           centerTitle: true,
         ),
@@ -91,8 +91,8 @@ class _ItemsDataView extends StatelessWidget {
                 childCount: items.length,
               ),
             ),
-          )
-        ]
+          ),
+        ],
       ],
     );
   }

@@ -6,14 +6,14 @@ import '../state.dart';
 import '../theme.dart';
 import '../utils.dart';
 
-class SearchBar extends ConsumerStatefulWidget {
-  const SearchBar({super.key});
+class AppSearchBar extends ConsumerStatefulWidget {
+  const AppSearchBar({super.key});
 
   @override
-  ConsumerState<SearchBar> createState() => _SearchBarState();
+  ConsumerState<AppSearchBar> createState() => _AppSearchBarState();
 }
 
-class _SearchBarState extends ConsumerState<SearchBar> {
+class _AppSearchBarState extends ConsumerState<AppSearchBar> {
   late final SearchTagQueryState queryProvider = ref.read(searchTagQueryStateProvider.notifier);
   late final TextEditingController controller = TextEditingController(text: queryProvider.currentState);
 

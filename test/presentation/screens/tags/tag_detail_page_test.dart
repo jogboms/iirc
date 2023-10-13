@@ -36,9 +36,9 @@ void main() {
     });
 
     testWidgets('should show list of items for tag', (WidgetTester tester) async {
-      final double devicePixelRatio = tester.binding.window.devicePixelRatio;
-      tester.binding.window.devicePixelRatioTestValue = .25;
-      addTearDown(() => tester.binding.window.devicePixelRatioTestValue = devicePixelRatio);
+      final double devicePixelRatio = tester.view.devicePixelRatio;
+      tester.view.devicePixelRatio = .25;
+      addTearDown(() => tester.view.devicePixelRatio = devicePixelRatio);
 
       final TagEntity tag = TagsMockImpl.generateTag();
       final DateTime now = clock.now();

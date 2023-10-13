@@ -160,7 +160,7 @@ class SelectedItemDataView extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

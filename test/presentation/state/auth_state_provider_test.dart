@@ -276,7 +276,7 @@ Future<void> main() async {
               expect(log, <AuthState>[
                 AuthState.idle,
                 AuthState.loading,
-                AuthState.error("Instance of 'AuthExceptionInvalidEmail'", AuthErrorStateReason.message),
+                AuthState.error("Instance of 'AuthExceptionInvalidEmail'"),
               ]);
             });
 
@@ -290,7 +290,7 @@ Future<void> main() async {
               expect(log, <AuthState>[
                 AuthState.idle,
                 AuthState.loading,
-                AuthState.error("Instance of 'AuthExceptionUserNotFound'", AuthErrorStateReason.message),
+                AuthState.error("Instance of 'AuthExceptionUserNotFound'"),
               ]);
             });
 
@@ -304,7 +304,7 @@ Future<void> main() async {
               expect(log, <AuthState>[
                 AuthState.idle,
                 AuthState.loading,
-                AuthState.error("Instance of 'AuthExceptionUnknown'", AuthErrorStateReason.message),
+                AuthState.error("Instance of 'AuthExceptionUnknown'"),
               ]);
             });
           });

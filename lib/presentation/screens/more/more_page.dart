@@ -28,7 +28,7 @@ class _MorePageState extends State<MorePage> {
               const LogoutListTile(),
             ]),
           ),
-        )
+        ),
       ],
     );
   }

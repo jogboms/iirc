@@ -16,7 +16,7 @@ void main() {
     test('should fetch items', () {
       final TagEntity tag = TagsMockImpl.generateTag();
       final NormalizedItemEntityList expectedItems = <NormalizedItemEntity>[
-        ItemsMockImpl.generateNormalizedItem(tag: tag)
+        ItemsMockImpl.generateNormalizedItem(tag: tag),
       ];
 
       when(() => itemsRepository.fetch(any()))

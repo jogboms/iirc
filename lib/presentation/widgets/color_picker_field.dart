@@ -37,7 +37,7 @@ class ColorPickerField extends FormField<Color> {
                     selectedColor: color,
                     onColorChange: (Color color) => fieldState.didChange(color),
                   ),
-                ]
+                ],
               ],
             );
           },

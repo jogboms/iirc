@@ -130,7 +130,7 @@ class MenuPageDataViewState extends State<MenuPageDataView> {
         valueListenable: widget.controller.animation!,
         builder: (BuildContext context, double value, Widget? child) => Stack(
           children: <Widget>[
-            for (MapEntry<MenuPageItem, TabRouteView> item in tabRouteViews.entries)
+            for (final MapEntry<MenuPageItem, TabRouteView> item in tabRouteViews.entries)
               Positioned(
                 left: (item.key.index - value) * width,
                 bottom: 0,

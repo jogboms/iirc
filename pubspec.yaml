@@ -35,10 +35,14 @@ dependencies:
   riverpod_annotation: ^2.0.2
   rxdart: ^0.27.7
   sentry: ^6.15.1
-  sliver_tools: ^0.2.9
+  sliver_tools: ^0.2.12
   table_calendar: ^3.0.8
   universal_io: ^2.2.0
   uuid: ^3.0.7
+
+dependency_overrides:
+  intl: 0.18.0 # because of flutter_localizations
+  meta: 1.9.1 # because of flutter_test
 
 dev_dependencies:
   build_runner:

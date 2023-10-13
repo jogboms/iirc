@@ -50,7 +50,7 @@ class MockUseCases {
         signInUseCase,
         signOutUseCase,
         createUserUseCase,
-        fetchUserUseCase
+        fetchUserUseCase,
       ].forEach(mt.reset);
 }
 
